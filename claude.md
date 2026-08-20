@@ -137,6 +137,12 @@ imported, for the same reason.
 - `LangVersion` 14.0, `TreatWarningsAsErrors` and `EnforceCodeStyleInBuild` both on, so IDE style
   rules fail the build. Use `var` everywhere; `IDE0017` (object initialisers) and `IDE0021`
   (expression-bodied constructors) both fire as errors.
+- **Text-parsing APIs are span-first**: the `ReadOnlySpan<char>` overload is the implementation and
+  the `string` one delegates to it, returning the original instance when nothing changed. The
+  consumers parse text they are reading rather than keeping — a CSS colour is a slice of a
+  declaration, which is a slice of a style attribute — so a string-only signature puts a `ToString`
+  on every boundary. `XmlChars` had to be retrofitted for this after Parchment could not consume
+  it; `Color.TryParse` was done up front. Anything that follows them down here does the same.
 - Central package management via `src/Directory.Packages.props`. Conventions otherwise come from the
   `ProjectDefaults` package, which also supplies the `Cancel`/`Date`/`Time` global aliases and
   copies `.editorconfig` into the repo.

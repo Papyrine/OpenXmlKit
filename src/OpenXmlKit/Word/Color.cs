@@ -48,13 +48,29 @@ public readonly struct Color :
 
     public static bool TryParse([NotNullWhen(true)] string? value, out Color color)
     {
-        color = Auto;
         if (value == null)
         {
+            color = Auto;
             return false;
         }
 
-        var span = value.AsSpan().Trim();
+        return TryParse(value.AsSpan(), out color);
+    }
+
+    /// <summary>
+    /// Parses <c>#RRGGBB</c>, <c>RRGGBB</c>, <c>#RGB</c> or the literal <c>auto</c>.
+    /// </summary>
+    /// <remarks>
+    /// The span overload is the implementation, and exists because the parsers that will feed it
+    /// already work in spans — a CSS declaration is a slice of the style attribute it came from,
+    /// and a colour is a slice of that. Offering only the string form would put a ToString on
+    /// every one of those boundaries, for text that is being read rather than kept.
+    /// </remarks>
+    public static bool TryParse(ReadOnlySpan<char> value, out Color color)
+    {
+        color = Auto;
+
+        var span = value.Trim();
         if (span.Length == 0)
         {
             return false;
