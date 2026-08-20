@@ -166,6 +166,26 @@ public readonly struct Color :
     internal string Value =>
         isSet ? rgb.ToString("X6", CultureInfo.InvariantCulture) : "auto";
 
+    /// <summary>
+    /// The <c>AARRGGBB</c> form Excel writes, or null for a colour that states no explicit RGB.
+    /// </summary>
+    /// <remarks>
+    /// Word writes six hex digits and treats colours as opaque; Excel writes eight, and puts the
+    /// alpha byte first. Null comes back for <see cref="Auto"/> and for a theme reference, because
+    /// neither has an RGB value to state — assigning null to an <c>Rgb</c> attribute leaves the
+    /// attribute out, which is what both of them mean.
+    /// <para>
+    /// The ordering is the trap: Excel's eight digits are alpha-first, where CSS's eight-digit
+    /// form is alpha-last. The two cannot be told apart by inspection, which is why this is a
+    /// one-way conversion and <see cref="TryParse(string?, out Color)"/> reads three or six digits
+    /// but never eight.
+    /// </para>
+    /// </remarks>
+    public string? ToArgbHex() =>
+        isSet && !IsTheme
+            ? "FF" + rgb.ToString("X6", CultureInfo.InvariantCulture)
+            : null;
+
     public static implicit operator Color(string value) => Parse(value);
 
     public static readonly Color Black = FromRgb(0x000000);

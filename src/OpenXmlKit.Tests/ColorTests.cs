@@ -59,6 +59,34 @@ public class ColorTests
     }
 
     [Test]
+    public void ArgbHexIsExcelsEightDigitAlphaFirstForm()
+    {
+        Assert.That(Color.Parse("#C00000").ToArgbHex(), Is.EqualTo("FFC00000"));
+        Assert.That(Color.FromRgb(0x00AAFF).ToArgbHex(), Is.EqualTo("FF00AAFF"));
+
+        // Word's own six-digit form is what Value carries; the two differ only by the alpha byte
+        // Excel insists on and Word has no place for.
+        Assert.That(Color.Parse("#C00000").ToString(), Is.EqualTo("#C00000"));
+    }
+
+    [Test]
+    public void AColourWithNoRgbHasNoArgb()
+    {
+        // Assigning null to an Rgb attribute leaves it out, which is what both of these mean.
+        Assert.That(Color.Auto.ToArgbHex(), Is.Null);
+        Assert.That(Color.FromTheme(ThemeColor.Accent1).ToArgbHex(), Is.Null);
+    }
+
+    [Test]
+    public void EightDigitInputIsNotParsedBecauseItsOrderIsAmbiguous()
+    {
+        // Excel writes AARRGGBB and CSS writes RRGGBBAA. Nothing in the string says which, so
+        // reading it either way would silently swap a channel for the alpha on half the inputs.
+        Assert.That(Color.TryParse("FFC00000", out _), Is.False);
+        Assert.That(Color.TryParse("#FFC00000", out _), Is.False);
+    }
+
+    [Test]
     public void AParsedColourSurvivesTheRoundTrip()
     {
         using var document = Document.Create();
