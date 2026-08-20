@@ -120,6 +120,60 @@ public readonly struct Color :
         return true;
     }
 
+    /// <summary>
+    /// Parses Excel's <c>AARRGGBB</c>, and everything <see cref="TryParse(string?, out Color)"/>
+    /// reads as well.
+    /// </summary>
+    /// <remarks>
+    /// The separate name is the whole point. Eight hex digits are alpha-first in Excel and
+    /// alpha-last in CSS, and nothing in the string says which, so the caller states the order by
+    /// choosing the method rather than the parser guessing. Three and six digits mean the same
+    /// thing to both and are read here too, so this is the single entry point for a value that may
+    /// or may not carry an alpha byte.
+    /// <para>
+    /// The alpha is read for validity and then dropped, because a <see cref="Color"/> has none to
+    /// keep: Word's colours are opaque, and <see cref="ToArgbHex"/> writes <c>FF</c> back. A value
+    /// that was half transparent going in comes out solid.
+    /// </para>
+    /// </remarks>
+    public static bool TryParseArgb([NotNullWhen(true)] string? value, out Color color)
+    {
+        if (value == null)
+        {
+            color = Auto;
+            return false;
+        }
+
+        return TryParseArgb(value.AsSpan(), out color);
+    }
+
+    /// <inheritdoc cref="TryParseArgb(string?, out Color)"/>
+    public static bool TryParseArgb(ReadOnlySpan<char> value, out Color color)
+    {
+        var span = value.Trim();
+        if (span.Length > 0 &&
+            span[0] == '#')
+        {
+            span = span[1..];
+        }
+
+        if (span.Length != 8)
+        {
+            return TryParse(span, out color);
+        }
+
+        // The alpha digits are checked rather than skipped: slicing them off unexamined would let
+        // an eight-character string with two pieces of rubbish on the front parse as a colour.
+        if (!TryHex(span[0], out _) ||
+            !TryHex(span[1], out _))
+        {
+            color = Auto;
+            return false;
+        }
+
+        return TryParse(span[2..], out color);
+    }
+
     static bool TryHex(char character, out int value)
     {
         if (character is >= '0' and <= '9')

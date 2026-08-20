@@ -205,5 +205,13 @@ imported, for the same reason.
   throws on those rather than dropping them, because a dropped child is a style that silently does
   less than it says. The throw surfaces at flush, so it also comes out of `Dispose` if the caller
   never saved.
+- **Eight hex digits do not say where the alpha is.** Excel writes `AARRGGBB` and CSS writes
+  `RRGGBBAA`, and nothing in the string distinguishes them, so reading one as the other silently
+  swaps a colour channel for the alpha. `Color.TryParse` reads three or six digits and refuses
+  eight; `Color.TryParseArgb` reads Excel's order, and the caller states which it means by picking
+  the method. `ToArgbHex` is the one-way counterpart. Excelsior hit the other half of this: it
+  accepts `AARRGGBB` and passes it to both renderers, and the Word one only strips `#`, so an
+  eight-digit colour lands in `w:shd/@w:fill` and `w:color/@w:val` — both `ST_HexColor`, six digits
+  — and fails validation.
 - **Fields need a cached value** or Word asks the reader for permission to update fields on open and
   shows a placeholder until they agree.
