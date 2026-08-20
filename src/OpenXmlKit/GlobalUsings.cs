@@ -1,3 +1,8 @@
+// The non-generic collection interfaces, for the explicit IEnumerable.GetEnumerator every
+// collection has to implement. Without this the short form binds to the generic IEnumerable<T>
+// that the implicit usings supply, and the build breaks the moment an IDE cleanup simplifies the
+// fully qualified name away.
+global using System.Collections;
 global using System.Diagnostics.CodeAnalysis;
 global using System.Globalization;
 global using System.Runtime.CompilerServices;

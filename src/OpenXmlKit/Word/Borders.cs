@@ -156,14 +156,15 @@ public class Borders :
             return null;
         }
 
-        var borders = new W.TableBorders();
-        Fill(Top, () => borders.TopBorder = new(), _ => borders.TopBorder = _);
-        Fill(Left, () => borders.LeftBorder = new(), _ => borders.LeftBorder = _);
-        Fill(Bottom, () => borders.BottomBorder = new(), _ => borders.BottomBorder = _);
-        Fill(Right, () => borders.RightBorder = new(), _ => borders.RightBorder = _);
-        Fill(InsideHorizontal, () => borders.InsideHorizontalBorder = new(), _ => borders.InsideHorizontalBorder = _);
-        Fill(InsideVertical, () => borders.InsideVerticalBorder = new(), _ => borders.InsideVerticalBorder = _);
-        return borders;
+        return new()
+        {
+            TopBorder = Build<W.TopBorder>(Top),
+            LeftBorder = Build<W.LeftBorder>(Left),
+            BottomBorder = Build<W.BottomBorder>(Bottom),
+            RightBorder = Build<W.RightBorder>(Right),
+            InsideHorizontalBorder = Build<W.InsideHorizontalBorder>(InsideHorizontal),
+            InsideVerticalBorder = Build<W.InsideVerticalBorder>(InsideVertical)
+        };
     }
 
     internal W.TableCellBorders? ToCellBorders()
@@ -173,14 +174,15 @@ public class Borders :
             return null;
         }
 
-        var borders = new W.TableCellBorders();
-        Fill(Top, () => borders.TopBorder = new(), _ => borders.TopBorder = _);
-        Fill(Left, () => borders.LeftBorder = new(), _ => borders.LeftBorder = _);
-        Fill(Bottom, () => borders.BottomBorder = new(), _ => borders.BottomBorder = _);
-        Fill(Right, () => borders.RightBorder = new(), _ => borders.RightBorder = _);
-        Fill(InsideHorizontal, () => borders.InsideHorizontalBorder = new(), _ => borders.InsideHorizontalBorder = _);
-        Fill(InsideVertical, () => borders.InsideVerticalBorder = new(), _ => borders.InsideVerticalBorder = _);
-        return borders;
+        return new()
+        {
+            TopBorder = Build<W.TopBorder>(Top),
+            LeftBorder = Build<W.LeftBorder>(Left),
+            BottomBorder = Build<W.BottomBorder>(Bottom),
+            RightBorder = Build<W.RightBorder>(Right),
+            InsideHorizontalBorder = Build<W.InsideHorizontalBorder>(InsideHorizontal),
+            InsideVerticalBorder = Build<W.InsideVerticalBorder>(InsideVertical)
+        };
     }
 
     internal W.ParagraphBorders? ToParagraphBorders()
@@ -193,25 +195,30 @@ public class Borders :
             return null;
         }
 
-        var borders = new W.ParagraphBorders();
-        Fill(Top, () => borders.TopBorder = new(), _ => borders.TopBorder = _);
-        Fill(Left, () => borders.LeftBorder = new(), _ => borders.LeftBorder = _);
-        Fill(Bottom, () => borders.BottomBorder = new(), _ => borders.BottomBorder = _);
-        Fill(Right, () => borders.RightBorder = new(), _ => borders.RightBorder = _);
-        return borders;
+        // A paragraph has no interior grid, so those two edges are simply not written.
+        return new()
+        {
+            TopBorder = Build<W.TopBorder>(Top),
+            LeftBorder = Build<W.LeftBorder>(Left),
+            BottomBorder = Build<W.BottomBorder>(Bottom),
+            RightBorder = Build<W.RightBorder>(Right)
+        };
     }
 
-    static void Fill<T>(Border border, Func<T> create, Action<T> assign)
+    // Null for an edge that states nothing, because assigning null to a typed property leaves the
+    // child out — the same shape as Toggles.OnOff, and what lets each container above be one
+    // object initialiser rather than a sequence of conditional assignments.
+    static T? Build<T>(Border border)
         where T : W.BorderType, new()
     {
         if (border.IsEmpty)
         {
-            return;
+            return null;
         }
 
         var element = new T();
         border.ApplyTo(element);
-        assign(element);
+        return element;
     }
 
     internal void ReadFrom(OpenXmlElement? container)

@@ -92,6 +92,6 @@ public sealed class StylesView :
         }
     }
 
-    System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator() =>
+    IEnumerator IEnumerable.GetEnumerator() =>
         GetEnumerator();
 }

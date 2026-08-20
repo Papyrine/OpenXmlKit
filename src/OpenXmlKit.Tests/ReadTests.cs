@@ -31,7 +31,7 @@ public class ReadTests
         var table = read.Body.Tables.Single();
         Assert.That(table.Format.Width, Is.EqualTo(Width.Percent(100)));
         Assert.That(table.Rows.First().IsHeader, Is.True);
-        Assert.That(table.Rows.Last().Cells.Select(_ => _.Text), Is.EqualTo(new[] { "a", "1" }));
+        Assert.That(table.Rows.Last().Cells.Select(_ => _.Text), Is.EqualTo(["a", "1"]));
     }
 
     [Test]
@@ -235,7 +235,7 @@ public class ReadTests
             document => document.Body.AddParagraph()
                 .AddBookmark(document, "du3", _ => _.Append("The third update")));
 
-        Assert.That(read.Body.Paragraphs.Single().BookmarkNames, Is.EqualTo(new[] { "du3" }));
+        Assert.That(read.Body.Paragraphs.Single().BookmarkNames, Is.EqualTo(["du3"]));
     }
 
     [Test]

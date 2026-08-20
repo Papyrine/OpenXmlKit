@@ -193,14 +193,4 @@ public class Run
         element.RunProperties = font.ToProperties();
     }
 
-    static string SymbolText(W.SymbolChar symbol)
-    {
-        if (symbol.Char is not { HasValue: true } code ||
-            !int.TryParse(code.Value, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out var value))
-        {
-            return "";
-        }
-
-        return char.ConvertFromUtf32(value);
-    }
 }

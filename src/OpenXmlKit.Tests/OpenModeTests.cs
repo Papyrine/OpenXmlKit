@@ -15,7 +15,7 @@ public class OpenModeTests
     {
         using var read = DocumentView.Open(Source());
 
-        Assert.That(read.Body.Paragraphs.Select(_ => _.Text), Is.EqualTo(new[] { "original" }));
+        Assert.That(read.Body.Paragraphs.Select(_ => _.Text), Is.EqualTo(["original"]));
         Assert.That(read.Text, Is.EqualTo("original"));
     }
 
@@ -31,7 +31,7 @@ public class OpenModeTests
         }
 
         using var read = DocumentView.Open(result);
-        Assert.That(read.Body.Paragraphs.Select(_ => _.Text), Is.EqualTo(new[] { "original", "appended" }));
+        Assert.That(read.Body.Paragraphs.Select(_ => _.Text), Is.EqualTo(["original", "appended"]));
     }
 
     [Test]
@@ -66,7 +66,7 @@ public class OpenModeTests
         // Disposing the view does not close the document it was taken of, so building continues.
         document.Body.Paragraph("second");
         using var after = DocumentView.Of(document);
-        Assert.That(after.Body.Paragraphs.Select(_ => _.Text), Is.EqualTo(new[] { "first", "second" }));
+        Assert.That(after.Body.Paragraphs.Select(_ => _.Text), Is.EqualTo(["first", "second"]));
     }
 
     [Test]
