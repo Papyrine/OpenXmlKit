@@ -230,7 +230,7 @@ public partial class Paragraph
                 }));
         AppendElement(
             new W.Run(
-                new W.Text(cachedValue ?? "")
+                new W.Text(XmlChars.Strip(cachedValue ?? ""))
                 {
                     Space = SpaceProcessingModeValues.Preserve
                 }));

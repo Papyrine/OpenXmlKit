@@ -83,6 +83,23 @@ public sealed partial class Document :
     public static Document OpenForAppend(string path) =>
         new(WordprocessingDocument.Open(path, true), null);
 
+    /// <summary>
+    /// Opens an existing document held in memory, to add content to.
+    /// </summary>
+    /// <remarks>
+    /// A <see cref="MemoryStream"/> constructed over a byte array is fixed-length, so handing one
+    /// to <see cref="OpenForAppend(Stream)"/> fails on the first write with "Memory stream is not
+    /// expandable" — a message that says nothing about the array being the cause. This copies into
+    /// an expandable stream and owns it, so a template loaded from bytes just works.
+    /// </remarks>
+    public static Document OpenForAppend(byte[] bytes)
+    {
+        var stream = new MemoryStream();
+        stream.Write(bytes, 0, bytes.Length);
+        stream.Position = 0;
+        return new(WordprocessingDocument.Open(stream, true), stream);
+    }
+
     static void Initialise(WordprocessingDocument package)
     {
         var main = package.AddMainDocumentPart();

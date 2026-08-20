@@ -20,6 +20,27 @@ public class OpenModeTests
     }
 
     [Test]
+    public void OpenForAppendOverBytesJustWorks()
+    {
+        // A MemoryStream constructed over a byte array is fixed-length, so the obvious
+        // Document.OpenForAppend(new MemoryStream(bytes)) fails on the first write. The byte[]
+        // overload exists so a template loaded from bytes does not have to know that.
+        Assert.Throws<NotSupportedException>(
+            () =>
+            {
+                using var broken = Document.OpenForAppend(new MemoryStream(Source()));
+                broken.Body.Paragraph("appended");
+                broken.Save();
+            });
+
+        using var document = Document.OpenForAppend(Source());
+        document.Body.Paragraph("appended");
+
+        using var read = DocumentView.Open(document.ToArray());
+        Assert.That(read.Body.Paragraphs.Select(_ => _.Text), Is.EqualTo(["original", "appended"]));
+    }
+
+    [Test]
     public void OpenForAppendWritesAddedContentAndLeavesTheRestAlone()
     {
         var stream = Expandable(Source());

@@ -59,7 +59,9 @@ public class Run
         }
 
         element.Append(
-            new W.Text(value)
+            // Stripped here rather than left to the caller, because the characters XML forbids do
+            // not fail until Save and the exception names none of the text that carried them.
+            new W.Text(XmlChars.Strip(value))
             {
                 Space = SpaceProcessingModeValues.Preserve
             });

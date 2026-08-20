@@ -136,6 +136,26 @@ public class ReadContentTests
     }
 
     [Test]
+    public void EveryBlockContainerIsReachable()
+    {
+        using var document = Document.Create();
+        document.Body.AddParagraph("body text")
+            .AddFootnote(document, _ => _.AddParagraph("note text"));
+        var section = document.Body.Section;
+        section.AddHeader(HeaderFooterKind.Default).AddParagraph("header text");
+        section.AddFooter(HeaderFooterKind.Default).AddParagraph("footer text");
+
+        using var read = DocumentAssert.Read(document);
+        var text = read.Containers.Select(_ => _.Value.Text).ToList();
+
+        // Body alone reports the letterhead and every footnote as absent.
+        Assert.That(text.Any(_ => _.Contains("body text")), Is.True);
+        Assert.That(text.Any(_ => _.Contains("header text")), Is.True);
+        Assert.That(text.Any(_ => _.Contains("footer text")), Is.True);
+        Assert.That(text.Any(_ => _.Contains("note text")), Is.True);
+    }
+
+    [Test]
     public void AStyleTableFormatIsReadable()
     {
         using var document = Document.Create();

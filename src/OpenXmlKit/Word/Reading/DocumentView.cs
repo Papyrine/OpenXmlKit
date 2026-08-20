@@ -139,6 +139,71 @@ public sealed class DocumentView :
         field ??= new(Styles, MainPart);
 
     /// <summary>
+    /// Every part of the document that holds block content, keyed by the part it lives in.
+    /// </summary>
+    /// <remarks>
+    /// The body is only one of them. A document's text also lives in its headers, its footers and
+    /// its notes, and anything that searches or extracts across a whole document has to visit all
+    /// of them — <see cref="Body"/> alone silently reports a letterhead's contact block and every
+    /// footnote as absent.
+    /// </remarks>
+    public IEnumerable<KeyValuePair<string, BlockContainerView>> Containers
+    {
+        get
+        {
+            var main = MainPart;
+            if (main.Document?.Body is { } body)
+            {
+                yield return new(main.Uri.ToString(), new(body));
+            }
+
+            foreach (var part in main.HeaderParts)
+            {
+                if (part.Header is { } header)
+                {
+                    yield return new(part.Uri.ToString(), new(header));
+                }
+            }
+
+            foreach (var part in main.FooterParts)
+            {
+                if (part.Footer is { } footer)
+                {
+                    yield return new(part.Uri.ToString(), new(footer));
+                }
+            }
+
+            // A notes part holds notes, not paragraphs, so each note is its own container rather
+            // than the part being one. Yielding the part would report every footnote as empty.
+            if (main.FootnotesPart?.Footnotes is { } footnotes)
+            {
+                var uri = main.FootnotesPart.Uri.ToString();
+                foreach (var footnote in footnotes.Elements<W.Footnote>())
+                {
+                    if (footnote.Type is not { HasValue: true })
+                    {
+                        yield return new(uri, new(footnote));
+                    }
+                }
+            }
+
+            // Endnotes are not something the build API writes, but a document opened for reading
+            // may well carry them, and leaving them out would make this list quietly incomplete.
+            if (main.EndnotesPart?.Endnotes is { } endnotes)
+            {
+                var uri = main.EndnotesPart.Uri.ToString();
+                foreach (var endnote in endnotes.Elements<W.Endnote>())
+                {
+                    if (endnote.Type is not { HasValue: true })
+                    {
+                        yield return new(uri, new(endnote));
+                    }
+                }
+            }
+        }
+    }
+
+    /// <summary>
     /// The document's metadata.
     /// </summary>
     public DocumentPropertiesView Properties =>

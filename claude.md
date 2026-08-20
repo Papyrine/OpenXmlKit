@@ -153,6 +153,12 @@ imported, for the same reason.
   properties dialog. `Document.CopyTo` puts them back by hand.
 - **A `MemoryStream` built over a byte array is not expandable**, so `Document.OpenForAppend` over
   one fails on the first write with `NotSupportedException: Memory stream is not expandable`.
+  `OpenForAppend(byte[])` exists so a caller holding bytes does not have to know that; the stream
+  overload still has the hazard, and `OpenModeTests` pins both halves.
+- **Characters XML 1.0 forbids do not fail until `Save`**, and the exception names none of the text
+  that carried them. `XmlChars.Strip` is applied to every string the build API turns into a `w:t`,
+  so a caller never has to. Three repos in the estate had their own copy of this — two of them
+  character-for-character identical — which is why it is public rather than internal.
 - **Editing existing content, when it arrives, cannot just flush a view.** Built wrappers rebuild
   their properties element wholesale, which is what makes flushing idempotent. Doing that to a
   paragraph read from a template would discard whatever the format model does not cover (`framePr`,

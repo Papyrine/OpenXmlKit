@@ -22,6 +22,7 @@
     <Using Include="OpenXmlKit.Toggle" Alias="WToggle" />
     <Using Include="OpenXmlKit.Width" Alias="WWidth" />
     <Using Include="OpenXmlKit.WidthUnit" Alias="WWidthUnit" />
+    <Using Include="OpenXmlKit.XmlChars" Alias="WXmlChars" />
     <Using Include="OpenXmlKit.Word.BlockContainer" Alias="WBlockContainer" />
     <Using Include="OpenXmlKit.Word.BlockContainerView" Alias="WBlockContainerView" />
     <Using Include="OpenXmlKit.Word.Body" Alias="WBody" />
@@ -121,6 +122,7 @@
     <Using Include="OpenXmlKit.Toggle" Alias="WordToggle" />
     <Using Include="OpenXmlKit.Width" Alias="WordWidth" />
     <Using Include="OpenXmlKit.WidthUnit" Alias="WordWidthUnit" />
+    <Using Include="OpenXmlKit.XmlChars" Alias="WordXmlChars" />
     <Using Include="OpenXmlKit.Word.BlockContainer" Alias="WordBlockContainer" />
     <Using Include="OpenXmlKit.Word.BlockContainerView" Alias="WordBlockContainerView" />
     <Using Include="OpenXmlKit.Word.Body" Alias="WordBody" />
