@@ -49,7 +49,7 @@ document.Body.AddTable(
         .Width(Width.Percent(100))
         .Row(
             row => row
-                .Cell(Width.Percent(22), c => c.AddParagraph(p => p.Bold("Source")))
+                .Cell(Width.Percent(22), _ => _.AddParagraph(_ => _.Bold("Source")))
                 .Cell(Width.Percent(78), "Budget paper 2")));
 
 var bytes = document.ToArray();
