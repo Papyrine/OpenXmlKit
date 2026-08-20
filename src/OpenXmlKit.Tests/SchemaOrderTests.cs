@@ -221,19 +221,22 @@ public class SchemaOrderTests
         // estate to know the sequence; it is documented here so the rule above has a reason
         // attached rather than being folklore.
         var properties = new W.RunProperties();
-        properties.Append(new W.VerticalTextAlignment
-        {
-            Val = W.VerticalPositionValues.Superscript
-        });
-        properties.Append(new W.Underline
-        {
-            Val = W.UnderlineValues.Single
-        });
+        properties.Append(
+            new W.VerticalTextAlignment
+            {
+                Val = W.VerticalPositionValues.Superscript
+            });
+        properties.Append(
+            new W.Underline
+            {
+                Val = W.UnderlineValues.Single
+            });
         properties.Append(new W.Bold());
-        properties.Append(new W.RunFonts
-        {
-            Ascii = "Calibri"
-        });
+        properties.Append(
+            new W.RunFonts
+            {
+                Ascii = "Calibri"
+            });
 
         Assert.That(
             LocalNames(properties),
