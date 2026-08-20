@@ -145,8 +145,8 @@ public class BuildTests
             _ => _
                 .Row(
                     row => row
-                        .AddCell(cell => cell.Background(Color.Parse("#E0E8F2")).Paragraph("shaded"))
-                        .AddCell(cell => cell.ColumnSpan(2).Paragraph("wide"))));
+                        .AddCell(_ => _.Background(Color.Parse("#E0E8F2")).Paragraph("shaded"))
+                        .AddCell(_ => _.ColumnSpan(2).Paragraph("wide"))));
 
         var xml = DocumentAssert.MainPartXml(document);
         DocumentAssert.IsValid(document);
@@ -323,7 +323,7 @@ public class BuildTests
         nested.Body.Append(
             Table.Create()
                 .Width(Width.Percent(100))
-                .Row(row => row.Cell(Width.Percent(50), "a").Cell(Width.Percent(50), "b")));
+                .Row(_ => _.Cell(Width.Percent(50), "a").Cell(Width.Percent(50), "b")));
 
         using var cursor = Document.Create();
         var builder = cursor.Builder;
