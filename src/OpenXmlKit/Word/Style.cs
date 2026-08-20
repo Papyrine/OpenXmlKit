@@ -9,6 +9,7 @@ public class Style
     Font? font;
     ParagraphFormat? paragraphFormat;
     TableFormat? tableFormat;
+    List<TableStyleConditional>? conditionals;
 
     internal Style(W.Style element)
     {
@@ -157,6 +158,64 @@ public class Style
     /// </summary>
     public TableFormat TableFormat => tableFormat ??= new();
 
+    /// <summary>
+    /// The formatting this style applies to one part of a table — the header row, the banding, a
+    /// corner cell. Table styles only.
+    /// </summary>
+    /// <remarks>
+    /// Returns the existing block for the area if the style already has one, so calling this twice
+    /// for the same area configures the same block rather than adding a second.
+    /// </remarks>
+    public TableStyleConditional Conditional(TableStyleArea area)
+    {
+        var existing = Conditionals.FirstOrDefault(_ => _.Area == area);
+        if (existing != null)
+        {
+            return existing;
+        }
+
+        var conditional = new TableStyleConditional(area);
+        conditionals!.Add(conditional);
+        return conditional;
+    }
+
+    /// <summary>
+    /// Configures the formatting for one part of a table.
+    /// </summary>
+    public Style Conditional(TableStyleArea area, Action<TableStyleConditional> configure)
+    {
+        configure(Conditional(area));
+        return this;
+    }
+
+    /// <summary>
+    /// Every conditional block the style carries.
+    /// </summary>
+    public IReadOnlyList<TableStyleConditional> Conditionals =>
+        conditionals ??= ReadConditionals();
+
+    // Read lazily rather than in the constructor, because the blocks are rewritten wholesale on
+    // flush and only a caller that asks for them should trigger that. A style opened from a
+    // template and never asked keeps whatever it arrived with.
+    List<TableStyleConditional> ReadConditionals()
+    {
+        var result = new List<TableStyleConditional>();
+        foreach (var source in element.Elements<W.TableStyleProperties>())
+        {
+            var area = source.Type is { HasValue: true } type
+                ? Map.ToTableStyleArea(type.Value)
+                : TableStyleArea.WholeTable;
+            var conditional = new TableStyleConditional(area);
+            conditional.Font.ReadFrom(CloneInto<W.RunProperties>(source.RunPropertiesBaseStyle));
+            conditional.ParagraphFormat.ReadFrom(CloneInto<W.ParagraphProperties>(source.StyleParagraphProperties));
+            conditional.TableFormat.ReadFrom(CloneInto<W.TableProperties>(source.TableStyleConditionalFormattingTableProperties));
+            conditional.CellFormat.ReadFrom(CloneInto<W.TableCellProperties>(source.TableStyleConditionalFormattingTableCellProperties));
+            result.Add(conditional);
+        }
+
+        return result;
+    }
+
     public W.Style ToOpenXml()
     {
         Flush();
@@ -204,7 +263,34 @@ public class Style
         if (tableFormat is { IsEmpty: false })
         {
             element.GetFirstChild<W.StyleTableProperties>()?.Remove();
-            element.Append(tableFormat.ToStyleProperties());
+            var properties = tableFormat.ToStyleProperties();
+            // tblPr precedes tblStylePr in CT_Style's sequence, so a style that already carries
+            // conditional blocks needs the table properties put in front of them rather than
+            // appended after.
+            if (element.GetFirstChild<W.TableStyleProperties>() is { } first)
+            {
+                element.InsertBefore(properties, first);
+            }
+            else
+            {
+                element.Append(properties);
+            }
+        }
+
+        if (conditionals != null)
+        {
+            foreach (var existing in element.Elements<W.TableStyleProperties>().ToList())
+            {
+                existing.Remove();
+            }
+
+            foreach (var conditional in conditionals)
+            {
+                if (!conditional.IsEmpty)
+                {
+                    element.Append(conditional.ToOpenXml());
+                }
+            }
         }
     }
 
@@ -218,6 +304,26 @@ public class Style
             child.Remove();
             target.AppendChild(child);
         }
+    }
+
+    // The style-scoped and override-scoped property elements carry the same children as the
+    // content-scoped ones, so reading either means copying across into the type the format objects
+    // already know how to read.
+    static T CloneInto<T>(OpenXmlElement? source)
+        where T : OpenXmlElement, new()
+    {
+        var target = new T();
+        if (source == null)
+        {
+            return target;
+        }
+
+        foreach (var child in source.ChildElements)
+        {
+            target.AppendChild(child.CloneNode(true));
+        }
+
+        return target;
     }
 
     static W.RunProperties ToRunProperties(W.StyleRunProperties source)

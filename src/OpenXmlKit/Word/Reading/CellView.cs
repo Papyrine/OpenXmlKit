@@ -11,10 +11,11 @@ public readonly struct CellView
         this.element = element;
 
     /// <summary>
-    /// The cell's text, paragraphs joined by newlines.
+    /// The cell's text, blocks joined by newlines, in document order. A nested table is included,
+    /// on the same terms as <see cref="BlockContainerView.Text"/>.
     /// </summary>
     public string Text =>
-        string.Join("\n", Paragraphs.Select(_ => _.Text));
+        new BlockContainerView(element).Text;
 
     public IEnumerable<ParagraphView> Paragraphs
     {

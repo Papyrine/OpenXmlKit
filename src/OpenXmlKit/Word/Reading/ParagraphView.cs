@@ -20,12 +20,17 @@ public readonly struct ParagraphView
     /// The paragraph's text, runs concatenated, with breaks and tabs as the characters they stand
     /// for.
     /// </summary>
+    /// <remarks>
+    /// Built from <see cref="AllRuns"/> rather than <see cref="Runs"/>, because a hyperlink holds
+    /// its runs inside itself: reading only the paragraph's direct children drops the link text,
+    /// which is content this library's own <see cref="Paragraph.AddLink"/> writes.
+    /// </remarks>
     public string Text
     {
         get
         {
             var builder = new StringBuilder();
-            foreach (var run in Runs)
+            foreach (var run in AllRuns)
             {
                 builder.Append(run.Text);
             }
@@ -34,6 +39,10 @@ public readonly struct ParagraphView
         }
     }
 
+    /// <summary>
+    /// The runs sitting directly in the paragraph. A run inside a hyperlink is not one of these —
+    /// <see cref="AllRuns"/> is.
+    /// </summary>
     public IEnumerable<RunView> Runs
     {
         get
@@ -103,6 +112,125 @@ public readonly struct ParagraphView
     /// <summary>
     /// The names of the bookmarks starting in this paragraph.
     /// </summary>
+    /// <summary>
+    /// The links in the paragraph.
+    /// </summary>
+    public IEnumerable<HyperlinkView> Hyperlinks
+    {
+        get
+        {
+            foreach (var link in element.Descendants<W.Hyperlink>())
+            {
+                yield return new(link);
+            }
+        }
+    }
+
+    /// <summary>
+    /// The pictures in the paragraph.
+    /// </summary>
+    public IEnumerable<ImageView> Images
+    {
+        get
+        {
+            foreach (var drawing in element.Descendants<W.Drawing>())
+            {
+                yield return new(drawing);
+            }
+        }
+    }
+
+    /// <summary>
+    /// The fields in the paragraph, each with its instruction and its cached result.
+    /// </summary>
+    /// <remarks>
+    /// Both forms are read: the simple field, which is one element, and the complex field, which
+    /// is a run of markers around an instruction and a result. A field nested inside another
+    /// field's result is not distinguished from the outer one.
+    /// </remarks>
+    public IEnumerable<FieldView> Fields
+    {
+        get
+        {
+            foreach (var simple in element.Descendants<W.SimpleField>())
+            {
+                var text = new StringBuilder();
+                foreach (var run in simple.Descendants<W.Run>())
+                {
+                    text.Append(new RunView(run).Text);
+                }
+
+                yield return new(simple.Instruction?.Value?.Trim() ?? "", text.ToString());
+            }
+
+            StringBuilder? code = null;
+            StringBuilder? value = null;
+            var inResult = false;
+            foreach (var run in element.Descendants<W.Run>())
+            {
+                if (run.Ancestors<W.SimpleField>().Any())
+                {
+                    continue;
+                }
+
+                foreach (var child in run.ChildElements)
+                {
+                    switch (child)
+                    {
+                        case W.FieldChar { FieldCharType: { HasValue: true } type }:
+                            if (type.Value == W.FieldCharValues.Begin)
+                            {
+                                code = new();
+                                value = new();
+                                inResult = false;
+                            }
+                            else if (type.Value == W.FieldCharValues.Separate)
+                            {
+                                inResult = true;
+                            }
+                            else if (type.Value == W.FieldCharValues.End)
+                            {
+                                if (code != null)
+                                {
+                                    yield return new(code.ToString().Trim(), value!.ToString());
+                                }
+
+                                code = null;
+                                value = null;
+                                inResult = false;
+                            }
+
+                            break;
+                        case W.FieldCode instruction when code != null && !inResult:
+                            code.Append(instruction.Text);
+                            break;
+                        case W.Text result when inResult && value != null:
+                            value.Append(result.Text);
+                            break;
+                    }
+                }
+            }
+        }
+    }
+
+    /// <summary>
+    /// The ids of the footnotes referenced from this paragraph, for looking up in
+    /// <see cref="DocumentView.Footnotes"/>.
+    /// </summary>
+    public IEnumerable<int> FootnoteReferences
+    {
+        get
+        {
+            foreach (var reference in element.Descendants<W.FootnoteReference>())
+            {
+                if (reference.Id?.Value is { } id)
+                {
+                    yield return (int) id;
+                }
+            }
+        }
+    }
+
     public IEnumerable<string> BookmarkNames
     {
         get

@@ -43,6 +43,22 @@ public class TableFormat :
     /// </summary>
     public TableLook Look { get; } = new();
 
+    /// <summary>
+    /// The table's title, as assistive technology announces it.
+    /// </summary>
+    /// <remarks>
+    /// Word surfaces this and <see cref="Description"/> as "Alt Text" on a table. A table used for
+    /// layout rather than data wants neither; a data table wants both, and a document that has to
+    /// meet an accessibility standard will not without them.
+    /// </remarks>
+    public string? Caption { get; set; }
+
+    /// <summary>
+    /// A longer description of what the table contains, for the same audience as
+    /// <see cref="Caption"/>.
+    /// </summary>
+    public string? Description { get; set; }
+
     IBordersView ITableFormatView.Borders => Borders;
     IShadingView ITableFormatView.Shading => Shading;
     ITableLookView ITableFormatView.Look => Look;
@@ -67,7 +83,9 @@ public class TableFormat :
         DefaultRightMargin == null &&
         DefaultTopMargin == null &&
         DefaultBottomMargin == null &&
-        Look.IsDefault;
+        Look.IsDefault &&
+        Caption == null &&
+        Description == null;
 
     public TableFormat Clone()
     {
@@ -90,6 +108,8 @@ public class TableFormat :
         DefaultTopMargin = other.DefaultTopMargin;
         DefaultBottomMargin = other.DefaultBottomMargin;
         Look.CopyFrom(other.Look);
+        Caption = other.Caption;
+        Description = other.Description;
     }
 
     public void Clear() =>
@@ -232,6 +252,22 @@ public class TableFormat :
             properties.TableLook = look;
         }
 
+        if (Caption != null)
+        {
+            properties.TableCaption = new()
+            {
+                Val = Caption
+            };
+        }
+
+        if (Description != null)
+        {
+            properties.TableDescription = new()
+            {
+                Val = Description
+            };
+        }
+
         return properties;
     }
 
@@ -272,6 +308,8 @@ public class TableFormat :
         }
 
         Look.ReadFrom(properties.TableLook);
+        Caption = properties.TableCaption?.Val?.Value;
+        Description = properties.TableDescription?.Val?.Value;
     }
 
     static Length? ReadMargin(W.TableWidthType? margin)

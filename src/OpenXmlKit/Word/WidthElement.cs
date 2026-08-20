@@ -10,16 +10,19 @@ namespace OpenXmlKit.Word;
 /// </remarks>
 static class WidthElement
 {
-    public static W.TableWidth TableWidth(Width width)
-    {
-        var element = new W.TableWidth();
-        Fill(element, width);
-        return element;
-    }
+    public static W.TableWidth TableWidth(Width width) =>
+        Of<W.TableWidth>(width);
 
-    public static W.TableCellWidth CellWidth(Width width)
+    public static W.TableCellWidth CellWidth(Width width) =>
+        Of<W.TableCellWidth>(width);
+
+    /// <summary>
+    /// The same conversion for any of the CT_TblWidth elements that has no named helper here.
+    /// </summary>
+    public static T Of<T>(Width width)
+        where T : W.TableWidthType, new()
     {
-        var element = new W.TableCellWidth();
+        var element = new T();
         Fill(element, width);
         return element;
     }

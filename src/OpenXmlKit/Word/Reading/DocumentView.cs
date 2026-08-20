@@ -96,6 +96,42 @@ public sealed class DocumentView :
         field ??= new(MainPart);
 
     /// <summary>
+    /// The document's list definitions, for resolving a paragraph's
+    /// <see cref="ParagraphView.List"/> into the marker it draws.
+    /// </summary>
+    public NumberingView Numbering =>
+        field ??= new(MainPart);
+
+    /// <summary>
+    /// The document's footnotes, in id order as stored.
+    /// </summary>
+    /// <remarks>
+    /// The separator and continuation-separator notes Word requires every document to carry are
+    /// not included: they are machinery rather than content, and returning them would put two
+    /// empty entries in front of every real note.
+    /// </remarks>
+    public IEnumerable<FootnoteView> Footnotes
+    {
+        get
+        {
+            if (MainPart.FootnotesPart?.Footnotes is not { } footnotes)
+            {
+                yield break;
+            }
+
+            foreach (var footnote in footnotes.Elements<W.Footnote>())
+            {
+                if (footnote.Type is { HasValue: true })
+                {
+                    continue;
+                }
+
+                yield return new(footnote);
+            }
+        }
+    }
+
+    /// <summary>
     /// Resolves the formatting that actually applies to a piece of content, rather than the
     /// formatting written on it.
     /// </summary>

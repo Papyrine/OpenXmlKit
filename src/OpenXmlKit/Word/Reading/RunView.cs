@@ -31,6 +31,21 @@ public readonly struct RunView
                     case W.Break:
                         builder.Append('\n');
                         break;
+                    case W.CarriageReturn:
+                        builder.Append('\n');
+                        break;
+                    case W.PositionalTab:
+                        builder.Append('\t');
+                        break;
+                    // A non-breaking hyphen and a soft hyphen are characters Word stores as
+                    // elements rather than as text, so a reader that only looks at w:t drops them
+                    // and silently joins the words either side.
+                    case W.NoBreakHyphen:
+                        builder.Append('\u2011');
+                        break;
+                    case W.SoftHyphen:
+                        builder.Append('\u00AD');
+                        break;
                     case W.SymbolChar symbol:
                         builder.Append(SymbolText(symbol));
                         break;
@@ -64,6 +79,18 @@ public readonly struct RunView
     /// </summary>
     public bool HasDrawing =>
         element.GetFirstChild<W.Drawing>() != null;
+
+    /// <summary>
+    /// The picture in this run, or null when it holds none.
+    /// </summary>
+    public ImageView? Image =>
+        element.GetFirstChild<W.Drawing>() is { } drawing ? new ImageView(drawing) : null;
+
+    /// <summary>
+    /// The id of the footnote this run is the reference mark for, or null when it is not one.
+    /// </summary>
+    public int? FootnoteReference =>
+        element.GetFirstChild<W.FootnoteReference>()?.Id?.Value is { } id ? (int) id : null;
 
     /// <summary>
     /// The underlying OpenXML element, for anything this view does not expose.

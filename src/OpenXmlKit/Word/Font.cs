@@ -106,6 +106,29 @@ public partial class Font :
     public Length? Position { get; set; }
 
     /// <summary>
+    /// The language the text is in, as a BCP 47 tag such as <c>en-AU</c>. This is what Word
+    /// proofs against.
+    /// </summary>
+    /// <remarks>
+    /// Worth stating on generated text. Unstated, the language is inherited from the style chain
+    /// and ultimately from whatever the reader's Word is set to, so a document written on one
+    /// machine can open covered in spelling errors on another. <see cref="NoProof"/> is the other
+    /// half of the answer, for text that is not prose at all.
+    /// </remarks>
+    public string? Language { get; set; }
+
+    /// <summary>
+    /// The language of East Asian text in the run, where it differs from <see cref="Language"/>.
+    /// </summary>
+    public string? LanguageEastAsia { get; set; }
+
+    /// <summary>
+    /// The language of complex-script text in the run, where it differs from
+    /// <see cref="Language"/>.
+    /// </summary>
+    public string? LanguageComplexScript { get; set; }
+
+    /// <summary>
     /// The id of a character style to apply. Direct formatting on this font still wins over it.
     /// </summary>
     public string? StyleId { get; set; }
@@ -145,6 +168,9 @@ public partial class Font :
         CharacterSpacing == null &&
         Scale == null &&
         Position == null &&
+        Language == null &&
+        LanguageEastAsia == null &&
+        LanguageComplexScript == null &&
         StyleId == null;
 
     public Font Clone()
@@ -187,6 +213,9 @@ public partial class Font :
         CharacterSpacing = other.CharacterSpacing;
         Scale = other.Scale;
         Position = other.Position;
+        Language = other.Language;
+        LanguageEastAsia = other.LanguageEastAsia;
+        LanguageComplexScript = other.LanguageComplexScript;
         StyleId = other.StyleId;
     }
 
@@ -366,6 +395,31 @@ public partial class Font :
                 Val = verticalPosition.ToOpenXml()
             };
         }
+
+        if (Language != null ||
+            LanguageEastAsia != null ||
+            LanguageComplexScript != null)
+        {
+            var languages = new W.Languages();
+            if (Language != null)
+            {
+                languages.Val = Language;
+            }
+
+            if (LanguageEastAsia != null)
+            {
+                languages.EastAsia = LanguageEastAsia;
+            }
+
+            // Word calls the complex-script slot "bidi", which is the attribute name rather than
+            // anything to do with direction — RightToLeft is the separate w:rtl toggle.
+            if (LanguageComplexScript != null)
+            {
+                languages.Bidi = LanguageComplexScript;
+            }
+
+            properties.Languages = languages;
+        }
     }
 
     // A stated-off toggle still emits its element, carrying w:val="0". That is the whole point of
@@ -461,6 +515,13 @@ public partial class Font :
         if (properties.VerticalTextAlignment?.Val is { HasValue: true } verticalPosition)
         {
             VerticalPosition = Map.ToVerticalTextPosition(verticalPosition.Value);
+        }
+
+        if (properties.Languages is { } languages)
+        {
+            Language = languages.Val?.Value;
+            LanguageEastAsia = languages.EastAsia?.Value;
+            LanguageComplexScript = languages.Bidi?.Value;
         }
     }
 

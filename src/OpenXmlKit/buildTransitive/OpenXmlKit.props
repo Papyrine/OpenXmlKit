@@ -41,32 +41,40 @@
     <Using Include="OpenXmlKit.Word.DocumentProperties" Alias="WDocumentProperties" />
     <Using Include="OpenXmlKit.Word.DocumentPropertiesView" Alias="WDocumentPropertiesView" />
     <Using Include="OpenXmlKit.Word.DocumentView" Alias="WDocumentView" />
+    <Using Include="OpenXmlKit.Word.FieldView" Alias="WFieldView" />
     <Using Include="OpenXmlKit.Word.Font" Alias="WFont" />
+    <Using Include="OpenXmlKit.Word.FootnoteView" Alias="WFootnoteView" />
     <Using Include="OpenXmlKit.Word.FormattingResolver" Alias="WFormattingResolver" />
     <Using Include="OpenXmlKit.Word.HeaderFooter" Alias="WHeaderFooter" />
     <Using Include="OpenXmlKit.Word.HeaderFooterKind" Alias="WHeaderFooterKind" />
     <Using Include="OpenXmlKit.Word.HighlightColor" Alias="WHighlightColor" />
+    <Using Include="OpenXmlKit.Word.HyperlinkView" Alias="WHyperlinkView" />
     <Using Include="OpenXmlKit.Word.IBorderView" Alias="IWBorderView" />
     <Using Include="OpenXmlKit.Word.IBordersView" Alias="IWBordersView" />
     <Using Include="OpenXmlKit.Word.ICellFormatView" Alias="IWCellFormatView" />
     <Using Include="OpenXmlKit.Word.IFontView" Alias="IWFontView" />
+    <Using Include="OpenXmlKit.Word.IListLevelView" Alias="IWListLevelView" />
     <Using Include="OpenXmlKit.Word.IPageSetupView" Alias="IWPageSetupView" />
     <Using Include="OpenXmlKit.Word.IParagraphFormatView" Alias="IWParagraphFormatView" />
     <Using Include="OpenXmlKit.Word.IRowFormatView" Alias="IWRowFormatView" />
     <Using Include="OpenXmlKit.Word.IShadingView" Alias="IWShadingView" />
     <Using Include="OpenXmlKit.Word.ITableFormatView" Alias="IWTableFormatView" />
     <Using Include="OpenXmlKit.Word.ITableLookView" Alias="IWTableLookView" />
+    <Using Include="OpenXmlKit.Word.ITableStyleConditionalView" Alias="IWTableStyleConditionalView" />
     <Using Include="OpenXmlKit.Word.ImageFormat" Alias="WImageFormat" />
     <Using Include="OpenXmlKit.Word.ImageInfo" Alias="WImageInfo" />
+    <Using Include="OpenXmlKit.Word.ImageView" Alias="WImageView" />
     <Using Include="OpenXmlKit.Word.ImageWrap" Alias="WImageWrap" />
     <Using Include="OpenXmlKit.Word.LineSpacingRule" Alias="WLineSpacingRule" />
     <Using Include="OpenXmlKit.Word.ListDefinition" Alias="WListDefinition" />
+    <Using Include="OpenXmlKit.Word.ListDefinitionView" Alias="WListDefinitionView" />
     <Using Include="OpenXmlKit.Word.ListLevel" Alias="WListLevel" />
     <Using Include="OpenXmlKit.Word.ListLevelAlignment" Alias="WListLevelAlignment" />
     <Using Include="OpenXmlKit.Word.ListMembership" Alias="WListMembership" />
     <Using Include="OpenXmlKit.Word.ListTrailingCharacter" Alias="WListTrailingCharacter" />
     <Using Include="OpenXmlKit.Word.NumberFormat" Alias="WNumberFormat" />
     <Using Include="OpenXmlKit.Word.Numbering" Alias="WNumbering" />
+    <Using Include="OpenXmlKit.Word.NumberingView" Alias="WNumberingView" />
     <Using Include="OpenXmlKit.Word.PageOrientation" Alias="WPageOrientation" />
     <Using Include="OpenXmlKit.Word.PageSetup" Alias="WPageSetup" />
     <Using Include="OpenXmlKit.Word.Paragraph" Alias="WParagraph" />
@@ -98,6 +106,8 @@
     <Using Include="OpenXmlKit.Word.TableFormat" Alias="WTableFormat" />
     <Using Include="OpenXmlKit.Word.TableLayout" Alias="WTableLayout" />
     <Using Include="OpenXmlKit.Word.TableLook" Alias="WTableLook" />
+    <Using Include="OpenXmlKit.Word.TableStyleArea" Alias="WTableStyleArea" />
+    <Using Include="OpenXmlKit.Word.TableStyleConditional" Alias="WTableStyleConditional" />
     <Using Include="OpenXmlKit.Word.TableView" Alias="WTableView" />
     <Using Include="OpenXmlKit.Word.TextDirection" Alias="WTextDirection" />
     <Using Include="OpenXmlKit.Word.ThemeColor" Alias="WThemeColor" />
@@ -130,32 +140,40 @@
     <Using Include="OpenXmlKit.Word.DocumentProperties" Alias="WordDocumentProperties" />
     <Using Include="OpenXmlKit.Word.DocumentPropertiesView" Alias="WordDocumentPropertiesView" />
     <Using Include="OpenXmlKit.Word.DocumentView" Alias="WordDocumentView" />
+    <Using Include="OpenXmlKit.Word.FieldView" Alias="WordFieldView" />
     <Using Include="OpenXmlKit.Word.Font" Alias="WordFont" />
+    <Using Include="OpenXmlKit.Word.FootnoteView" Alias="WordFootnoteView" />
     <Using Include="OpenXmlKit.Word.FormattingResolver" Alias="WordFormattingResolver" />
     <Using Include="OpenXmlKit.Word.HeaderFooter" Alias="WordHeaderFooter" />
     <Using Include="OpenXmlKit.Word.HeaderFooterKind" Alias="WordHeaderFooterKind" />
     <Using Include="OpenXmlKit.Word.HighlightColor" Alias="WordHighlightColor" />
+    <Using Include="OpenXmlKit.Word.HyperlinkView" Alias="WordHyperlinkView" />
     <Using Include="OpenXmlKit.Word.IBorderView" Alias="IWordBorderView" />
     <Using Include="OpenXmlKit.Word.IBordersView" Alias="IWordBordersView" />
     <Using Include="OpenXmlKit.Word.ICellFormatView" Alias="IWordCellFormatView" />
     <Using Include="OpenXmlKit.Word.IFontView" Alias="IWordFontView" />
+    <Using Include="OpenXmlKit.Word.IListLevelView" Alias="IWordListLevelView" />
     <Using Include="OpenXmlKit.Word.IPageSetupView" Alias="IWordPageSetupView" />
     <Using Include="OpenXmlKit.Word.IParagraphFormatView" Alias="IWordParagraphFormatView" />
     <Using Include="OpenXmlKit.Word.IRowFormatView" Alias="IWordRowFormatView" />
     <Using Include="OpenXmlKit.Word.IShadingView" Alias="IWordShadingView" />
     <Using Include="OpenXmlKit.Word.ITableFormatView" Alias="IWordTableFormatView" />
     <Using Include="OpenXmlKit.Word.ITableLookView" Alias="IWordTableLookView" />
+    <Using Include="OpenXmlKit.Word.ITableStyleConditionalView" Alias="IWordTableStyleConditionalView" />
     <Using Include="OpenXmlKit.Word.ImageFormat" Alias="WordImageFormat" />
     <Using Include="OpenXmlKit.Word.ImageInfo" Alias="WordImageInfo" />
+    <Using Include="OpenXmlKit.Word.ImageView" Alias="WordImageView" />
     <Using Include="OpenXmlKit.Word.ImageWrap" Alias="WordImageWrap" />
     <Using Include="OpenXmlKit.Word.LineSpacingRule" Alias="WordLineSpacingRule" />
     <Using Include="OpenXmlKit.Word.ListDefinition" Alias="WordListDefinition" />
+    <Using Include="OpenXmlKit.Word.ListDefinitionView" Alias="WordListDefinitionView" />
     <Using Include="OpenXmlKit.Word.ListLevel" Alias="WordListLevel" />
     <Using Include="OpenXmlKit.Word.ListLevelAlignment" Alias="WordListLevelAlignment" />
     <Using Include="OpenXmlKit.Word.ListMembership" Alias="WordListMembership" />
     <Using Include="OpenXmlKit.Word.ListTrailingCharacter" Alias="WordListTrailingCharacter" />
     <Using Include="OpenXmlKit.Word.NumberFormat" Alias="WordNumberFormat" />
     <Using Include="OpenXmlKit.Word.Numbering" Alias="WordNumbering" />
+    <Using Include="OpenXmlKit.Word.NumberingView" Alias="WordNumberingView" />
     <Using Include="OpenXmlKit.Word.PageOrientation" Alias="WordPageOrientation" />
     <Using Include="OpenXmlKit.Word.PageSetup" Alias="WordPageSetup" />
     <Using Include="OpenXmlKit.Word.Paragraph" Alias="WordParagraph" />
@@ -187,6 +205,8 @@
     <Using Include="OpenXmlKit.Word.TableFormat" Alias="WordTableFormat" />
     <Using Include="OpenXmlKit.Word.TableLayout" Alias="WordTableLayout" />
     <Using Include="OpenXmlKit.Word.TableLook" Alias="WordTableLook" />
+    <Using Include="OpenXmlKit.Word.TableStyleArea" Alias="WordTableStyleArea" />
+    <Using Include="OpenXmlKit.Word.TableStyleConditional" Alias="WordTableStyleConditional" />
     <Using Include="OpenXmlKit.Word.TableView" Alias="WordTableView" />
     <Using Include="OpenXmlKit.Word.TextDirection" Alias="WordTextDirection" />
     <Using Include="OpenXmlKit.Word.ThemeColor" Alias="WordThemeColor" />

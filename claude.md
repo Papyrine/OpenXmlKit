@@ -60,9 +60,12 @@ primitives.
   `Table`, `Row`, `Cell`. Forward-only: content goes in, nothing comes back out. These types have
   no enumeration properties at all.
 - **Read** — `DocumentView.Open` (or `DocumentView.Of` over a document being built), then
-  `ParagraphView`, `RunView`, `TableView`, `RowView`, `CellView`, `SectionView`, `StyleView`. All
-  `readonly struct`s over the SDK elements, allocating nothing but the enumerators, with no format
-  caching and no flush machinery because reading needs neither.
+  `ParagraphView`, `RunView`, `TableView`, `RowView`, `CellView`, `SectionView`, `StyleView`, plus
+  `HyperlinkView`, `ImageView`, `FieldView`, `FootnoteView` and `NumberingView` for the content
+  that is not plain text. All `readonly struct`s over the SDK elements, allocating nothing but the
+  enumerators, with no format caching and no flush machinery because reading needs neither.
+  The rule the read side is held to: **anything the build API can write, the read API can read
+  back.** `ReadContentTests` writes with one and asserts with the other so the two cannot drift.
 
 Formatting crosses the line through interfaces: `IFontView`, `IParagraphFormatView` and the rest
 carry the same properties as `Font` and friends with the setters removed, and the mutable classes
@@ -105,6 +108,7 @@ src/OpenXmlKit/
     Border.cs Borders.cs Shading.cs TabStops.cs
     Styles.cs Style.cs BuiltInStyleDefinitions.cs
     Numbering.cs ListDefinition.cs ListLevel.cs
+    TableStyleConditional.cs TableStyleArea.cs conditional table style formatting (tblStylePr)
     FormattingResolver.cs                      the read-side cascade
     Map.cs Toggles.cs WidthElement.cs Images.cs  internal converters
     Reading/                                   the read API: *View types and I*View interfaces
@@ -167,5 +171,17 @@ imported, for the same reason.
   cross-reference to it renders as an error. `Bookmarks.Sanitise` handles the mechanical part, but
   sanitising collapses distinct titles onto the same name — derive names positionally where they
   have to be unique.
+- **`ParagraphView.Text` walks `AllRuns`, not `Runs`.** A hyperlink holds its runs inside itself,
+  so a reader that only looks at the paragraph's direct children drops the link text — silently,
+  and all the way up through `DocumentView.Text`. `Runs` still means the direct children; only
+  `Text` changed. `BlockContainerView.Text` includes tables for the same reason. `TextTests` pins
+  both. The trailing empty paragraph Word requires after a table shows up as a blank line, and is
+  reported rather than trimmed: a blank line a caller put there deliberately looks identical.
+- **A conditional table style block cannot state everything its format object can.** `tblStylePr`
+  uses the `CT_*StyleOverride` types, which drop the properties that belong to content rather than
+  to a style — `rStyle`, `tcW`, `gridSpan`, `tblW`, `tblLook` and the rest. `TableStyleConditional`
+  throws on those rather than dropping them, because a dropped child is a style that silently does
+  less than it says. The throw surfaces at flush, so it also comes out of `Dispose` if the caller
+  never saved.
 - **Fields need a cached value** or Word asks the reader for permission to update fields on open and
   shows a placeholder until they agree.

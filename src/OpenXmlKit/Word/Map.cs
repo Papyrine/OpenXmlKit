@@ -547,6 +547,91 @@ static class Map
         return TextDirection.Horizontal;
     }
 
+    public static W.TableStyleOverrideValues ToOpenXml(this TableStyleArea value) =>
+        value switch
+        {
+            TableStyleArea.WholeTable => W.TableStyleOverrideValues.WholeTable,
+            TableStyleArea.FirstRow => W.TableStyleOverrideValues.FirstRow,
+            TableStyleArea.LastRow => W.TableStyleOverrideValues.LastRow,
+            TableStyleArea.FirstColumn => W.TableStyleOverrideValues.FirstColumn,
+            TableStyleArea.LastColumn => W.TableStyleOverrideValues.LastColumn,
+            TableStyleArea.Band1Horizontal => W.TableStyleOverrideValues.Band1Horizontal,
+            TableStyleArea.Band2Horizontal => W.TableStyleOverrideValues.Band2Horizontal,
+            TableStyleArea.Band1Vertical => W.TableStyleOverrideValues.Band1Vertical,
+            TableStyleArea.Band2Vertical => W.TableStyleOverrideValues.Band2Vertical,
+            // Word names the four corner cells by compass point rather than by position.
+            TableStyleArea.TopLeftCell => W.TableStyleOverrideValues.NorthWestCell,
+            TableStyleArea.TopRightCell => W.TableStyleOverrideValues.NorthEastCell,
+            TableStyleArea.BottomLeftCell => W.TableStyleOverrideValues.SouthWestCell,
+            TableStyleArea.BottomRightCell => W.TableStyleOverrideValues.SouthEastCell,
+            _ => throw Unmapped(value)
+        };
+
+    public static TableStyleArea ToTableStyleArea(W.TableStyleOverrideValues value)
+    {
+        if (value == W.TableStyleOverrideValues.FirstRow)
+        {
+            return TableStyleArea.FirstRow;
+        }
+
+        if (value == W.TableStyleOverrideValues.LastRow)
+        {
+            return TableStyleArea.LastRow;
+        }
+
+        if (value == W.TableStyleOverrideValues.FirstColumn)
+        {
+            return TableStyleArea.FirstColumn;
+        }
+
+        if (value == W.TableStyleOverrideValues.LastColumn)
+        {
+            return TableStyleArea.LastColumn;
+        }
+
+        if (value == W.TableStyleOverrideValues.Band1Horizontal)
+        {
+            return TableStyleArea.Band1Horizontal;
+        }
+
+        if (value == W.TableStyleOverrideValues.Band2Horizontal)
+        {
+            return TableStyleArea.Band2Horizontal;
+        }
+
+        if (value == W.TableStyleOverrideValues.Band1Vertical)
+        {
+            return TableStyleArea.Band1Vertical;
+        }
+
+        if (value == W.TableStyleOverrideValues.Band2Vertical)
+        {
+            return TableStyleArea.Band2Vertical;
+        }
+
+        if (value == W.TableStyleOverrideValues.NorthWestCell)
+        {
+            return TableStyleArea.TopLeftCell;
+        }
+
+        if (value == W.TableStyleOverrideValues.NorthEastCell)
+        {
+            return TableStyleArea.TopRightCell;
+        }
+
+        if (value == W.TableStyleOverrideValues.SouthWestCell)
+        {
+            return TableStyleArea.BottomLeftCell;
+        }
+
+        if (value == W.TableStyleOverrideValues.SouthEastCell)
+        {
+            return TableStyleArea.BottomRightCell;
+        }
+
+        return TableStyleArea.WholeTable;
+    }
+
     static Exception Unmapped<T>(T value)
         where T : struct, Enum =>
         new ArgumentOutOfRangeException(nameof(value), value, $"Unmapped {typeof(T).Name}.");

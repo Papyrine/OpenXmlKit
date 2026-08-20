@@ -46,6 +46,9 @@ public partial class Font
         CharacterSpacing = higher.CharacterSpacing ?? CharacterSpacing;
         Scale = higher.Scale ?? Scale;
         Position = higher.Position ?? Position;
+        Language = higher.Language ?? Language;
+        LanguageEastAsia = higher.LanguageEastAsia ?? LanguageEastAsia;
+        LanguageComplexScript = higher.LanguageComplexScript ?? LanguageComplexScript;
 
         if (!higher.Shading.IsEmpty)
         {

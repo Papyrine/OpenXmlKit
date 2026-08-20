@@ -17,5 +17,7 @@ public interface ITableFormatView
     Length? DefaultTopMargin { get; }
     Length? DefaultBottomMargin { get; }
     ITableLookView Look { get; }
+    string? Caption { get; }
+    string? Description { get; }
     bool IsEmpty { get; }
 }

@@ -10,6 +10,12 @@ public readonly struct TableView
     internal TableView(W.Table element) =>
         this.element = element;
 
+    /// <summary>
+    /// The table's text, rows joined by newlines and cells within a row by tabs.
+    /// </summary>
+    public string Text =>
+        string.Join("\n", Rows.Select(_ => _.Text));
+
     public IEnumerable<RowView> Rows
     {
         get

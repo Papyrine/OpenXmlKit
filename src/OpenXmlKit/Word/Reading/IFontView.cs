@@ -41,6 +41,9 @@ public interface IFontView
     Length? CharacterSpacing { get; }
     int? Scale { get; }
     Length? Position { get; }
+    string? Language { get; }
+    string? LanguageEastAsia { get; }
+    string? LanguageComplexScript { get; }
 
     /// <summary>
     /// The character style named on the run, if any. What that style resolves to is

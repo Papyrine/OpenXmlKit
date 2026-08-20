@@ -14,5 +14,9 @@ public interface IRowFormatView
     Toggle IsHeader { get; }
 
     Toggle CantSplit { get; }
+    int? GridBefore { get; }
+    int? GridAfter { get; }
+    Width WidthBefore { get; }
+    Width WidthAfter { get; }
     bool IsEmpty { get; }
 }
