@@ -147,8 +147,17 @@ TestContext.Out.WriteLine($"{level.Format} in {level.Font.Name}");
 <sup><a href='/src/OpenXmlKit.Tests/Samples.cs#L120-L135' title='Snippet source file'>snippet source</a> | <a href='#snippet-ReadingContent' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
-`RunView.Image` gives an `ImageView` with the drawn size, the alternative text and the encoded
-bytes; `DocumentView.Footnotes` gives the notes themselves rather than just the reference marks.
+Each of those is its own view: `HyperlinkView` resolves the relationship back to the address, and
+against the part the link actually lives in, so a link in a header works; `FieldView` carries the
+instruction and the cached result, reading both the simple field and the five-run complex form;
+`NumberingView` turns a numbering id into the level it draws. `RunView.Image` gives an `ImageView`
+with the drawn size, the alternative text and the encoded bytes, and `DocumentView.Footnotes` gives
+`FootnoteView`s — the notes themselves rather than just the reference marks.
+
+`DocumentView.Body` is only one of the places text lives. `DocumentView.Containers` walks all of
+them — body, headers, footers, footnotes, endnotes — which is what anything searching or extracting
+across a whole document needs. Reading only the body reports a letterhead's contact block and every
+footnote as absent.
 
 `FontFor` returns an `IFontView`, and it walks the cascade in the order the format defines — document defaults, table style, paragraph
 style with its `basedOn` chain, character style, then direct formatting. That order is where most
@@ -199,10 +208,62 @@ document.Body.AddTable(
 <sup><a href='/src/OpenXmlKit.Tests/Samples.cs#L147-L180' title='Snippet source file'>snippet source</a> | <a href='#snippet-TableStyles' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
+Each block is a `TableStyleConditional`, and reading one back is `StyleView.ConditionalFormats`.
+
 The schema narrows each block — a conditional override carries no style reference, no table width
 and no cell span, because those belong to the content rather than to the style. Stating one throws
 rather than being dropped on the way out, since a dropped child is a style that silently does less
 than it says.
+
+
+## Colours
+
+`Color` reads `#RRGGBB`, `RRGGBB`, `#RGB` and the literal `auto`, and carries theme slots as well as
+fixed values, so `Color.FromTheme(ThemeColor.Accent1)` follows the template rather than pinning a
+value.
+
+Eight hex digits are the one thing it will not read, and deliberately. Excel writes `AARRGGBB` with
+the alpha first; CSS's eight-digit form is `RRGGBBAA` with the alpha last. Nothing in the string
+says which, so reading one as the other silently swaps a colour channel for the alpha. The order is
+stated by choosing the method:
+
+| | |
+|---|---|
+| `Color.TryParse` | three or six digits, and `auto`. Refuses eight. |
+| `Color.TryParseArgb` | Excel's alpha-first eight, plus everything above. |
+| `Color.ToArgbHex()` | the eight-digit form back out, or null for `auto` and for a theme slot. |
+
+The alpha is checked and then dropped: Word's colours are opaque, so a half-transparent value comes
+out solid.
+
+
+## Things this handles for you
+
+Each of these is a way to produce a document that opens wrong, and each one cost somebody in this
+estate an afternoon before it was written down.
+
+- **Characters XML forbids.** Most C0 controls and unpaired surrogates cannot appear in an XML
+  document at all, and the SDK does not escape them — it throws at `Save`, naming none of the text
+  that carried them. Every string the build API turns into a `w:t` goes through `XmlChars.Strip`
+  first, and that is public for anything writing parts of its own.
+- **A `MemoryStream` over a byte array is not expandable**, so the obvious
+  `Document.OpenForAppend(new MemoryStream(bytes))` fails on the first write with a message that
+  never mentions the array. `OpenForAppend(byte[])` exists so a template loaded from bytes just
+  works.
+- **Proofing language.** Unstated, Word proofs generated text in whatever language the reader's
+  copy is set to, so a document written on one machine can open covered in red on another.
+  `Font.Language` states it; `Font.NoProof` is the other half, for text that is not prose.
+- **Table alternative text.** `TableFormat.Caption` and `Description` are what a screen reader
+  announces, and what an accessibility standard asks for.
+- **Ragged tables.** Every row shares the table's one grid, so a row that starts part-way across
+  states the gap rather than carrying placeholder cells — `RowFormat.GridBefore` with
+  `WidthBefore`, and the matching pair at the other end.
+- **Bookmark names.** Word takes only letters, digits and underscores, must start with a letter,
+  and caps at forty characters. A name that breaks the rules is dropped without a warning and every
+  cross-reference to it renders as an error. `Bookmarks.Sanitise` handles the mechanical part.
+- **Built-in styles.** Word carries `TableGrid`, `Heading1` and the rest at application level and
+  only writes them into a document when a user inserts something that uses them, so a generated
+  document that names one renders unstyled. `Styles.EnsureBuiltIn` supplies the definitions.
 
 
 ## Name collisions
