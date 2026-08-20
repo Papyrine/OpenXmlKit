@@ -1,5 +1,9 @@
 # <img src="/src/icon.png" height="30px"> OpenXmlKit
 
+
+[![Build status](https://img.shields.io/appveyor/build/SimonCropp/OpenXmlKit)](https://ci.appveyor.com/project/SimonCropp/OpenXmlKit)
+[![NuGet Status](https://img.shields.io/nuget/v/OpenXmlKit.svg)](https://www.nuget.org/packages/OpenXmlKit/)
+
 OpenXmlKit is an ergonomic wrapper over [DocumentFormat.OpenXml](https://github.com/dotnet/Open-XML-SDK)
 for building and reading Word documents. It wraps the SDK rather than replacing it, so anything it
 does not model is still reachable and a partial migration onto it is always possible.
