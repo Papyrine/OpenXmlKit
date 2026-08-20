@@ -183,6 +183,16 @@ imported, for the same reason.
   `Text` changed. `BlockContainerView.Text` includes tables for the same reason. `TextTests` pins
   both. The trailing empty paragraph Word requires after a table shows up as a blank line, and is
   reported rather than trimmed: a blank line a caller put there deliberately looks identical.
+- **Cell margins are emitted as `w:start`/`w:end`, and that is correct.** Both pairs are in
+  `CT_TcMar` and `CT_TblCellMar` — `start`/`end` are the Office 2010+ form, `left`/`right` the
+  legacy one. Verified against Word 16.0: it reports identical padding for either, and on save it
+  rewrites `start`/`end` to `left`/`right` with the values intact, which is proof it read them.
+  Morph reads both and *prefers* `start`/`end`, with a test saying so because Excelsior emits them
+  too. A comment in OpenXmlHtml's `PaddingHelper` claims `start`/`end` are "not schema-valid here
+  and silently dropped by stricter consumers"; that is wrong on both counts. One real asymmetry:
+  at table level `w:left` is `TableWidthDxaNilType` (integer, dxa or nil) where `w:start` is
+  `TableWidthType`, so the legacy form cannot express a percentage — another reason to keep
+  `start`/`end`.
 - **A conditional table style block cannot state everything its format object can.** `tblStylePr`
   uses the `CT_*StyleOverride` types, which drop the properties that belong to content rather than
   to a style — `rStyle`, `tcW`, `gridSpan`, `tblW`, `tblLook` and the rest. `TableStyleConditional`
