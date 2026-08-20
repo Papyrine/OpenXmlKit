@@ -55,3 +55,32 @@ static class BothInOneFile
         return document.ToArray();
     }
 }
+
+/// <summary>
+/// The read half, under aliases, in the same file as the SDK's own names.
+/// </summary>
+static class ReadingUnderAliases
+{
+    /// <summary>
+    /// Reading gives back views, and a view has no way to change what it is looking at. The lines
+    /// commented out below are the point: they do not compile, which is the guarantee.
+    /// </summary>
+    public static string FirstParagraph(byte[] bytes)
+    {
+        using var document = WDocumentView.Open(bytes);
+        var paragraph = document.Body.Paragraphs.First();
+
+        // paragraph.AddBookmark(...);              no such method on a view
+        // paragraph.Format.Alignment = ...;        IWParagraphFormatView has no setters
+
+        // Typed as IWFontView, the alias for IFontView: the prefix goes after the leading I.
+        var font = document.Formatting.FontFor(paragraph.Runs.First(), paragraph);
+        return $"{paragraph.Text} in {font.Name ?? "the default font"}";
+    }
+
+    /// <summary>
+    /// And the SDK's own reading, unqualified, alongside it.
+    /// </summary>
+    public static int CountParagraphs(MainDocumentPart main) =>
+        main.Document!.Body!.Elements<Paragraph>().Count();
+}

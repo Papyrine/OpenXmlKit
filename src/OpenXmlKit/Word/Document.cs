@@ -26,6 +26,8 @@ public sealed partial class Document :
         this.ownedStream = ownedStream;
     }
 
+    internal WordprocessingDocument Package => package;
+
     /// <summary>
     /// Starts an empty document in memory. <see cref="Save(Stream)"/> or <see cref="ToArray"/>
     /// gets the bytes out.
@@ -57,21 +59,29 @@ public sealed partial class Document :
     }
 
     /// <summary>
-    /// Opens an existing document.
+    /// Opens an existing document to add content to it — a branded template, typically, whose
+    /// styles, headers and page setup the new content should inherit.
     /// </summary>
+    /// <remarks>
+    /// Building into an existing document rather than editing it: content added through
+    /// <see cref="Body"/> and <see cref="Builder"/> is written, and everything already in the file
+    /// is left exactly as it was.
+    /// <para>
+    /// Adding, not editing. There is no way to reach the content already in the file through this
+    /// API — for that, open a <see cref="DocumentView"/> — so a change to it cannot be written and
+    /// cannot be silently dropped either.
+    /// </para>
+    /// </remarks>
     /// <param name="stream">
-    /// The document to read. Opening for edit needs a writable, expandable stream: a MemoryStream
-    /// built over a byte array is fixed-size and fails on the first write.
+    /// The document to add to. It must be writable and expandable: a MemoryStream built over a
+    /// byte array is fixed-size and fails on the first write.
     /// </param>
-    /// <param name="editable">
-    /// Whether changes are written back. Reading is the cheaper path and the one v1 is built for;
-    /// see the readme on what editing an existing document does and does not preserve.
-    /// </param>
-    public static Document Open(Stream stream, bool editable = false) =>
-        new(WordprocessingDocument.Open(stream, editable), null);
+    public static Document OpenForAppend(Stream stream) =>
+        new(WordprocessingDocument.Open(stream, true), null);
 
-    public static Document Open(string path, bool editable = false) =>
-        new(WordprocessingDocument.Open(path, editable), null);
+    /// <inheritdoc cref="OpenForAppend(Stream)"/>
+    public static Document OpenForAppend(string path) =>
+        new(WordprocessingDocument.Open(path, true), null);
 
     static void Initialise(WordprocessingDocument package)
     {

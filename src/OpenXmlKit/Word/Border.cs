@@ -3,7 +3,8 @@ namespace OpenXmlKit.Word;
 /// <summary>
 /// One edge of a border box.
 /// </summary>
-public class Border
+public class Border :
+    IBorderView
 {
     /// <summary>
     /// The line to draw. Null leaves the edge unstated, so it inherits; <see cref="BorderStyle.None"/>

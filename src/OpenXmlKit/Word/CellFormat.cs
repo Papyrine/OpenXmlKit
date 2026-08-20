@@ -3,7 +3,8 @@ namespace OpenXmlKit.Word;
 /// <summary>
 /// Formatting for one table cell.
 /// </summary>
-public class CellFormat
+public class CellFormat :
+    ICellFormatView
 {
     /// <summary>
     /// The cell's preferred width. A percentage is of the table, not the page.
@@ -49,6 +50,9 @@ public class CellFormat
     /// Squeezes the content horizontally to fit the cell width.
     /// </summary>
     public Toggle FitText { get; set; }
+
+    IBordersView ICellFormatView.Borders => Borders;
+    IShadingView ICellFormatView.Shading => Shading;
 
     /// <summary>
     /// Sets all four margins at once.

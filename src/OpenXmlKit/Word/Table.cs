@@ -18,29 +18,6 @@ public class Table
     public Table() =>
         element = new();
 
-    internal Table(W.Table element)
-    {
-        this.element = element;
-        if (element.GetFirstChild<W.TableProperties>() is { } properties)
-        {
-            format = new();
-            format.ReadFrom(properties);
-        }
-
-        if (element.GetFirstChild<W.TableGrid>() is { } grid)
-        {
-            columnWidths = [];
-            foreach (var column in grid.Elements<W.GridColumn>())
-            {
-                columnWidths.Add(
-                    column.Width is { HasValue: true } width &&
-                    double.TryParse(width.Value, NumberStyles.Float, CultureInfo.InvariantCulture, out var twips)
-                        ? Length.FromTwips(twips)
-                        : Length.Zero);
-            }
-        }
-    }
-
     /// <summary>
     /// Starts a new table. Equivalent to the constructor, and reads better at the head of a chain.
     /// </summary>
@@ -59,18 +36,6 @@ public class Table
     /// widest row, and Word fits the columns to their content.
     /// </remarks>
     public IReadOnlyList<Length>? ColumnWidths => columnWidths;
-
-    public IEnumerable<Row> Rows
-    {
-        get
-        {
-            Flush();
-            foreach (var row in element.Elements<W.TableRow>())
-            {
-                yield return new(row);
-            }
-        }
-    }
 
     public Row AddRow()
     {

@@ -29,8 +29,8 @@ public class AliasPropsTests
 
         foreach (var type in AliasProps.PublicTypes())
         {
-            Assert.That(props, Does.Contain($"Alias=\"W{type.Name}\""), type.Name);
-            Assert.That(props, Does.Contain($"Alias=\"Word{type.Name}\""), type.Name);
+            Assert.That(props, Does.Contain($"Alias=\"{AliasProps.Alias("W", type)}\""), type.Name);
+            Assert.That(props, Does.Contain($"Alias=\"{AliasProps.Alias("Word", type)}\""), type.Name);
         }
     }
 
@@ -48,6 +48,16 @@ public class AliasPropsTests
 
         var names = AliasProps.PublicTypes().Select(_ => _.Name).ToHashSet(StringComparer.Ordinal);
         Assert.That(names, Is.SupersetOf(collisions));
+    }
+
+    [Test]
+    public void InterfacesKeepTheirLeadingI()
+    {
+        // IFontView aliased as WIFontView would read as a type called WIFont; the prefix belongs
+        // after the I, where it leaves the interface convention intact.
+        Assert.That(AliasProps.Alias("W", typeof(IFontView)), Is.EqualTo("IWFontView"));
+        Assert.That(AliasProps.Alias("Word", typeof(IFontView)), Is.EqualTo("IWordFontView"));
+        Assert.That(AliasProps.Alias("W", typeof(ParagraphView)), Is.EqualTo("WParagraphView"));
     }
 
     static string Normalise(string value) =>

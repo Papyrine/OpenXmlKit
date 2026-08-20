@@ -47,7 +47,7 @@ public static class AliasProps
             builder.AppendLine($"  <ItemGroup Condition=\"'$(OpenXmlKitAliases)' == '{prefix}'\">");
             foreach (var type in PublicTypes())
             {
-                builder.AppendLine($"    <Using Include=\"{type.FullName}\" Alias=\"{prefix}{type.Name}\" />");
+                builder.AppendLine($"    <Using Include=\"{type.FullName}\" Alias=\"{Alias(prefix, type)}\" />");
             }
 
             builder.AppendLine("  </ItemGroup>");
@@ -56,6 +56,24 @@ public static class AliasProps
         builder.AppendLine();
         builder.AppendLine("</Project>");
         return builder.ToString();
+    }
+
+    /// <summary>
+    /// The prefixed name for a type. On an interface the prefix goes after the leading I, so
+    /// IFontView becomes IWFontView rather than WIFontView.
+    /// </summary>
+    public static string Alias(string prefix, Type type)
+    {
+        var name = type.Name;
+        if (type.IsInterface &&
+            name.Length > 1 &&
+            name[0] == 'I' &&
+            char.IsUpper(name[1]))
+        {
+            return "I" + prefix + name[1..];
+        }
+
+        return prefix + name;
     }
 
     /// <summary>

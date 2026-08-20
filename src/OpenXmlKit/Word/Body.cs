@@ -49,28 +49,10 @@ public class Body :
     }
 
     /// <summary>
-    /// The final section. A document always has at least this one.
+    /// The section currently being written into. A document always has at least this one.
     /// </summary>
     public Section Section =>
         SectionFor(SectionProperties());
-
-    public IEnumerable<Section> Sections
-    {
-        get
-        {
-            // Every section but the last is stored on the paragraph mark that ends it; the last
-            // one closes the body. Walking in document order therefore means the paragraphs first.
-            foreach (var paragraph in element.Elements<W.Paragraph>())
-            {
-                if (paragraph.ParagraphProperties?.GetFirstChild<W.SectionProperties>() is { } properties)
-                {
-                    yield return SectionFor(properties);
-                }
-            }
-
-            yield return Section;
-        }
-    }
 
     /// <summary>
     /// Ends the current section and starts a new one, so the rest of the document can have its own

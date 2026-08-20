@@ -3,7 +3,8 @@ namespace OpenXmlKit.Word;
 /// <summary>
 /// Formatting for a table as a whole.
 /// </summary>
-public class TableFormat
+public class TableFormat :
+    ITableFormatView
 {
     /// <summary>
     /// The id of the table style to apply.
@@ -41,6 +42,10 @@ public class TableFormat
     /// so on.
     /// </summary>
     public TableLook Look { get; } = new();
+
+    IBordersView ITableFormatView.Borders => Borders;
+    IShadingView ITableFormatView.Shading => Shading;
+    ITableLookView ITableFormatView.Look => Look;
 
     public void SetDefaultMargins(Length horizontal, Length vertical)
     {

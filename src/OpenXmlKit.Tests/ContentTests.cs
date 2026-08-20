@@ -170,7 +170,7 @@ public class ContentTests
 
         DocumentAssert.IsValid(document);
 
-        using var reopened = Document.Open(new MemoryStream(document.ToArray()));
+        using var reopened = DocumentAssert.Read(document);
         Assert.That(reopened.Properties.Title, Is.EqualTo("Stocktake delivery update"));
         Assert.That(reopened.Properties.GetCustom("Classification"), Is.EqualTo("OFFICIAL"));
     }

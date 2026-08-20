@@ -137,7 +137,7 @@ public class DocumentProperties
         return this;
     }
 
-    static string ValueOf(CustomDocumentProperty property) =>
+    internal static string ValueOf(CustomDocumentProperty property) =>
         property.VTLPWSTR?.Text ??
         property.VTBString?.Text ??
         property.VTInt32?.Text ??

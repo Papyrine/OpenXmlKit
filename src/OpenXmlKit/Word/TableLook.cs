@@ -12,7 +12,8 @@ namespace OpenXmlKit.Word;
 /// row banding on, everything else off.
 /// </para>
 /// </remarks>
-public class TableLook
+public class TableLook :
+    ITableLookView
 {
     public bool FirstRow { get; set; } = true;
     public bool LastRow { get; set; }

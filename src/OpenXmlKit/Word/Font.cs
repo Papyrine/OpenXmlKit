@@ -14,7 +14,8 @@ namespace OpenXmlKit.Word;
 /// one thing that differs.
 /// </para>
 /// </remarks>
-public partial class Font
+public partial class Font :
+    IFontView
 {
     /// <summary>
     /// The typeface, applied to every script. Set <see cref="NameAscii"/> and the rest directly to

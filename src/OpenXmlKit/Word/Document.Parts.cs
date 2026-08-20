@@ -124,13 +124,6 @@ public sealed partial class Document
         BlockContainer(footnote, document);
 
     /// <summary>
-    /// Resolves the formatting that actually applies to a piece of content, rather than the
-    /// formatting written on it.
-    /// </summary>
-    public FormattingResolver Formatting =>
-        field ??= new(this);
-
-    /// <summary>
     /// The document's metadata — title, author, and the rest of what a file's properties dialog
     /// shows.
     /// </summary>

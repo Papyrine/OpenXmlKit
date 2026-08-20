@@ -27,6 +27,12 @@ public class TabStops :
 
     public int Count => stops.Count;
 
+    /// <summary>
+    /// The stops as a list, for the read side. <see cref="TabStop"/> is an immutable value, so no
+    /// read-only projection of it is needed.
+    /// </summary>
+    public IReadOnlyList<TabStop> AsList => stops;
+
     public TabStop this[int index] => stops[index];
 
     public bool IsEmpty => stops.Count == 0;

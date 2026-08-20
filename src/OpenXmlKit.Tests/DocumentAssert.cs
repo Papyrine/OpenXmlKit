@@ -44,6 +44,16 @@ public static class DocumentAssert
     }
 
     /// <summary>
+    /// Reads back what the document would save as.
+    /// </summary>
+    /// <remarks>
+    /// Through the file rather than through the builder, so an assertion checks what landed in the
+    /// package rather than what is pending in memory.
+    /// </remarks>
+    public static DocumentView Read(Document document) =>
+        DocumentView.Open(document.ToArray());
+
+    /// <summary>
     /// The XML of the main document part, for asserting on what was actually written.
     /// </summary>
     public static string MainPartXml(Document document)

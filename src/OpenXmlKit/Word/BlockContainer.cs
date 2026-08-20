@@ -22,36 +22,6 @@ public abstract class BlockContainer
 
     internal Document? Document { get; }
 
-    public IEnumerable<Paragraph> Paragraphs
-    {
-        get
-        {
-            Flush();
-            foreach (var paragraph in container.Elements<W.Paragraph>())
-            {
-                yield return new(paragraph);
-            }
-        }
-    }
-
-    public IEnumerable<Table> Tables
-    {
-        get
-        {
-            Flush();
-            foreach (var table in container.Elements<W.Table>())
-            {
-                yield return new(table);
-            }
-        }
-    }
-
-    /// <summary>
-    /// The plain text, blocks joined by newlines.
-    /// </summary>
-    public string Text =>
-        string.Join("\n", Paragraphs.Select(_ => _.Text));
-
     public Paragraph AddParagraph(string? text = null)
     {
         var paragraph = new Paragraph(text);

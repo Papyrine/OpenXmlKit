@@ -7,7 +7,8 @@ namespace OpenXmlKit.Word;
 /// As with <see cref="Font"/>, everything defaults to unstated, so an untouched format writes no
 /// paragraph properties and the style hierarchy resolves.
 /// </remarks>
-public partial class ParagraphFormat
+public partial class ParagraphFormat :
+    IParagraphFormatView
 {
     /// <summary>
     /// The id of the paragraph style to apply.

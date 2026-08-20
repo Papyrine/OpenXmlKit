@@ -83,7 +83,7 @@ using (builder.Row())
     builder.Write("B");
 }
 ```
-<sup><a href='/src/OpenXmlKit.Tests/Samples.cs#L35-L58' title='Snippet source file'>snippet source</a> | <a href='#snippet-CursorBuilder' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/OpenXmlKit.Tests/Samples.cs#L36-L59' title='Snippet source file'>snippet source</a> | <a href='#snippet-CursorBuilder' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 `PushFormatting` scopes character, paragraph, cell, row and table formatting together, and every
@@ -92,20 +92,21 @@ paired start and end — table, row, bookmark — is a `using` block, so neither
 
 ## Reading
 
-Reading is a lazy view over the SDK tree rather than a second model, so it costs about what walking
-the tree yourself would:
+Reading is a separate API, not the same one with the setters hidden. `DocumentView.Open` gives back
+views — `ParagraphView`, `RunView`, `TableView` — which are lazy projections over the SDK tree and
+have no way to change what they are looking at:
 
 <!-- snippet: Reading -->
 <a id='snippet-Reading'></a>
 ```cs
-using var document = Document.Open(new MemoryStream(source));
+using var document = DocumentView.Open(source);
 
 foreach (var paragraph in document.Body.Paragraphs)
 {
     TestContext.Out.WriteLine(paragraph.Text);
 }
 ```
-<sup><a href='/src/OpenXmlKit.Tests/Samples.cs#L69-L78' title='Snippet source file'>snippet source</a> | <a href='#snippet-Reading' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/OpenXmlKit.Tests/Samples.cs#L71-L80' title='Snippet source file'>snippet source</a> | <a href='#snippet-Reading' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 The part worth knowing about is the resolver, which answers what formatting *applies* rather than
@@ -116,10 +117,10 @@ what is written:
 ```cs
 var font = document.Formatting.FontFor(run, paragraph, tableStyleId: "Branded");
 ```
-<sup><a href='/src/OpenXmlKit.Tests/Samples.cs#L93-L97' title='Snippet source file'>snippet source</a> | <a href='#snippet-ResolvingFormatting' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/OpenXmlKit.Tests/Samples.cs#L97-L101' title='Snippet source file'>snippet source</a> | <a href='#snippet-ResolvingFormatting' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
-It walks the cascade in the order the format defines — document defaults, table style, paragraph
+`FontFor` returns an `IFontView`, and it walks the cascade in the order the format defines — document defaults, table style, paragraph
 style with its `basedOn` chain, character style, then direct formatting. That order is where most
 Word surprises come from, and one in particular: **a paragraph style outranks a table style**, so
 branding a table's font through its table style alone silently loses to whatever `Normal` says.
@@ -162,7 +163,7 @@ var raw = table.ToOpenXml();
 using var document = Document.Create();
 document.Body.AppendElement(raw);
 ```
-<sup><a href='/src/OpenXmlKit.Tests/Samples.cs#L107-L115' title='Snippet source file'>snippet source</a> | <a href='#snippet-EscapeHatch' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/OpenXmlKit.Tests/Samples.cs#L111-L119' title='Snippet source file'>snippet source</a> | <a href='#snippet-EscapeHatch' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 This is deliberate and load-bearing. A library migrating onto OpenXmlKit does so a piece at a time,
@@ -171,11 +172,27 @@ and code that hands raw elements across a boundary has to keep working while it 
 
 ## What v1 does not do
 
-**Manipulate.** v1 is Build and Read. `Document.Open(stream, editable: true)` works and writes back
-through the same wrappers, but there is no structural repair, no change tracking, and **no
-round-trip fidelity guarantee** — this library does not promise that opening a document it does not
-fully model, changing one paragraph, and saving leaves everything else untouched. If that is what
-you need, wait for it rather than assuming it.
+**Modify an existing document.** There are three ways in, and their types say what they do:
+
+| | | |
+|---|---|---|
+| `Document.Create()` | `Document` | A new document. |
+| `Document.OpenForAppend(...)` | `Document` | An existing one, to add content to — a branded template, typically, whose styles, headers and page setup the new content inherits. |
+| `DocumentView.Open(...)` | `DocumentView` | An existing one, to read. |
+
+What is missing is changing content that is already there, and it is missing at the type level
+rather than by convention. A `Document` has nothing to enumerate — no `Body.Paragraphs`, no
+`Table.Rows` — so there is no way to reach the content already in a file through the building API.
+A `ParagraphView` has no `AddRun`, no `AddBookmark`, and its formatting is `IParagraphFormatView`,
+which has no setters. So this does not compile, which is the whole point:
+
+```cs
+using var document = DocumentView.Open(bytes);
+document.Body.Paragraphs.First().AddBookmark(...);   // no such method
+document.Body.Paragraphs.First().Format.Alignment = ParagraphAlignment.Center;  // no setter
+```
+
+To inspect a document while building it, take a view of it: `DocumentView.Of(document)`.
 
 **Charts, content controls, and OLE.** Reachable through the escape hatch, not modelled.
 

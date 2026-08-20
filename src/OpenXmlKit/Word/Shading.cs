@@ -15,7 +15,8 @@ namespace OpenXmlKit.Word;
 /// named table style.
 /// </para>
 /// </remarks>
-public class Shading
+public class Shading :
+    IShadingView
 {
     /// <summary>
     /// The solid colour to fill with.

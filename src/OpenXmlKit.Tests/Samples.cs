@@ -26,7 +26,8 @@ public class Samples
         #endregion
 
         DocumentAssert.IsValid(bytes);
-        Assert.That(document.Body.Tables.Single().Rows.Single().Cells.First().Text, Is.EqualTo("Source"));
+        using var read = DocumentView.Open(bytes);
+        Assert.That(read.Body.Tables.Single().Rows.Single().Cells.First().Text, Is.EqualTo("Source"));
     }
 
     [Test]
@@ -58,7 +59,8 @@ public class Samples
         #endregion
 
         DocumentAssert.IsValid(document);
-        Assert.That(document.Body.Tables.Single().Rows.Single().Cells.Count(), Is.EqualTo(2));
+        using var read = DocumentAssert.Read(document);
+        Assert.That(read.Body.Tables.Single().Rows.Single().Cells.Count(), Is.EqualTo(2));
     }
 
     [Test]
@@ -68,7 +70,7 @@ public class Samples
 
         #region Reading
 
-        using var document = Document.Open(new MemoryStream(source));
+        using var document = DocumentView.Open(source);
 
         foreach (var paragraph in document.Body.Paragraphs)
         {
@@ -83,12 +85,14 @@ public class Samples
     [Test]
     public void ResolvingFormatting()
     {
-        using var document = Document.Create();
-        document.Styles.Add(StyleKind.Table, "Branded", "Branded", style => style.Font.Name = "Georgia");
-        document.Styles.Add(StyleKind.Paragraph, "Normal", "Normal", style => style.Font.Name = "Calibri");
-        var paragraph = document.Body.AddParagraph();
-        paragraph.Style("Normal");
-        var run = paragraph.AddRun("cell text");
+        using var built = Document.Create();
+        built.Styles.Add(StyleKind.Table, "Branded", "Branded", style => style.Font.Name = "Georgia");
+        built.Styles.Add(StyleKind.Paragraph, "Normal", "Normal", style => style.Font.Name = "Calibri");
+        built.Body.Paragraph("cell text", "Normal");
+
+        using var document = DocumentView.Open(built.ToArray());
+        var paragraph = document.Body.Paragraphs.Single();
+        var run = paragraph.Runs.Single();
 
         #region ResolvingFormatting
 

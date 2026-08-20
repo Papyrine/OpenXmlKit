@@ -17,47 +17,7 @@ public class Cell
         : this() =>
         AddParagraph(text);
 
-    internal Cell(W.TableCell element)
-    {
-        this.element = element;
-        if (element.TableCellProperties is { } properties)
-        {
-            format = new();
-            format.ReadFrom(properties);
-        }
-    }
-
     public CellFormat Format => format ??= new();
-
-    /// <summary>
-    /// The cell's text, paragraphs joined by newlines.
-    /// </summary>
-    public string Text =>
-        string.Join("\n", Paragraphs.Select(_ => _.Text));
-
-    public IEnumerable<Paragraph> Paragraphs
-    {
-        get
-        {
-            Flush();
-            foreach (var paragraph in element.Elements<W.Paragraph>())
-            {
-                yield return new(paragraph);
-            }
-        }
-    }
-
-    public IEnumerable<Table> Tables
-    {
-        get
-        {
-            Flush();
-            foreach (var table in element.Elements<W.Table>())
-            {
-                yield return new(table);
-            }
-        }
-    }
 
     public Paragraph AddParagraph(string? text = null)
     {

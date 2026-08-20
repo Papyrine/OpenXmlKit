@@ -10,7 +10,8 @@ namespace OpenXmlKit.Word;
 /// rather than six near-identical objects. That shape is lifted from Aspose, and it is what
 /// replaces the six-fold repetition in the estate.
 /// </remarks>
-public class Borders
+public class Borders :
+    IBordersView
 {
     public Border Top { get; } = new();
     public Border Bottom { get; } = new();
@@ -107,6 +108,15 @@ public class Borders
         InsideHorizontal.Set(style, width, color);
         InsideVertical.Set(style, width, color);
     }
+
+    // Explicit, because an implicit implementation would have to return IBorderView, and the rest
+    // of the library wants the concrete type. Same reason on every sub-object below.
+    IBorderView IBordersView.Top => Top;
+    IBorderView IBordersView.Bottom => Bottom;
+    IBorderView IBordersView.Left => Left;
+    IBorderView IBordersView.Right => Right;
+    IBorderView IBordersView.InsideHorizontal => InsideHorizontal;
+    IBorderView IBordersView.InsideVertical => InsideVertical;
 
     public IEnumerable<Border> All()
     {

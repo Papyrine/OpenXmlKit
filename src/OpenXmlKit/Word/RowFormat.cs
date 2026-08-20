@@ -3,7 +3,8 @@ namespace OpenXmlKit.Word;
 /// <summary>
 /// Formatting for one table row.
 /// </summary>
-public class RowFormat
+public class RowFormat :
+    IRowFormatView
 {
     public Length? Height { get; set; }
 

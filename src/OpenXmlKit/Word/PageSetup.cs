@@ -3,7 +3,8 @@ namespace OpenXmlKit.Word;
 /// <summary>
 /// Page geometry for a section: paper, orientation, margins, and columns.
 /// </summary>
-public class PageSetup
+public class PageSetup :
+    IPageSetupView
 {
     public Length? PageWidth { get; set; }
     public Length? PageHeight { get; set; }

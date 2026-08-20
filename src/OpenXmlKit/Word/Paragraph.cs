@@ -31,16 +31,6 @@ public partial class Paragraph
         }
     }
 
-    internal Paragraph(W.Paragraph element)
-    {
-        this.element = element;
-        if (element.ParagraphProperties is { } properties)
-        {
-            format = new();
-            format.ReadFrom(properties);
-        }
-    }
-
     /// <summary>
     /// Paragraph formatting.
     /// </summary>
@@ -50,35 +40,6 @@ public partial class Paragraph
     /// Formatting for the paragraph mark itself, which decides the height of an empty paragraph.
     /// </summary>
     public Font MarkFont => markFont ??= new();
-
-    /// <summary>
-    /// The paragraph's text, runs concatenated.
-    /// </summary>
-    public string Text
-    {
-        get
-        {
-            var builder = new StringBuilder();
-            foreach (var run in Runs)
-            {
-                builder.Append(run.Text);
-            }
-
-            return builder.ToString();
-        }
-    }
-
-    public IEnumerable<Run> Runs
-    {
-        get
-        {
-            Flush();
-            foreach (var run in element.Elements<W.Run>())
-            {
-                yield return new(run);
-            }
-        }
-    }
 
     /// <summary>
     /// Adds a run, optionally with text, and returns it.

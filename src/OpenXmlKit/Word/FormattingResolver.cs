@@ -11,18 +11,22 @@ namespace OpenXmlKit.Word;
 /// Normal says, and the fix is a paragraph style on the cells rather than more table styling.
 /// <para>
 /// The order applied here, lowest first, follows the precedence the format defines:
-/// document defaults, table style, numbering style, paragraph style, character style, then the
-/// direct formatting on the paragraph and finally on the run. Each style contributes through its
-/// own <c>basedOn</c> chain, walked from the root down so that a derived style overlays the one it
-/// derives from.
+/// document defaults, table style, paragraph style, character style, then the direct formatting on
+/// the paragraph and finally on the run. Each style contributes through its own <c>basedOn</c>
+/// chain, walked from the root down so that a derived style overlays the one it derives from.
 /// </para>
 /// </remarks>
 public class FormattingResolver
 {
-    readonly Document document;
+    readonly StylesView styles;
 
-    internal FormattingResolver(Document document) =>
-        this.document = document;
+    internal FormattingResolver(StylesView styles, MainDocumentPart main)
+    {
+        this.styles = styles;
+        Main = main;
+    }
+
+    internal MainDocumentPart Main { get; }
 
     /// <summary>
     /// The character formatting a run ends up with.
@@ -31,17 +35,17 @@ public class FormattingResolver
     /// The run whose direct formatting sits at the top of the cascade.
     /// </param>
     /// <param name="paragraph">
-    /// The paragraph containing it, which contributes its style and its direct formatting. Omitting
-    /// it resolves the run against the document defaults alone.
+    /// The paragraph containing it, which contributes its style. Omitting it resolves the run
+    /// against the document defaults alone.
     /// </param>
     /// <param name="tableStyleId">
     /// The style of the table the content sits in, if any.
     /// </param>
-    public Font FontFor(Run run, Paragraph? paragraph = null, string? tableStyleId = null)
+    public IFontView FontFor(RunView run, ParagraphView? paragraph = null, string? tableStyleId = null)
     {
         var resolved = new Font();
 
-        if (DefaultFont() is { } defaults)
+        if (styles.DefaultFont is Font defaults)
         {
             resolved.MergeFrom(defaults);
         }
@@ -51,28 +55,33 @@ public class FormattingResolver
             ApplyStyleFonts(resolved, tableStyleId);
         }
 
-        if (paragraph?.Format.StyleId is { } paragraphStyle)
+        if (paragraph?.StyleId is { } paragraphStyle)
         {
             ApplyStyleFonts(resolved, paragraphStyle);
         }
 
-        if (run.Font.StyleId is { } characterStyle)
+        var direct = run.Font;
+        if (direct.StyleId is { } characterStyle)
         {
             ApplyStyleFonts(resolved, characterStyle);
         }
 
-        resolved.MergeFrom(run.Font);
+        if (direct is Font directFont)
+        {
+            resolved.MergeFrom(directFont);
+        }
+
         return resolved;
     }
 
     /// <summary>
     /// The paragraph formatting a paragraph ends up with.
     /// </summary>
-    public ParagraphFormat FormatFor(Paragraph paragraph, string? tableStyleId = null)
+    public IParagraphFormatView FormatFor(ParagraphView paragraph, string? tableStyleId = null)
     {
         var resolved = new ParagraphFormat();
 
-        if (DefaultParagraphFormat() is { } defaults)
+        if (styles.DefaultParagraphFormat is ParagraphFormat defaults)
         {
             resolved.MergeFrom(defaults);
         }
@@ -82,30 +91,34 @@ public class FormattingResolver
             ApplyStyleFormats(resolved, tableStyleId);
         }
 
-        if (paragraph.Format.StyleId is { } styleId)
+        if (paragraph.StyleId is { } styleId)
         {
             ApplyStyleFormats(resolved, styleId);
         }
 
-        resolved.MergeFrom(paragraph.Format);
+        if (paragraph.Format is ParagraphFormat direct)
+        {
+            resolved.MergeFrom(direct);
+        }
+
         // The style id is what the paragraph names, not something the cascade produced, so it is
         // carried through rather than resolved away - a caller asking what applies still wants to
         // know which style said so.
-        resolved.StyleId = paragraph.Format.StyleId;
+        resolved.StyleId = paragraph.StyleId;
         return resolved;
     }
 
     // A style contributes what it inherits before what it declares, so the basedOn chain is walked
     // to its root and then applied downwards. A cycle in the chain - which a hand-edited template
     // can carry - would otherwise not terminate.
-    IReadOnlyList<Style> Chain(string styleId)
+    IReadOnlyList<StyleView> Chain(string styleId)
     {
-        var chain = new List<Style>();
+        var chain = new List<StyleView>();
         var seen = new HashSet<string>(StringComparer.Ordinal);
         var current = styleId;
         while (current != null && seen.Add(current))
         {
-            if (document.Styles.Find(current) is not { } style)
+            if (styles.Find(current) is not { } style)
             {
                 break;
             }
@@ -122,7 +135,10 @@ public class FormattingResolver
     {
         foreach (var style in Chain(styleId))
         {
-            resolved.MergeFrom(style.Font);
+            if (style.Font is Font font)
+            {
+                resolved.MergeFrom(font);
+            }
         }
     }
 
@@ -130,45 +146,10 @@ public class FormattingResolver
     {
         foreach (var style in Chain(styleId))
         {
-            resolved.MergeFrom(style.ParagraphFormat);
+            if (style.ParagraphFormat is ParagraphFormat format)
+            {
+                resolved.MergeFrom(format);
+            }
         }
-    }
-
-    Font? DefaultFont()
-    {
-        var defaults = document.MainPart.StyleDefinitionsPart?.Styles?.DocDefaults;
-        if (defaults?.RunPropertiesDefault?.RunPropertiesBaseStyle is not { } source)
-        {
-            return null;
-        }
-
-        var properties = new W.RunProperties();
-        foreach (var child in source.ChildElements)
-        {
-            properties.AppendChild(child.CloneNode(true));
-        }
-
-        var font = new Font();
-        font.ReadFrom(properties);
-        return font;
-    }
-
-    ParagraphFormat? DefaultParagraphFormat()
-    {
-        var defaults = document.MainPart.StyleDefinitionsPart?.Styles?.DocDefaults;
-        if (defaults?.ParagraphPropertiesDefault?.ParagraphPropertiesBaseStyle is not { } source)
-        {
-            return null;
-        }
-
-        var properties = new W.ParagraphProperties();
-        foreach (var child in source.ChildElements)
-        {
-            properties.AppendChild(child.CloneNode(true));
-        }
-
-        var format = new ParagraphFormat();
-        format.ReadFrom(properties);
-        return format;
     }
 }

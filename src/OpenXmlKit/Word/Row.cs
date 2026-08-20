@@ -12,29 +12,7 @@ public class Row
     public Row() =>
         element = new();
 
-    internal Row(W.TableRow element)
-    {
-        this.element = element;
-        if (element.TableRowProperties is { } properties)
-        {
-            format = new();
-            format.ReadFrom(properties);
-        }
-    }
-
     public RowFormat Format => format ??= new();
-
-    public IEnumerable<Cell> Cells
-    {
-        get
-        {
-            Flush();
-            foreach (var cell in element.Elements<W.TableCell>())
-            {
-                yield return new(cell);
-            }
-        }
-    }
 
     public Cell AddCell(string? text = null)
     {

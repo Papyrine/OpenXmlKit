@@ -21,7 +21,8 @@ public class BuildTests
                     .Append("and coloured.", font => font.Color = Color.Parse("#C00000")));
 
         DocumentAssert.IsValid(document);
-        Assert.That(document.Body.Text, Is.EqualTo("Plain text.\nBold and italic and coloured."));
+        using var read = DocumentAssert.Read(document);
+        Assert.That(read.Body.Text, Is.EqualTo("Plain text.\nBold and italic and coloured."));
     }
 
     [Test]
@@ -37,7 +38,8 @@ public class BuildTests
         // breaks would otherwise run together on one line.
         Assert.That(xml, Does.Contain("<w:br />"));
         Assert.That(xml, Does.Contain("<w:tab />"));
-        Assert.That(document.Body.Text, Is.EqualTo("first\nsecond\tindented"));
+        using var read = DocumentAssert.Read(document);
+        Assert.That(read.Body.Text, Is.EqualTo("first\nsecond\tindented"));
     }
 
     [Test]
@@ -343,9 +345,11 @@ public class BuildTests
         DocumentAssert.IsValid(nested);
         DocumentAssert.IsValid(cursor);
 
+        using var readNested = DocumentAssert.Read(nested);
+        using var readCursor = DocumentAssert.Read(cursor);
         Assert.That(
-            cursor.Body.Tables.Single().Rows.Single().Cells.Select(_ => _.Text),
-            Is.EqualTo(nested.Body.Tables.Single().Rows.Single().Cells.Select(_ => _.Text)));
+            readCursor.Body.Tables.Single().Rows.Single().Cells.Select(_ => _.Text),
+            Is.EqualTo(readNested.Body.Tables.Single().Rows.Single().Cells.Select(_ => _.Text)));
     }
 
     [Test]
@@ -391,7 +395,8 @@ public class BuildTests
             .AppendElement(new W.Run(new W.Text("raw")));
 
         DocumentAssert.IsValid(document);
-        Assert.That(document.Body.Text, Is.EqualTo("raw"));
+        using var read = DocumentAssert.Read(document);
+        Assert.That(read.Body.Text, Is.EqualTo("raw"));
     }
 
     [Test]
@@ -406,6 +411,7 @@ public class BuildTests
         document.Body.AppendElement(table);
 
         DocumentAssert.IsValid(document);
-        Assert.That(document.Body.Tables.Single().Rows.Single().Cells.Count(), Is.EqualTo(2));
+        using var read = DocumentAssert.Read(document);
+        Assert.That(read.Body.Tables.Single().Rows.Single().Cells.Count(), Is.EqualTo(2));
     }
 }

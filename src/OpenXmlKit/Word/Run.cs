@@ -11,47 +11,10 @@ public class Run
     public Run() =>
         element = new();
 
-    internal Run(W.Run element)
-    {
-        this.element = element;
-        font = Font.Read(element.RunProperties);
-    }
-
     /// <summary>
     /// Character formatting for this run.
     /// </summary>
     public Font Font => font ??= new();
-
-    /// <summary>
-    /// The run's text, with breaks and tabs rendered as the characters they stand for.
-    /// </summary>
-    public string Text
-    {
-        get
-        {
-            var builder = new StringBuilder();
-            foreach (var child in element.ChildElements)
-            {
-                switch (child)
-                {
-                    case W.Text text:
-                        builder.Append(text.Text);
-                        break;
-                    case W.TabChar:
-                        builder.Append('\t');
-                        break;
-                    case W.Break:
-                        builder.Append('\n');
-                        break;
-                    case W.SymbolChar symbol:
-                        builder.Append(SymbolText(symbol));
-                        break;
-                }
-            }
-
-            return builder.ToString();
-        }
-    }
 
     /// <summary>
     /// Appends text.

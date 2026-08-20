@@ -51,6 +51,31 @@ Two places genuinely cannot use typed properties, and both are commented as such
   complaint lands on `tblGrid`, which is the next element rather than the missing one.
 - `Section.Reference` — header and footer references are repeatable, and must lead `sectPr`.
 
+### Two APIs, not one with the setters hidden
+
+Building and reading are separate type hierarchies that share nothing but the enums and the
+primitives.
+
+- **Build** — `Document.Create` / `Document.OpenForAppend`, then `Body`, `Paragraph`, `Run`,
+  `Table`, `Row`, `Cell`. Forward-only: content goes in, nothing comes back out. These types have
+  no enumeration properties at all.
+- **Read** — `DocumentView.Open` (or `DocumentView.Of` over a document being built), then
+  `ParagraphView`, `RunView`, `TableView`, `RowView`, `CellView`, `SectionView`, `StyleView`. All
+  `readonly struct`s over the SDK elements, allocating nothing but the enumerators, with no format
+  caching and no flush machinery because reading needs neither.
+
+Formatting crosses the line through interfaces: `IFontView`, `IParagraphFormatView` and the rest
+carry the same properties as `Font` and friends with the setters removed, and the mutable classes
+implement them. Sub-object properties need explicit implementation (`IShadingView IFontView.Shading
+=> Shading;`) because C# does not accept a covariant return type for an implicit interface
+implementation.
+
+The reason for the split is that one type serving both jobs makes
+`Open(...).Body.Paragraphs.First().AddBookmark(...)` compile, and it either does nothing or means
+something the library does not do. Modifying existing content is out of scope for v1, and the
+scope is now enforced by the compiler rather than by the readme. `OpenModeTests` asserts the
+absence of the members that would break it.
+
 ### Deferred formatting, cascading flush
 
 Content elements are appended to the tree as they are added. Formatting is deferred: each wrapper
@@ -82,6 +107,7 @@ src/OpenXmlKit/
     Numbering.cs ListDefinition.cs ListLevel.cs
     FormattingResolver.cs                      the read-side cascade
     Map.cs Toggles.cs WidthElement.cs Images.cs  internal converters
+    Reading/                                   the read API: *View types and I*View interfaces
 src/OpenXmlKit.Tests/    NUnit; DocumentAssert.IsValid runs OpenXmlValidator on everything
 src/AliasCheck/          compile-only proof that alias mode works
 src/OpenXmlKit.Benchmarks/
@@ -121,9 +147,12 @@ imported, for the same reason.
 - **`OpenXmlPackage.Clone` does not carry core properties.** Title, author and dates live outside
   the part graph it copies, and losing them is silent — the document opens fine with a blank
   properties dialog. `Document.CopyTo` puts them back by hand.
-- **A `MemoryStream` built over a byte array is not expandable**, so `Document.Open(stream,
-  editable: true)` over one fails on the first write with `NotSupportedException: Memory stream is
-  not expandable`.
+- **A `MemoryStream` built over a byte array is not expandable**, so `Document.OpenForAppend` over
+  one fails on the first write with `NotSupportedException: Memory stream is not expandable`.
+- **Editing existing content, when it arrives, cannot just flush a view.** Built wrappers rebuild
+  their properties element wholesale, which is what makes flushing idempotent. Doing that to a
+  paragraph read from a template would discard whatever the format model does not cover (`framePr`,
+  a `sectPr` on the mark), so editing needs apply-in-place instead — and views would need owners.
 - **A cell must contain a paragraph and must not end on a table**; both are repaired in
   `Cell.Flush`. `Cell.Container` deliberately skips that repair, because the cursor builder writes
   into a cell after opening it and the repair would leave an empty paragraph above everything.
