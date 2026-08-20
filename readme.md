@@ -201,3 +201,8 @@ Every test that produces a document runs it through `OpenXmlValidator`. That is 
 emitter design exists to pass, and it is what would catch a schema-order regression — including one
 introduced by an SDK upgrade, which
 [`SchemaOrderTests`](src/OpenXmlKit.Tests/SchemaOrderTests.cs) pins directly.
+
+
+## Icon
+
+https://thenounproject.com/icon/phoenix-rising-6442478/
