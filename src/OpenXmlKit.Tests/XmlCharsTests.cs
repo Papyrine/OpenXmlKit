@@ -38,6 +38,38 @@ public class XmlCharsTests
     }
 
     [Test]
+    public void CleanSpansComeBackAsTheSameMemory()
+    {
+        // The contract the span overload exists for: a parser holding a slice of its input pays
+        // nothing for text that needs no changing.
+        var source = "Ordinary text".AsSpan();
+        Assert.That(XmlChars.Strip(source) == source, Is.True);
+
+        var dirty = "a\u0001b".AsSpan();
+        Assert.That(XmlChars.Strip(dirty) == dirty, Is.False);
+        Assert.That(XmlChars.Strip(dirty).ToString(), Is.EqualTo("ab"));
+    }
+
+    [Test]
+    public void ASurrogatePairDoesNotForceACopy()
+    {
+        // The scan cannot tell a paired surrogate from a lone one, so it stops on both; only the
+        // walk can, and having decided nothing is wrong it must hand back the original memory.
+        var source = "a\U0001F600b".AsSpan();
+        Assert.That(XmlChars.Strip(source) == source, Is.True);
+    }
+
+    [Test]
+    public void TheTwoOverloadsAgree()
+    {
+        string[] values = ["", "plain", "a\u0001b", "a\uD83Db", "a\U0001F600b", "\uFFFE", "\t\n\r"];
+        foreach (var value in values)
+        {
+            Assert.That(XmlChars.Strip(value.AsSpan()).ToString(), Is.EqualTo(XmlChars.Strip(value)), value);
+        }
+    }
+
+    [Test]
     public void TextWrittenThroughTheBuildApiIsStripped()
     {
         using var document = Document.Create();
