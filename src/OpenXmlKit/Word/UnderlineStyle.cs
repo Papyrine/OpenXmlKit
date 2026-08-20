@@ -1,5 +1,8 @@
 namespace OpenXmlKit.Word;
 
+/// <summary>
+/// How text is underlined. The colour is stated separately, on <see cref="Font.UnderlineColor"/>.
+/// </summary>
 public enum UnderlineStyle
 {
     /// <summary>
@@ -7,13 +10,44 @@ public enum UnderlineStyle
     /// </summary>
     None,
 
+    /// <summary>
+    /// One line under the text.
+    /// </summary>
     Single,
+
+    /// <summary>
+    /// Two lines.
+    /// </summary>
     Double,
+
+    /// <summary>
+    /// One heavy line.
+    /// </summary>
     Thick,
+
+    /// <summary>
+    /// A dotted line.
+    /// </summary>
     Dotted,
+
+    /// <summary>
+    /// A dashed line.
+    /// </summary>
     Dashed,
+
+    /// <summary>
+    /// Alternating dots and dashes.
+    /// </summary>
     DotDash,
+
+    /// <summary>
+    /// Two dots then a dash, repeating.
+    /// </summary>
     DotDotDash,
+
+    /// <summary>
+    /// A wavy line, which is also what Word draws under a spelling error.
+    /// </summary>
     Wave,
 
     /// <summary>

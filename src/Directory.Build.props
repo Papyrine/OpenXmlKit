@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project>
   <PropertyGroup>
-    <NoWarn>CS1591;NU1608;NU1109;SC023</NoWarn>
+    <NoWarn>NU1608;NU1109;SC023</NoWarn>
+    <!-- CS1591 (missing XML comment) is deliberately absent from NoWarn: the public surface of
+         this library is its documentation, and TreatWarningsAsErrors is what stops that decaying a
+         member at a time. A project that ships nothing suppresses it in its own file rather than
+         here, because the local build passes -p:IsPackable=false and a condition on that would
+         turn the check off for everyone. -->
     <Version>0.2.2</Version>
     <LangVersion>14.0</LangVersion>
     <AssemblyVersion>1.0.0</AssemblyVersion>

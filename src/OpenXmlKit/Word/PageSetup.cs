@@ -6,7 +6,14 @@ namespace OpenXmlKit.Word;
 public class PageSetup :
     IPageSetupView
 {
+    /// <summary>
+    /// The width of the page.
+    /// </summary>
     public Length? PageWidth { get; set; }
+
+    /// <summary>
+    /// The height of the page.
+    /// </summary>
     public Length? PageHeight { get; set; }
 
     /// <summary>
@@ -19,9 +26,24 @@ public class PageSetup :
     /// </remarks>
     public PageOrientation? Orientation { get; set; }
 
+    /// <summary>
+    /// Space between the left edge of the page and the text.
+    /// </summary>
     public Length? LeftMargin { get; set; }
+
+    /// <summary>
+    /// Space between the text and the right edge.
+    /// </summary>
     public Length? RightMargin { get; set; }
+
+    /// <summary>
+    /// Space between the top edge of the page and the text.
+    /// </summary>
     public Length? TopMargin { get; set; }
+
+    /// <summary>
+    /// Space between the text and the bottom edge.
+    /// </summary>
     public Length? BottomMargin { get; set; }
 
     /// <summary>
@@ -39,6 +61,9 @@ public class PageSetup :
     /// </summary>
     public Length? Gutter { get; set; }
 
+    /// <summary>
+    /// Where the content after this section break begins.
+    /// </summary>
     public SectionStart? Start { get; set; }
 
     /// <summary>
@@ -46,6 +71,9 @@ public class PageSetup :
     /// </summary>
     public int? ColumnCount { get; set; }
 
+    /// <summary>
+    /// The gutter between columns, when there is more than one.
+    /// </summary>
     public Length? ColumnSpacing { get; set; }
 
     /// <summary>
@@ -107,6 +135,9 @@ public class PageSetup :
     public void SetMargins(Length all) =>
         SetMargins(all, all, all, all);
 
+    /// <summary>
+    /// Sets all four page margins at once.
+    /// </summary>
     public void SetMargins(Length left, Length top, Length right, Length bottom)
     {
         LeftMargin = left;
@@ -115,6 +146,10 @@ public class PageSetup :
         BottomMargin = bottom;
     }
 
+    /// <summary>
+    /// Whether anything at all is stated. An empty format writes no properties element,
+    /// leaving the style hierarchy to resolve every value.
+    /// </summary>
     public bool IsEmpty =>
         PageWidth == null &&
         PageHeight == null &&
@@ -134,6 +169,9 @@ public class PageSetup :
         !DifferentOddAndEvenPages &&
         PageNumberStart == null;
 
+    /// <summary>
+    /// An independent copy, so the two can diverge.
+    /// </summary>
     public PageSetup Clone()
     {
         var clone = new PageSetup();
@@ -141,6 +179,9 @@ public class PageSetup :
         return clone;
     }
 
+    /// <summary>
+    /// Overwrites every property with the other value, stated or not.
+    /// </summary>
     public void CopyFrom(PageSetup other)
     {
         PageWidth = other.PageWidth;

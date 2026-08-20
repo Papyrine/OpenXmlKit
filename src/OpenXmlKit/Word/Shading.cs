@@ -34,11 +34,17 @@ public class Shading :
     /// </summary>
     public ShadingPattern Pattern { get; set; } = ShadingPattern.Clear;
 
+    /// <summary>
+    /// Whether the shading states anything.
+    /// </summary>
     public bool IsEmpty =>
         BackgroundColor == null &&
         PatternColor == null &&
         Pattern == ShadingPattern.Clear;
 
+    /// <summary>
+    /// An independent copy.
+    /// </summary>
     public Shading Clone() =>
         new()
         {
@@ -47,6 +53,9 @@ public class Shading :
             Pattern = Pattern
         };
 
+    /// <summary>
+    /// Overwrites every property with the other shading.
+    /// </summary>
     public void CopyFrom(Shading other)
     {
         BackgroundColor = other.BackgroundColor;

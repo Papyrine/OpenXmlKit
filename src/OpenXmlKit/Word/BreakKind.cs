@@ -1,5 +1,8 @@
 namespace OpenXmlKit.Word;
 
+/// <summary>
+/// What a break inside a run breaks.
+/// </summary>
 public enum BreakKind
 {
     /// <summary>
@@ -7,6 +10,12 @@ public enum BreakKind
     /// </summary>
     Line,
 
+    /// <summary>
+    /// Moves what follows onto the next page.
+    /// </summary>
     Page,
+    /// <summary>
+    /// Moves what follows into the next column.
+    /// </summary>
     Column
 }

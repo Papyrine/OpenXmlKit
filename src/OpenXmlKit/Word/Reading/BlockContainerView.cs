@@ -10,6 +10,9 @@ public readonly struct BlockContainerView
     internal BlockContainerView(OpenXmlElement container) =>
         this.container = container;
 
+    /// <summary>
+    /// The paragraphs sitting directly in the container. A paragraph inside a table is not one.
+    /// </summary>
     public IEnumerable<ParagraphView> Paragraphs
     {
         get
@@ -21,6 +24,9 @@ public readonly struct BlockContainerView
         }
     }
 
+    /// <summary>
+    /// The tables sitting directly in the container.
+    /// </summary>
     public IEnumerable<TableView> Tables
     {
         get

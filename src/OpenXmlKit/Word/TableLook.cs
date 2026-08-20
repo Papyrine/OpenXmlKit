@@ -15,9 +15,24 @@ namespace OpenXmlKit.Word;
 public class TableLook :
     ITableLookView
 {
+    /// <summary>
+    /// Whether the header-row block of the table style applies.
+    /// </summary>
     public bool FirstRow { get; set; } = true;
+
+    /// <summary>
+    /// Whether the total-row block applies.
+    /// </summary>
     public bool LastRow { get; set; }
+
+    /// <summary>
+    /// Whether the first-column block applies.
+    /// </summary>
     public bool FirstColumn { get; set; }
+
+    /// <summary>
+    /// Whether the last-column block applies.
+    /// </summary>
     public bool LastColumn { get; set; }
 
     /// <summary>
@@ -42,6 +57,9 @@ public class TableLook :
         RowBanding &&
         !ColumnBanding;
 
+    /// <summary>
+    /// Copies every flag from the other look.
+    /// </summary>
     public void CopyFrom(TableLook other)
     {
         FirstRow = other.FirstRow;

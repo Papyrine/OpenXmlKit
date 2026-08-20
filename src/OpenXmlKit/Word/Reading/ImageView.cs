@@ -31,6 +31,9 @@ public readonly struct ImageView
     public Length Width =>
         Extent?.Cx is { } cx ? Length.FromEmu(cx) : Length.Zero;
 
+    /// <summary>
+    /// The height the picture is drawn at, which is not necessarily the image own height.
+    /// </summary>
     public Length Height =>
         Extent?.Cy is { } cy ? Length.FromEmu(cy) : Length.Zero;
 
@@ -39,6 +42,9 @@ public readonly struct ImageView
     /// </summary>
     public string? Description => Properties?.Description?.Value;
 
+    /// <summary>
+    /// The name the drawing carries, which Word shows in the selection pane.
+    /// </summary>
     public string? Name => Properties?.Name?.Value;
 
     /// <summary>

@@ -231,6 +231,9 @@ public readonly struct ParagraphView
         }
     }
 
+    /// <summary>
+    /// The names of the bookmarks that start in this paragraph.
+    /// </summary>
     public IEnumerable<string> BookmarkNames
     {
         get
@@ -260,6 +263,9 @@ public readonly struct ParagraphView
 
     internal W.Paragraph Element => element;
 
+    /// <summary>
+    /// A readable form, for logs and debugging rather than for the file.
+    /// </summary>
     public override string ToString() =>
         Text;
 }

@@ -1,5 +1,8 @@
 namespace OpenXmlKit.Word;
 
+/// <summary>
+/// How column widths are decided.
+/// </summary>
 public enum TableLayout
 {
     /// <summary>

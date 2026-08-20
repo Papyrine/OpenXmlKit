@@ -16,6 +16,9 @@ public readonly struct TableView
     public string Text =>
         string.Join("\n", Rows.Select(_ => _.Text));
 
+    /// <summary>
+    /// The rows in the table, top to bottom.
+    /// </summary>
     public IEnumerable<RowView> Rows
     {
         get
@@ -27,6 +30,9 @@ public readonly struct TableView
         }
     }
 
+    /// <summary>
+    /// The formatting written on the table.
+    /// </summary>
     public ITableFormatView Format
     {
         get

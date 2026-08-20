@@ -51,6 +51,9 @@ public sealed partial class Document :
         return new(package, null);
     }
 
+    /// <summary>
+    /// Creates a document at the given path.
+    /// </summary>
     public static Document Create(string path)
     {
         var package = WordprocessingDocument.Create(path, WordprocessingDocumentType.Document);
@@ -119,12 +122,21 @@ public sealed partial class Document :
     public W.Document Root =>
         MainPart.Document ??= new(new W.Body());
 
+    /// <summary>
+    /// The document body, which is where content goes.
+    /// </summary>
     public Body Body =>
         body ??= new(Root.Body ??= new(), this);
 
+    /// <summary>
+    /// The document style definitions.
+    /// </summary>
     public Styles Styles =>
         styles ??= new(this);
 
+    /// <summary>
+    /// The document list definitions.
+    /// </summary>
     public Numbering Numbering =>
         numbering ??= new(this);
 
@@ -154,6 +166,9 @@ public sealed partial class Document :
         }
     }
 
+    /// <summary>
+    /// Writes pending changes into the package without closing it.
+    /// </summary>
     public void Save()
     {
         Flush();
@@ -237,6 +252,9 @@ public sealed partial class Document :
         return section;
     }
 
+    /// <summary>
+    /// Flushes, writes the styles and numbering parts, and closes the package.
+    /// </summary>
     public void Dispose()
     {
         if (disposed)

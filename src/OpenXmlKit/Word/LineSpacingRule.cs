@@ -1,5 +1,8 @@
 namespace OpenXmlKit.Word;
 
+/// <summary>
+/// How the space between lines in a paragraph is measured.
+/// </summary>
 public enum LineSpacingRule
 {
     /// <summary>

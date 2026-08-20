@@ -22,6 +22,9 @@ public class Section
     /// </summary>
     public PageSetup PageSetup => pageSetup ??= new();
 
+    /// <summary>
+    /// Where the content after this section break begins.
+    /// </summary>
     public SectionStart? Start
     {
         get => PageSetup.Start;

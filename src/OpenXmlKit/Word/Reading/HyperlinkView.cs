@@ -27,6 +27,9 @@ public readonly struct HyperlinkView
         }
     }
 
+    /// <summary>
+    /// The runs the link wraps.
+    /// </summary>
     public IEnumerable<RunView> Runs
     {
         get
@@ -72,6 +75,9 @@ public readonly struct HyperlinkView
     /// </summary>
     public string? Anchor => element.Anchor?.Value;
 
+    /// <summary>
+    /// The text Word shows on hover, where the link states one.
+    /// </summary>
     public string? Tooltip => element.Tooltip?.Value;
 
     /// <summary>
@@ -80,6 +86,9 @@ public readonly struct HyperlinkView
     public W.Hyperlink ToOpenXml() =>
         element;
 
+    /// <summary>
+    /// A readable form, for logs and debugging rather than for the file.
+    /// </summary>
     public override string ToString() =>
         Text;
 }

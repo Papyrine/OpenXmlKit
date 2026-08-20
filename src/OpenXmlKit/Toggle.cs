@@ -28,6 +28,9 @@ public readonly struct Toggle :
     /// </summary>
     public static Toggle Inherit => default;
 
+    /// <summary>
+    /// Explicitly on.
+    /// </summary>
     public static Toggle On => new(true);
 
     /// <summary>
@@ -40,7 +43,14 @@ public readonly struct Toggle :
     /// </summary>
     public bool IsSet => value.HasValue;
 
+    /// <summary>
+    /// Whether the value is explicitly on. False for both off and inherited.
+    /// </summary>
     public bool IsOn => value == true;
+
+    /// <summary>
+    /// Whether the value is explicitly off, which is the state that cancels a style.
+    /// </summary>
     public bool IsOff => value == false;
 
     /// <summary>
@@ -62,18 +72,37 @@ public readonly struct Toggle :
     public static implicit operator bool(Toggle toggle) =>
         toggle.value == true;
 
+    /// <summary>
+    /// Whether the two toggles are in the same one of the three states.
+    /// </summary>
     public bool Equals(Toggle other) =>
         value == other.value;
 
+    /// <summary>
+    /// Whether the other object is a value of this type and equal to this one.
+    /// </summary>
     public override bool Equals(object? obj) =>
         obj is Toggle other && Equals(other);
 
+    /// <summary>
+    /// A hash consistent with equality.
+    /// </summary>
     public override int GetHashCode() =>
         value.GetHashCode();
 
+    /// <summary>
+    /// Whether the two toggles are in the same state.
+    /// </summary>
     public static bool operator ==(Toggle left, Toggle right) => left.Equals(right);
+
+    /// <summary>
+    /// Whether the two toggles differ.
+    /// </summary>
     public static bool operator !=(Toggle left, Toggle right) => !left.Equals(right);
 
+    /// <summary>
+    /// A readable form, for logs and debugging rather than for the file.
+    /// </summary>
     public override string ToString() =>
         value switch
         {

@@ -17,6 +17,9 @@ public readonly struct CellView
     public string Text =>
         new BlockContainerView(element).Text;
 
+    /// <summary>
+    /// The paragraphs in the cell.
+    /// </summary>
     public IEnumerable<ParagraphView> Paragraphs
     {
         get
@@ -42,6 +45,9 @@ public readonly struct CellView
         }
     }
 
+    /// <summary>
+    /// The formatting written on the cell.
+    /// </summary>
     public ICellFormatView Format
     {
         get
@@ -64,6 +70,9 @@ public readonly struct CellView
     public W.TableCell ToOpenXml() =>
         element;
 
+    /// <summary>
+    /// A readable form, for logs and debugging rather than for the file.
+    /// </summary>
     public override string ToString() =>
         Text;
 }

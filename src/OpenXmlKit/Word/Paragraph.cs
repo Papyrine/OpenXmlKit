@@ -19,9 +19,15 @@ public partial class Paragraph
     // when the tree is flushed. Everything in the object model owns its children this way.
     readonly List<Run> runs = [];
 
+    /// <summary>
+    /// A paragraph with no content and no formatting.
+    /// </summary>
     public Paragraph() =>
         element = new();
 
+    /// <summary>
+    /// A paragraph holding one run of plain text.
+    /// </summary>
     public Paragraph(string? text)
         : this()
     {
@@ -72,12 +78,18 @@ public partial class Paragraph
         return this;
     }
 
+    /// <summary>
+    /// Appends a run of bold text.
+    /// </summary>
     public Paragraph Bold(string? text)
     {
         AddRun(text).Bold();
         return this;
     }
 
+    /// <summary>
+    /// Appends a run of italic text.
+    /// </summary>
     public Paragraph Italic(string? text)
     {
         AddRun(text).Italic();
@@ -93,6 +105,9 @@ public partial class Paragraph
         return this;
     }
 
+    /// <summary>
+    /// Sets how the paragraph sits between its margins.
+    /// </summary>
     public Paragraph Alignment(ParagraphAlignment alignment)
     {
         Format.Alignment = alignment;

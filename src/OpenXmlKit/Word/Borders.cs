@@ -13,9 +13,24 @@ namespace OpenXmlKit.Word;
 public class Borders :
     IBordersView
 {
+    /// <summary>
+    /// The line along the top edge.
+    /// </summary>
     public Border Top { get; } = new();
+
+    /// <summary>
+    /// The line along the bottom edge.
+    /// </summary>
     public Border Bottom { get; } = new();
+
+    /// <summary>
+    /// The line along the left edge.
+    /// </summary>
     public Border Left { get; } = new();
+
+    /// <summary>
+    /// The line along the right edge.
+    /// </summary>
     public Border Right { get; } = new();
 
     /// <summary>
@@ -28,6 +43,9 @@ public class Borders :
     /// </summary>
     public Border InsideVertical { get; } = new();
 
+    /// <summary>
+    /// Whether any edge states anything.
+    /// </summary>
     public bool IsEmpty =>
         Top.IsEmpty &&
         Bottom.IsEmpty &&
@@ -118,6 +136,9 @@ public class Borders :
     IBorderView IBordersView.InsideHorizontal => InsideHorizontal;
     IBorderView IBordersView.InsideVertical => InsideVertical;
 
+    /// <summary>
+    /// Every edge, including the interior ones, so a caller can apply something to each.
+    /// </summary>
     public IEnumerable<Border> All()
     {
         yield return Top;
@@ -128,6 +149,9 @@ public class Borders :
         yield return InsideVertical;
     }
 
+    /// <summary>
+    /// An independent copy.
+    /// </summary>
     public Borders Clone()
     {
         var clone = new Borders();
@@ -135,6 +159,9 @@ public class Borders :
         return clone;
     }
 
+    /// <summary>
+    /// Overwrites every edge with the other set.
+    /// </summary>
     public void CopyFrom(Borders other)
     {
         Top.CopyFrom(other.Top);

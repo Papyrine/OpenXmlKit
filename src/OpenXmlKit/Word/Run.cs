@@ -8,6 +8,9 @@ public class Run
     readonly W.Run element;
     Font? font;
 
+    /// <summary>
+    /// A run with no content and no formatting.
+    /// </summary>
     public Run() =>
         element = new();
 
@@ -86,6 +89,9 @@ public class Run
         return this;
     }
 
+    /// <summary>
+    /// Appends a tab, which jumps to the next stop rather than inserting spaces.
+    /// </summary>
     public Run AppendTab()
     {
         element.Append(new W.TabChar());
@@ -120,30 +126,45 @@ public class Run
         return this;
     }
 
+    /// <summary>
+    /// Makes the run bold. Fluent shorthand for <see cref="Font"/>.
+    /// </summary>
     public Run Bold(Toggle value = default)
     {
         Font.Bold = value.IsSet ? value : Toggle.On;
         return this;
     }
 
+    /// <summary>
+    /// Makes the run italic.
+    /// </summary>
     public Run Italic(Toggle value = default)
     {
         Font.Italic = value.IsSet ? value : Toggle.On;
         return this;
     }
 
+    /// <summary>
+    /// Underlines the run.
+    /// </summary>
     public Run Underline(UnderlineStyle style = UnderlineStyle.Single)
     {
         Font.Underline = style;
         return this;
     }
 
+    /// <summary>
+    /// Colours the text.
+    /// </summary>
     public Run Color(Color value)
     {
         Font.Color = value;
         return this;
     }
 
+    /// <summary>
+    /// Sets the point size.
+    /// </summary>
     public Run Size(Length value)
     {
         Font.Size = value;

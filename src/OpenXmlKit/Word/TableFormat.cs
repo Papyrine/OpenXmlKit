@@ -17,15 +17,34 @@ public class TableFormat :
     /// </remarks>
     public string? StyleId { get; set; }
 
+    /// <summary>
+    /// The preferred width of the table.
+    /// </summary>
     public Width Width { get; set; } = Width.Auto;
 
+    /// <summary>
+    /// Where the table sits when it is narrower than the text width.
+    /// </summary>
     public TableAlignment? Alignment { get; set; }
 
+    /// <summary>
+    /// How column widths are decided.
+    /// </summary>
     public TableLayout? Layout { get; set; }
 
+    /// <summary>
+    /// Space between the left margin and the table.
+    /// </summary>
     public Length? Indent { get; set; }
 
+    /// <summary>
+    /// The borders drawn around and between cells.
+    /// </summary>
     public Borders Borders { get; } = new();
+
+    /// <summary>
+    /// A fill behind the whole table.
+    /// </summary>
     public Shading Shading { get; } = new();
 
     /// <summary>
@@ -33,8 +52,19 @@ public class TableFormat :
     /// </summary>
     public Length? DefaultLeftMargin { get; set; }
 
+    /// <summary>
+    /// The default padding inside the right edge of every cell.
+    /// </summary>
     public Length? DefaultRightMargin { get; set; }
+
+    /// <summary>
+    /// The default padding inside the top edge of every cell.
+    /// </summary>
     public Length? DefaultTopMargin { get; set; }
+
+    /// <summary>
+    /// The default padding inside the bottom edge of every cell.
+    /// </summary>
     public Length? DefaultBottomMargin { get; set; }
 
     /// <summary>
@@ -63,6 +93,9 @@ public class TableFormat :
     IShadingView ITableFormatView.Shading => Shading;
     ITableLookView ITableFormatView.Look => Look;
 
+    /// <summary>
+    /// Sets the default cell padding on both axes at once.
+    /// </summary>
     public void SetDefaultMargins(Length horizontal, Length vertical)
     {
         DefaultLeftMargin = horizontal;
@@ -71,6 +104,10 @@ public class TableFormat :
         DefaultBottomMargin = vertical;
     }
 
+    /// <summary>
+    /// Whether anything at all is stated. An empty format writes no properties element,
+    /// leaving the style hierarchy to resolve every value.
+    /// </summary>
     public bool IsEmpty =>
         StyleId == null &&
         Width.IsAuto &&
@@ -87,6 +124,9 @@ public class TableFormat :
         Caption == null &&
         Description == null;
 
+    /// <summary>
+    /// An independent copy, so the two can diverge.
+    /// </summary>
     public TableFormat Clone()
     {
         var clone = new TableFormat();
@@ -94,6 +134,9 @@ public class TableFormat :
         return clone;
     }
 
+    /// <summary>
+    /// Overwrites every property with the other value, stated or not.
+    /// </summary>
     public void CopyFrom(TableFormat other)
     {
         StyleId = other.StyleId;
@@ -112,6 +155,9 @@ public class TableFormat :
         Description = other.Description;
     }
 
+    /// <summary>
+    /// Returns every property to unstated, so the style hierarchy resolves the lot.
+    /// </summary>
     public void Clear() =>
         CopyFrom(new());
 

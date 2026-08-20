@@ -6,8 +6,14 @@ namespace OpenXmlKit.Word;
 public class RowFormat :
     IRowFormatView
 {
+    /// <summary>
+    /// How tall the row is, interpreted by <see cref="HeightRule"/>.
+    /// </summary>
     public Length? Height { get; set; }
 
+    /// <summary>
+    /// Whether <see cref="Height"/> is a minimum, an exact value, or ignored.
+    /// </summary>
     public RowHeightRule HeightRule { get; set; } = RowHeightRule.Auto;
 
     /// <summary>
@@ -51,6 +57,10 @@ public class RowFormat :
     /// </summary>
     public Width WidthAfter { get; set; } = Width.Auto;
 
+    /// <summary>
+    /// Whether anything at all is stated. An empty format writes no properties element,
+    /// leaving the style hierarchy to resolve every value.
+    /// </summary>
     public bool IsEmpty =>
         Height == null &&
         HeightRule == RowHeightRule.Auto &&
@@ -61,6 +71,9 @@ public class RowFormat :
         WidthBefore.IsAuto &&
         WidthAfter.IsAuto;
 
+    /// <summary>
+    /// An independent copy, so the two can diverge.
+    /// </summary>
     public RowFormat Clone()
     {
         var clone = new RowFormat();
@@ -68,6 +81,9 @@ public class RowFormat :
         return clone;
     }
 
+    /// <summary>
+    /// Overwrites every property with the other value, stated or not.
+    /// </summary>
     public void CopyFrom(RowFormat other)
     {
         Height = other.Height;
@@ -80,6 +96,9 @@ public class RowFormat :
         WidthAfter = other.WidthAfter;
     }
 
+    /// <summary>
+    /// Returns every property to unstated, so the style hierarchy resolves the lot.
+    /// </summary>
     public void Clear() =>
         CopyFrom(new());
 

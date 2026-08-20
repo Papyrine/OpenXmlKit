@@ -31,9 +31,24 @@ public partial class Font :
         }
     }
 
+    /// <summary>
+    /// The typeface for Latin text.
+    /// </summary>
     public string? NameAscii { get; set; }
+
+    /// <summary>
+    /// The typeface for the upper half of the Windows code page.
+    /// </summary>
     public string? NameHighAnsi { get; set; }
+
+    /// <summary>
+    /// The typeface for complex scripts such as Arabic and Hebrew.
+    /// </summary>
     public string? NameComplexScript { get; set; }
+
+    /// <summary>
+    /// The typeface for East Asian text.
+    /// </summary>
     public string? NameEastAsia { get; set; }
 
     /// <summary>
@@ -47,21 +62,74 @@ public partial class Font :
     /// </summary>
     public Length? SizeComplexScript { get; set; }
 
+    /// <summary>
+    /// Bold.
+    /// </summary>
     public Toggle Bold { get; set; }
+
+    /// <summary>
+    /// Bold, for complex-script runs.
+    /// </summary>
     public Toggle BoldComplexScript { get; set; }
+
+    /// <summary>
+    /// Italic.
+    /// </summary>
     public Toggle Italic { get; set; }
+
+    /// <summary>
+    /// Italic, for complex-script runs.
+    /// </summary>
     public Toggle ItalicComplexScript { get; set; }
 
+    /// <summary>
+    /// How the text is underlined.
+    /// </summary>
     public UnderlineStyle? Underline { get; set; }
+
+    /// <summary>
+    /// The colour of the underline, where it differs from the text.
+    /// </summary>
     public Color? UnderlineColor { get; set; }
 
+    /// <summary>
+    /// A line through the text.
+    /// </summary>
     public Toggle Strike { get; set; }
+
+    /// <summary>
+    /// Two lines through the text.
+    /// </summary>
     public Toggle DoubleStrike { get; set; }
+
+    /// <summary>
+    /// Lower case drawn as smaller capitals.
+    /// </summary>
     public Toggle SmallCaps { get; set; }
+
+    /// <summary>
+    /// Every letter drawn as a capital. The stored text is unchanged.
+    /// </summary>
     public Toggle AllCaps { get; set; }
+
+    /// <summary>
+    /// Hollow letters.
+    /// </summary>
     public Toggle Outline { get; set; }
+
+    /// <summary>
+    /// A drop shadow behind the letters.
+    /// </summary>
     public Toggle Shadow { get; set; }
+
+    /// <summary>
+    /// Letters raised off the page.
+    /// </summary>
     public Toggle Emboss { get; set; }
+
+    /// <summary>
+    /// Letters pressed into the page.
+    /// </summary>
     public Toggle Imprint { get; set; }
 
     /// <summary>
@@ -69,9 +137,20 @@ public partial class Font :
     /// </summary>
     public Toggle Hidden { get; set; }
 
+    /// <summary>
+    /// Excludes the text from spelling and grammar checking, which is what code and
+    /// identifiers want.
+    /// </summary>
     public Toggle NoProof { get; set; }
+
+    /// <summary>
+    /// Marks the run as right-to-left text.
+    /// </summary>
     public Toggle RightToLeft { get; set; }
 
+    /// <summary>
+    /// The colour of the text.
+    /// </summary>
     public Color? Color { get; set; }
 
     /// <summary>
@@ -80,6 +159,9 @@ public partial class Font :
     /// </summary>
     public HighlightColor? Highlight { get; set; }
 
+    /// <summary>
+    /// A fill behind the text, which unlike <see cref="Highlight"/> can be any colour.
+    /// </summary>
     public Shading Shading { get; } = new();
 
     /// <summary>
@@ -87,6 +169,9 @@ public partial class Font :
     /// </summary>
     public Border Border { get; } = new();
 
+    /// <summary>
+    /// Superscript or subscript, which also reduces the size.
+    /// </summary>
     public VerticalTextPosition? VerticalPosition { get; set; }
 
     /// <summary>
@@ -173,6 +258,9 @@ public partial class Font :
         LanguageComplexScript == null &&
         StyleId == null;
 
+    /// <summary>
+    /// An independent copy, so the two can diverge.
+    /// </summary>
     public Font Clone()
     {
         var clone = new Font();
@@ -180,6 +268,10 @@ public partial class Font :
         return clone;
     }
 
+    /// <summary>
+    /// Overwrites every property with the other value, stated or not.
+    /// Use <see cref="MergeFrom"/> to overlay only what is stated.
+    /// </summary>
     public void CopyFrom(Font other)
     {
         NameAscii = other.NameAscii;

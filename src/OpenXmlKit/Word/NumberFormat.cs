@@ -15,10 +15,29 @@ public enum NumberFormat
     /// </summary>
     Bullet,
 
+    /// <summary>
+    /// 1, 2, 3.
+    /// </summary>
     Decimal,
+
+    /// <summary>
+    /// I, II, III.
+    /// </summary>
     UpperRoman,
+
+    /// <summary>
+    /// i, ii, iii.
+    /// </summary>
     LowerRoman,
+
+    /// <summary>
+    /// A, B, C.
+    /// </summary>
     UpperLetter,
+
+    /// <summary>
+    /// a, b, c.
+    /// </summary>
     LowerLetter,
 
     /// <summary>

@@ -5,6 +5,9 @@ namespace OpenXmlKit.Word;
 /// </summary>
 public enum TextDirection
 {
+    /// <summary>
+    /// Ordinary left-to-right text.
+    /// </summary>
     Horizontal,
 
     /// <summary>

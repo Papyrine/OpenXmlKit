@@ -19,6 +19,9 @@ public class Border :
     /// </summary>
     public Length? Width { get; set; }
 
+    /// <summary>
+    /// The colour of the line.
+    /// </summary>
     public Color? Color { get; set; }
 
     /// <summary>
@@ -26,8 +29,14 @@ public class Border :
     /// </summary>
     public Length? Space { get; set; }
 
+    /// <summary>
+    /// Draws the border with a shadow, which Word renders as a thicker line on two sides.
+    /// </summary>
     public bool Shadow { get; set; }
 
+    /// <summary>
+    /// Whether the border states anything. An empty border writes no element.
+    /// </summary>
     public bool IsEmpty =>
         Style == null &&
         Width == null &&
@@ -35,6 +44,9 @@ public class Border :
         Space == null &&
         !Shadow;
 
+    /// <summary>
+    /// An independent copy.
+    /// </summary>
     public Border Clone() =>
         new()
         {
@@ -45,6 +57,9 @@ public class Border :
             Shadow = Shadow
         };
 
+    /// <summary>
+    /// Overwrites every property with the other border.
+    /// </summary>
     public void CopyFrom(Border other)
     {
         Style = other.Style;

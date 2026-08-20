@@ -1,5 +1,8 @@
 namespace OpenXmlKit.Word;
 
+/// <summary>
+/// How a stated row height is treated.
+/// </summary>
 public enum RowHeightRule
 {
     /// <summary>

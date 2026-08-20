@@ -27,9 +27,15 @@ public sealed class DocumentView :
         this.ownsPackage = ownsPackage;
     }
 
+    /// <summary>
+    /// Reads a document from a stream.
+    /// </summary>
     public static DocumentView Open(Stream stream) =>
         new(WordprocessingDocument.Open(stream, false), true);
 
+    /// <summary>
+    /// Reads a document from a file.
+    /// </summary>
     public static DocumentView Open(string path) =>
         new(WordprocessingDocument.Open(path, false), true);
 
@@ -58,6 +64,9 @@ public sealed class DocumentView :
         package.MainDocumentPart ??
         throw new InvalidOperationException("The document has no main part, so it is not a readable Word document.");
 
+    /// <summary>
+    /// The document body.
+    /// </summary>
     public BlockContainerView Body =>
         new(MainPart.Document?.Body ?? new W.Body());
 
@@ -92,6 +101,9 @@ public sealed class DocumentView :
         }
     }
 
+    /// <summary>
+    /// The style definitions the document carries.
+    /// </summary>
     public StylesView Styles =>
         field ??= new(MainPart);
 
@@ -215,6 +227,9 @@ public sealed class DocumentView :
     public string Text =>
         Body.Text;
 
+    /// <summary>
+    /// Closes the package, unless this view was taken of a document still being built.
+    /// </summary>
     public void Dispose()
     {
         if (disposed)

@@ -16,6 +16,9 @@ public readonly struct RowView
     public string Text =>
         string.Join("\t", Cells.Select(_ => _.Text));
 
+    /// <summary>
+    /// The cells in the row, left to right.
+    /// </summary>
     public IEnumerable<CellView> Cells
     {
         get
@@ -27,6 +30,9 @@ public readonly struct RowView
         }
     }
 
+    /// <summary>
+    /// The formatting written on the row.
+    /// </summary>
     public IRowFormatView Format
     {
         get

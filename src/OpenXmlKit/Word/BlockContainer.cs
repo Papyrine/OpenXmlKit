@@ -22,6 +22,9 @@ public abstract class BlockContainer
 
     internal Document? Document { get; }
 
+    /// <summary>
+    /// Adds a paragraph, optionally holding plain text, and returns it.
+    /// </summary>
     public Paragraph AddParagraph(string? text = null)
     {
         var paragraph = new Paragraph(text);
@@ -29,6 +32,9 @@ public abstract class BlockContainer
         return paragraph;
     }
 
+    /// <summary>
+    /// Adds an empty table and returns it.
+    /// </summary>
     public Table AddTable()
     {
         var table = new Table();
@@ -46,6 +52,9 @@ public abstract class BlockContainer
         InsertParagraphAfterTable();
     }
 
+    /// <summary>
+    /// Appends a paragraph built elsewhere.
+    /// </summary>
     public void Append(Paragraph paragraph)
     {
         Insert(paragraph.Element);

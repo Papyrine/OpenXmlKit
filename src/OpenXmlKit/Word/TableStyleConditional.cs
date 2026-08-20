@@ -51,12 +51,18 @@ public class TableStyleConditional :
     ITableFormatView ITableStyleConditionalView.TableFormat => TableFormat;
     ICellFormatView ITableStyleConditionalView.CellFormat => CellFormat;
 
+    /// <summary>
+    /// Whether the block states any formatting. An empty block is not written.
+    /// </summary>
     public bool IsEmpty =>
         Font.IsEmpty &&
         ParagraphFormat.IsEmpty &&
         TableFormat.IsEmpty &&
         CellFormat.IsEmpty;
 
+    /// <summary>
+    /// Overwrites every part with the other block.
+    /// </summary>
     public void CopyFrom(TableStyleConditional other)
     {
         Font.CopyFrom(other.Font);

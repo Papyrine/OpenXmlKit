@@ -80,6 +80,13 @@ public partial class Paragraph
         return run;
     }
 
+    /// <summary>
+    /// Adds a picture read from a stream, on the same terms as
+    /// <see cref="AddImage(Document, byte[], Length?, Length?, ImageWrap, string?)"/>.
+    /// </summary>
+    /// <remarks>
+    /// The stream is read to the end and not disposed, because the caller owns it.
+    /// </remarks>
     public Run AddImage(
         Document document,
         Stream stream,

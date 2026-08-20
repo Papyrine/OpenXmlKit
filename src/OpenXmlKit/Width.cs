@@ -33,15 +33,27 @@ public readonly struct Width :
     public static Width Percent(double percent) =>
         new(WidthUnit.Percent, percent);
 
+    /// <summary>
+    /// A fixed width in points.
+    /// </summary>
     public static Width FromPoints(double points) =>
         new(WidthUnit.Absolute, points);
 
+    /// <summary>
+    /// A fixed width in twips, the unit the file format stores.
+    /// </summary>
     public static Width FromTwips(double twips) =>
         new(WidthUnit.Absolute, twips / 20);
 
+    /// <summary>
+    /// A fixed width from a <see cref="Length"/>.
+    /// </summary>
     public static Width From(Length length) =>
         new(WidthUnit.Absolute, length.TotalPoints);
 
+    /// <summary>
+    /// What the width is measured in, which decides how it is written.
+    /// </summary>
     public WidthUnit Unit => unit;
 
     /// <summary>
@@ -50,8 +62,15 @@ public readonly struct Width :
     /// </summary>
     public double Value => value;
 
+    /// <summary>
+    /// Whether the width is left to Word, which is what an unstated width means.
+    /// </summary>
     public bool IsAuto => unit == WidthUnit.Auto;
 
+    /// <summary>
+    /// The width as a <see cref="Length"/>. Meaningless unless <see cref="Unit"/> is
+    /// <see cref="WidthUnit.Absolute"/>.
+    /// </summary>
     public Length AsLength =>
         unit == WidthUnit.Absolute ? Length.FromPoints(value) : Length.Zero;
 
@@ -59,18 +78,37 @@ public readonly struct Width :
     internal int FiftiethsOfAPercent =>
         (int) Math.Round(value * 50, MidpointRounding.AwayFromZero);
 
+    /// <summary>
+    /// Whether the two widths state the same thing in the same unit.
+    /// </summary>
     public bool Equals(Width other) =>
         unit == other.unit && value.Equals(other.value);
 
+    /// <summary>
+    /// Whether the other object is a value of this type and equal to this one.
+    /// </summary>
     public override bool Equals(object? obj) =>
         obj is Width other && Equals(other);
 
+    /// <summary>
+    /// A hash consistent with equality.
+    /// </summary>
     public override int GetHashCode() =>
         (unit, value).GetHashCode();
 
+    /// <summary>
+    /// Whether the two widths state the same thing in the same unit.
+    /// </summary>
     public static bool operator ==(Width left, Width right) => left.Equals(right);
+
+    /// <summary>
+    /// Whether the two widths differ.
+    /// </summary>
     public static bool operator !=(Width left, Width right) => !left.Equals(right);
 
+    /// <summary>
+    /// A readable form, for logs and debugging rather than for the file.
+    /// </summary>
     public override string ToString() =>
         unit switch
         {

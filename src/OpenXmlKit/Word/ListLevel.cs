@@ -14,6 +14,9 @@ public class ListLevel :
     /// </summary>
     public int Depth { get; }
 
+    /// <summary>
+    /// What the level counts in.
+    /// </summary>
     public NumberFormat Format { get; set; } = NumberFormat.Decimal;
 
     /// <summary>
@@ -22,8 +25,14 @@ public class ListLevel :
     /// </summary>
     public string Text { get; set; } = "";
 
+    /// <summary>
+    /// The number the level starts from.
+    /// </summary>
     public int StartAt { get; set; } = 1;
 
+    /// <summary>
+    /// How the marker sits against the space reserved for it.
+    /// </summary>
     public ListLevelAlignment Alignment { get; set; } = ListLevelAlignment.Left;
 
     /// <summary>
@@ -36,6 +45,9 @@ public class ListLevel :
     /// </summary>
     public Length Hanging { get; set; } = Length.FromInches(0.25);
 
+    /// <summary>
+    /// What separates the marker from the text after it.
+    /// </summary>
     public ListTrailingCharacter TrailingCharacter { get; set; } = ListTrailingCharacter.Tab;
 
     /// <summary>

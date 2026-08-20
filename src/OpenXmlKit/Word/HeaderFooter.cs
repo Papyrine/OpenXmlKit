@@ -34,12 +34,18 @@ public class HeaderFooter :
         return this;
     }
 
+    /// <summary>
+    /// Adds a paragraph and configures it.
+    /// </summary>
     public HeaderFooter AddParagraph(Action<Paragraph> configure)
     {
         configure(AddParagraph());
         return this;
     }
 
+    /// <summary>
+    /// Adds a table and configures it.
+    /// </summary>
     public HeaderFooter AddTable(Action<Table> configure)
     {
         configure(AddTable());

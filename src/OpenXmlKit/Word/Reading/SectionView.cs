@@ -15,6 +15,9 @@ public readonly struct SectionView
         this.main = main;
     }
 
+    /// <summary>
+    /// The page size, margins and columns the section states.
+    /// </summary>
     public IPageSetupView PageSetup
     {
         get

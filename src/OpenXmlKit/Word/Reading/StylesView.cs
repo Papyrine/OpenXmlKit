@@ -23,6 +23,9 @@ public sealed class StylesView :
     /// </summary>
     public StyleView? this[BuiltInStyle style] => Find(BuiltInStyleDefinitions.IdOf(style));
 
+    /// <summary>
+    /// The style with the given id, or null when the document has none.
+    /// </summary>
     public StyleView? Find(string id)
     {
         foreach (var element in Root?.Elements<W.Style>() ?? [])
@@ -36,6 +39,9 @@ public sealed class StylesView :
         return null;
     }
 
+    /// <summary>
+    /// Whether the document defines a style with the given id.
+    /// </summary>
     public bool Contains(string id) =>
         Find(id) != null;
 
@@ -63,6 +69,9 @@ public sealed class StylesView :
         }
     }
 
+    /// <summary>
+    /// The paragraph formatting in the document defaults, which every style starts from.
+    /// </summary>
     public IParagraphFormatView? DefaultParagraphFormat
     {
         get
@@ -84,6 +93,9 @@ public sealed class StylesView :
         }
     }
 
+    /// <summary>
+    /// Every style the document defines.
+    /// </summary>
     public IEnumerator<StyleView> GetEnumerator()
     {
         foreach (var element in Root?.Elements<W.Style>() ?? [])

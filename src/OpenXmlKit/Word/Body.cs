@@ -27,12 +27,18 @@ public class Body :
         return this;
     }
 
+    /// <summary>
+    /// Adds a paragraph and configures it.
+    /// </summary>
     public Body AddParagraph(Action<Paragraph> configure)
     {
         configure(AddParagraph());
         return this;
     }
 
+    /// <summary>
+    /// Adds a table and configures it.
+    /// </summary>
     public Body AddTable(Action<Table> configure)
     {
         configure(AddTable());

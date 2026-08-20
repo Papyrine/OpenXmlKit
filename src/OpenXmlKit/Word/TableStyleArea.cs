@@ -14,9 +14,24 @@ public enum TableStyleArea
     /// </summary>
     WholeTable,
 
+    /// <summary>
+    /// The header row.
+    /// </summary>
     FirstRow,
+
+    /// <summary>
+    /// The total row.
+    /// </summary>
     LastRow,
+
+    /// <summary>
+    /// The leftmost column, which often carries the row labels.
+    /// </summary>
     FirstColumn,
+
+    /// <summary>
+    /// The rightmost column.
+    /// </summary>
     LastColumn,
 
     /// <summary>
@@ -29,7 +44,14 @@ public enum TableStyleArea
     /// </summary>
     Band2Horizontal,
 
+    /// <summary>
+    /// The odd-numbered vertical bands, the first stripe of column banding.
+    /// </summary>
     Band1Vertical,
+
+    /// <summary>
+    /// The even-numbered vertical bands.
+    /// </summary>
     Band2Vertical,
 
     /// <summary>
@@ -37,7 +59,18 @@ public enum TableStyleArea
     /// </summary>
     TopLeftCell,
 
+    /// <summary>
+    /// The cell where the first row meets the last column.
+    /// </summary>
     TopRightCell,
+
+    /// <summary>
+    /// The cell where the last row meets the first column.
+    /// </summary>
     BottomLeftCell,
+
+    /// <summary>
+    /// The cell where the last row meets the last column.
+    /// </summary>
     BottomRightCell
 }

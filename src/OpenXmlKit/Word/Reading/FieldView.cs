@@ -17,6 +17,9 @@ namespace OpenXmlKit.Word;
 /// </param>
 public readonly record struct FieldView(string Code, string Value)
 {
+    /// <summary>
+    /// A readable form, for logs and debugging rather than for the file.
+    /// </summary>
     public override string ToString() =>
         Code;
 }

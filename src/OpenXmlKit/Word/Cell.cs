@@ -10,15 +10,27 @@ public class Cell
     readonly List<Paragraph> paragraphs = [];
     readonly List<Table> tables = [];
 
+    /// <summary>
+    /// A cell with no content and no formatting.
+    /// </summary>
     public Cell() =>
         element = new();
 
+    /// <summary>
+    /// A cell holding one paragraph of plain text.
+    /// </summary>
     public Cell(string? text)
         : this() =>
         AddParagraph(text);
 
+    /// <summary>
+    /// The cell formatting, applied when the document is flushed.
+    /// </summary>
     public CellFormat Format => format ??= new();
 
+    /// <summary>
+    /// Adds a paragraph of plain text and returns it.
+    /// </summary>
     public Paragraph AddParagraph(string? text = null)
     {
         var paragraph = new Paragraph(text);
@@ -27,6 +39,9 @@ public class Cell
         return paragraph;
     }
 
+    /// <summary>
+    /// Adds a paragraph and configures it.
+    /// </summary>
     public Cell AddParagraph(Action<Paragraph> configure)
     {
         configure(AddParagraph());
@@ -62,30 +77,45 @@ public class Cell
         return table;
     }
 
+    /// <summary>
+    /// Adds a nested table and configures it.
+    /// </summary>
     public Cell AddTable(Action<Table> configure)
     {
         configure(AddTable());
         return this;
     }
 
+    /// <summary>
+    /// Sets the preferred width. Fluent shorthand for <see cref="Format"/>.
+    /// </summary>
     public Cell Width(Width width)
     {
         Format.Width = width;
         return this;
     }
 
+    /// <summary>
+    /// Merges this cell with the ones to its right.
+    /// </summary>
     public Cell ColumnSpan(int columns)
     {
         Format.ColumnSpan = columns;
         return this;
     }
 
+    /// <summary>
+    /// Fills the cell with a colour.
+    /// </summary>
     public Cell Background(Color color)
     {
         Format.Shading.BackgroundColor = color;
         return this;
     }
 
+    /// <summary>
+    /// Sets where the content sits when the row is taller than it is.
+    /// </summary>
     public Cell VerticalAlignment(VerticalAlignment alignment)
     {
         Format.VerticalAlignment = alignment;
@@ -110,6 +140,9 @@ public class Cell
         return this;
     }
 
+    /// <summary>
+    /// The underlying element, flushed. The escape hatch for anything not modelled here.
+    /// </summary>
     public W.TableCell ToOpenXml()
     {
         Flush();

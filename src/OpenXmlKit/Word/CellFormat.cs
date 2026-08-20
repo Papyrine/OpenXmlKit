@@ -30,15 +30,44 @@ public class CellFormat :
     /// </summary>
     public CellMerge VerticalMerge { get; set; }
 
+    /// <summary>
+    /// The cell own borders, which win over the ones the table draws.
+    /// </summary>
     public Borders Borders { get; } = new();
+
+    /// <summary>
+    /// A fill behind the cell.
+    /// </summary>
     public Shading Shading { get; } = new();
 
+    /// <summary>
+    /// Where the content sits when the row is taller than it is.
+    /// </summary>
     public VerticalAlignment? VerticalAlignment { get; set; }
+
+    /// <summary>
+    /// Which way the text runs.
+    /// </summary>
     public TextDirection? TextDirection { get; set; }
 
+    /// <summary>
+    /// Padding inside the left edge, overriding the table default.
+    /// </summary>
     public Length? LeftMargin { get; set; }
+
+    /// <summary>
+    /// Padding inside the right edge.
+    /// </summary>
     public Length? RightMargin { get; set; }
+
+    /// <summary>
+    /// Padding inside the top edge.
+    /// </summary>
     public Length? TopMargin { get; set; }
+
+    /// <summary>
+    /// Padding inside the bottom edge.
+    /// </summary>
     public Length? BottomMargin { get; set; }
 
     /// <summary>
@@ -65,6 +94,10 @@ public class CellFormat :
         BottomMargin = vertical;
     }
 
+    /// <summary>
+    /// Whether anything at all is stated. An empty format writes no properties element,
+    /// leaving the style hierarchy to resolve every value.
+    /// </summary>
     public bool IsEmpty =>
         Width.IsAuto &&
         ColumnSpan == 1 &&
@@ -80,6 +113,9 @@ public class CellFormat :
         !NoWrap.IsSet &&
         !FitText.IsSet;
 
+    /// <summary>
+    /// An independent copy, so the two can diverge.
+    /// </summary>
     public CellFormat Clone()
     {
         var clone = new CellFormat();
@@ -87,6 +123,9 @@ public class CellFormat :
         return clone;
     }
 
+    /// <summary>
+    /// Overwrites every property with the other value, stated or not.
+    /// </summary>
     public void CopyFrom(CellFormat other)
     {
         Width = other.Width;
@@ -104,6 +143,9 @@ public class CellFormat :
         FitText = other.FitText;
     }
 
+    /// <summary>
+    /// Returns every property to unstated, so the style hierarchy resolves the lot.
+    /// </summary>
     public void Clear() =>
         CopyFrom(new());
 

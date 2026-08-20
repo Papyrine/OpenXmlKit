@@ -16,6 +16,9 @@ public readonly record struct ImageInfo(ImageFormat Format, int WidthPixels, int
     /// </summary>
     public Length Width => Length.FromPixels(WidthPixels, Dpi);
 
+    /// <summary>
+    /// The intrinsic height of the image.
+    /// </summary>
     public Length Height => Length.FromPixels(HeightPixels, Dpi);
 
     /// <summary>
@@ -33,6 +36,10 @@ public readonly record struct ImageInfo(ImageFormat Format, int WidthPixels, int
         return info;
     }
 
+    /// <summary>
+    /// Reads the format and dimensions from the image header. False when the format is
+    /// not one this can measure.
+    /// </summary>
     public static bool TryRead(byte[] bytes, out ImageInfo info)
     {
         info = default;

@@ -27,8 +27,14 @@ public class ListDefinition
 
     internal int AbstractId { get; }
 
+    /// <summary>
+    /// The nine levels, outermost first.
+    /// </summary>
     public IReadOnlyList<ListLevel> Levels => levels;
 
+    /// <summary>
+    /// One level, by depth.
+    /// </summary>
     public ListLevel this[int depth] => levels[depth];
 
     /// <summary>

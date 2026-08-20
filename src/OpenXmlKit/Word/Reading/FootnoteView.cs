@@ -32,6 +32,9 @@ public readonly struct FootnoteView
     public W.Footnote ToOpenXml() =>
         element;
 
+    /// <summary>
+    /// A readable form, for logs and debugging rather than for the file.
+    /// </summary>
     public override string ToString() =>
         Text;
 }

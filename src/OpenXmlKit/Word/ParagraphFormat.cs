@@ -20,9 +20,19 @@ public partial class ParagraphFormat :
     /// </remarks>
     public string? StyleId { get; set; }
 
+    /// <summary>
+    /// How the paragraph sits between its margins.
+    /// </summary>
     public ParagraphAlignment? Alignment { get; set; }
 
+    /// <summary>
+    /// Space between the left margin and the paragraph.
+    /// </summary>
     public Length? LeftIndent { get; set; }
+
+    /// <summary>
+    /// Space between the paragraph and the right margin.
+    /// </summary>
     public Length? RightIndent { get; set; }
 
     /// <summary>
@@ -35,7 +45,14 @@ public partial class ParagraphFormat :
     /// </summary>
     public Length? HangingIndent { get; set; }
 
+    /// <summary>
+    /// Space above the paragraph.
+    /// </summary>
     public Length? SpaceBefore { get; set; }
+
+    /// <summary>
+    /// Space below the paragraph.
+    /// </summary>
     public Length? SpaceAfter { get; set; }
 
     /// <summary>
@@ -51,6 +68,9 @@ public partial class ParagraphFormat :
     /// </summary>
     public double? LineSpacingMultiple { get; set; }
 
+    /// <summary>
+    /// How <see cref="LineSpacing"/> is interpreted.
+    /// </summary>
     public LineSpacingRule? LineSpacingRule { get; set; }
 
     /// <summary>
@@ -69,6 +89,9 @@ public partial class ParagraphFormat :
     /// </summary>
     public Toggle KeepTogether { get; set; }
 
+    /// <summary>
+    /// Starts the paragraph on a new page.
+    /// </summary>
     public Toggle PageBreakBefore { get; set; }
 
     /// <summary>
@@ -76,7 +99,14 @@ public partial class ParagraphFormat :
     /// </summary>
     public Toggle WidowControl { get; set; }
 
+    /// <summary>
+    /// Leaves the paragraph out of the line numbering, where a section has it on.
+    /// </summary>
     public Toggle SuppressLineNumbers { get; set; }
+
+    /// <summary>
+    /// Lays the paragraph out right to left.
+    /// </summary>
     public Toggle RightToLeft { get; set; }
 
     /// <summary>
@@ -85,8 +115,19 @@ public partial class ParagraphFormat :
     /// </summary>
     public int? OutlineLevel { get; set; }
 
+    /// <summary>
+    /// Rules drawn around the paragraph.
+    /// </summary>
     public Borders Borders { get; } = new();
+
+    /// <summary>
+    /// A fill behind the whole paragraph.
+    /// </summary>
     public Shading Shading { get; } = new();
+
+    /// <summary>
+    /// Where tabs in the paragraph land.
+    /// </summary>
     public TabStops TabStops { get; } = new();
 
     /// <summary>
@@ -94,6 +135,10 @@ public partial class ParagraphFormat :
     /// </summary>
     public ListMembership? List { get; set; }
 
+    /// <summary>
+    /// Whether anything at all is stated. An empty format writes no properties element,
+    /// leaving the style hierarchy to resolve every value.
+    /// </summary>
     public bool IsEmpty =>
         StyleId == null &&
         Alignment == null &&
@@ -119,6 +164,9 @@ public partial class ParagraphFormat :
         TabStops.IsEmpty &&
         List == null;
 
+    /// <summary>
+    /// An independent copy, so the two can diverge.
+    /// </summary>
     public ParagraphFormat Clone()
     {
         var clone = new ParagraphFormat();
@@ -126,6 +174,9 @@ public partial class ParagraphFormat :
         return clone;
     }
 
+    /// <summary>
+    /// Overwrites every property with the other value, stated or not.
+    /// </summary>
     public void CopyFrom(ParagraphFormat other)
     {
         StyleId = other.StyleId;
@@ -153,6 +204,9 @@ public partial class ParagraphFormat :
         List = other.List;
     }
 
+    /// <summary>
+    /// Returns every property to unstated, so the style hierarchy resolves the lot.
+    /// </summary>
     public void Clear() =>
         CopyFrom(new());
 

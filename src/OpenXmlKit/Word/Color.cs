@@ -24,6 +24,9 @@ public readonly struct Color :
     /// </summary>
     public static Color Auto => default;
 
+    /// <summary>
+    /// A colour from its three channels.
+    /// </summary>
     public static Color FromRgb(byte red, byte green, byte blue) =>
         new((red << 16) | (green << 8) | blue, ThemeColor.None, true);
 
@@ -46,6 +49,10 @@ public readonly struct Color :
         return color;
     }
 
+    /// <summary>
+    /// Parses <c>#RRGGBB</c>, <c>RRGGBB</c>, <c>#RGB</c> or the literal <c>auto</c>.
+    /// Returns false rather than throwing when the text is not one of those.
+    /// </summary>
     public static bool TryParse([NotNullWhen(true)] string? value, out Color color)
     {
         if (value == null)
@@ -204,14 +211,36 @@ public readonly struct Color :
     public static Color FromTheme(ThemeColor theme) =>
         new(0, theme, true);
 
+    /// <summary>
+    /// Whether this is <see cref="Auto"/>, which is what an unstated colour means.
+    /// </summary>
     public bool IsAuto => !isSet;
+
+    /// <summary>
+    /// Whether this refers to a theme slot rather than a fixed value.
+    /// </summary>
     public bool IsTheme => theme != ThemeColor.None;
+
+    /// <summary>
+    /// The theme slot, or <see cref="ThemeColor.None"/> when the colour is a fixed value.
+    /// </summary>
     public ThemeColor Theme => theme;
 
     // R/G/B rather than Red/Green/Blue, so the channel accessors do not collide with the named
     // colours below. System.Drawing.Color draws the same line for the same reason.
+    /// <summary>
+    /// The red channel.
+    /// </summary>
     public byte R => (byte) ((rgb >> 16) & 0xFF);
+
+    /// <summary>
+    /// The green channel.
+    /// </summary>
     public byte G => (byte) ((rgb >> 8) & 0xFF);
+
+    /// <summary>
+    /// The blue channel.
+    /// </summary>
     public byte B => (byte) (rgb & 0xFF);
 
     /// <summary>
@@ -240,32 +269,91 @@ public readonly struct Color :
             ? "FF" + rgb.ToString("X6", CultureInfo.InvariantCulture)
             : null;
 
+    /// <summary>
+    /// Parses the text as a colour, so a hex literal can be assigned directly.
+    /// Throws when the text is not a colour, unlike <see cref="TryParse(string?, out Color)"/>.
+    /// </summary>
     public static implicit operator Color(string value) => Parse(value);
 
+    /// <summary>
+    /// Black.
+    /// </summary>
     public static readonly Color Black = FromRgb(0x000000);
+
+    /// <summary>
+    /// White.
+    /// </summary>
     public static readonly Color White = FromRgb(0xFFFFFF);
+
+    /// <summary>
+    /// Pure red.
+    /// </summary>
     public static readonly Color Red = FromRgb(0xFF0000);
+
+    /// <summary>
+    /// Word green, which is darker than pure green.
+    /// </summary>
     public static readonly Color Green = FromRgb(0x008000);
+
+    /// <summary>
+    /// Pure blue.
+    /// </summary>
     public static readonly Color Blue = FromRgb(0x0000FF);
+
+    /// <summary>
+    /// Pure yellow.
+    /// </summary>
     public static readonly Color Yellow = FromRgb(0xFFFF00);
+
+    /// <summary>
+    /// Mid grey.
+    /// </summary>
     public static readonly Color Gray = FromRgb(0x808080);
+
+    /// <summary>
+    /// Light grey.
+    /// </summary>
     public static readonly Color LightGray = FromRgb(0xD3D3D3);
+
+    /// <summary>
+    /// Dark grey.
+    /// </summary>
     public static readonly Color DarkGray = FromRgb(0xA9A9A9);
 
+    /// <summary>
+    /// Whether the two colours state the same thing the same way. A theme slot and the
+    /// value it currently resolves to are not equal.
+    /// </summary>
     public bool Equals(Color other) =>
         isSet == other.isSet &&
         rgb == other.rgb &&
         theme == other.theme;
 
+    /// <summary>
+    /// Whether the other object is a value of this type and equal to this one.
+    /// </summary>
     public override bool Equals(object? obj) =>
         obj is Color other && Equals(other);
 
+    /// <summary>
+    /// A hash consistent with equality.
+    /// </summary>
     public override int GetHashCode() =>
         (isSet, rgb, theme).GetHashCode();
 
+    /// <summary>
+    /// Whether the two colours state the same thing the same way.
+    /// </summary>
     public static bool operator ==(Color left, Color right) => left.Equals(right);
+
+    /// <summary>
+    /// Whether the two colours differ.
+    /// </summary>
     public static bool operator !=(Color left, Color right) => !left.Equals(right);
 
+    /// <summary>
+    /// A readable form, for logs and debugging rather than for the file.
+    /// </summary>
     public override string ToString() =>
         IsTheme ? theme.ToString() : isSet ? "#" + Value : "auto";
 }

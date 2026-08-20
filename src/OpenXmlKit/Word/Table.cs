@@ -15,6 +15,9 @@ public class Table
     List<Length>? columnWidths;
     readonly List<Row> rows = [];
 
+    /// <summary>
+    /// A table with no rows and no formatting.
+    /// </summary>
     public Table() =>
         element = new();
 
@@ -24,6 +27,9 @@ public class Table
     public static Table Create() =>
         new();
 
+    /// <summary>
+    /// The table formatting, applied when the document is flushed.
+    /// </summary>
     public TableFormat Format => format ??= new();
 
     /// <summary>
@@ -37,6 +43,9 @@ public class Table
     /// </remarks>
     public IReadOnlyList<Length>? ColumnWidths => columnWidths;
 
+    /// <summary>
+    /// Adds an empty row and returns it.
+    /// </summary>
     public Row AddRow()
     {
         var row = new Row();
@@ -45,6 +54,9 @@ public class Table
         return row;
     }
 
+    /// <summary>
+    /// Adds a row and configures it.
+    /// </summary>
     public Table AddRow(Action<Row> configure)
     {
         configure(AddRow());
@@ -95,6 +107,9 @@ public class Table
         return this;
     }
 
+    /// <summary>
+    /// Sets the preferred width of the table.
+    /// </summary>
     public Table Width(Width width)
     {
         Format.Width = width;
@@ -129,6 +144,9 @@ public class Table
         return this;
     }
 
+    /// <summary>
+    /// The underlying element, flushed. The escape hatch for anything not modelled here.
+    /// </summary>
     public W.Table ToOpenXml()
     {
         Flush();

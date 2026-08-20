@@ -25,6 +25,9 @@ public class TabStops :
 {
     readonly List<TabStop> stops = [];
 
+    /// <summary>
+    /// How many stops are set.
+    /// </summary>
     public int Count => stops.Count;
 
     /// <summary>
@@ -33,8 +36,14 @@ public class TabStops :
     /// </summary>
     public IReadOnlyList<TabStop> AsList => stops;
 
+    /// <summary>
+    /// The stop at the given index, in position order.
+    /// </summary>
     public TabStop this[int index] => stops[index];
 
+    /// <summary>
+    /// Whether any stop is set.
+    /// </summary>
     public bool IsEmpty => stops.Count == 0;
 
     /// <summary>
@@ -45,6 +54,9 @@ public class TabStops :
     public TabStops Add(Length position, TabAlignment alignment = TabAlignment.Left, TabLeader leader = TabLeader.None) =>
         Add(new(position, alignment, leader));
 
+    /// <summary>
+    /// Adds a stop. Stops are written in position order however they are added.
+    /// </summary>
     public TabStops Add(TabStop stop)
     {
         var index = stops.FindIndex(_ => _.Position == stop.Position);
@@ -74,18 +86,30 @@ public class TabStops :
     public TabStops Clear(Length position) =>
         Add(new(position, TabAlignment.Clear));
 
+    /// <summary>
+    /// Removes the stop at the given position, if there is one.
+    /// </summary>
     public bool Remove(Length position) =>
         stops.RemoveAll(_ => _.Position == position) > 0;
 
+    /// <summary>
+    /// Removes every stop.
+    /// </summary>
     public void RemoveAll() =>
         stops.Clear();
 
+    /// <summary>
+    /// Replaces the stops with the other collection.
+    /// </summary>
     public void CopyFrom(TabStops other)
     {
         stops.Clear();
         stops.AddRange(other.stops);
     }
 
+    /// <summary>
+    /// The stops, in position order.
+    /// </summary>
     public IEnumerator<TabStop> GetEnumerator() =>
         stops.GetEnumerator();
 

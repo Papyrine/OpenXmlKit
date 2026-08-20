@@ -10,10 +10,19 @@ public readonly struct StyleView
     internal StyleView(W.Style element) =>
         this.element = element;
 
+    /// <summary>
+    /// The id content refers to.
+    /// </summary>
     public string Id => element.StyleId?.Value ?? "";
 
+    /// <summary>
+    /// The name Word shows, falling back to the id when the style has none.
+    /// </summary>
     public string Name => element.StyleName?.Val?.Value ?? Id;
 
+    /// <summary>
+    /// What the style can be applied to.
+    /// </summary>
     public StyleKind Kind =>
         element.Type is { HasValue: true } type ? Map.ToStyleKind(type.Value) : StyleKind.Paragraph;
 
@@ -22,12 +31,24 @@ public readonly struct StyleView
     /// </summary>
     public string? BasedOn => element.BasedOn?.Val?.Value;
 
+    /// <summary>
+    /// The style applied to the paragraph typed after one in this style.
+    /// </summary>
     public string? NextStyle => element.NextParagraphStyle?.Val?.Value;
 
+    /// <summary>
+    /// The character style paired with this paragraph style.
+    /// </summary>
     public string? LinkedStyle => element.LinkedStyle?.Val?.Value;
 
+    /// <summary>
+    /// Where the style sorts in the gallery. Lower comes first.
+    /// </summary>
     public int? Priority => element.UIPriority?.Val?.Value;
 
+    /// <summary>
+    /// Whether this is the default style of its kind.
+    /// </summary>
     public bool IsDefault => element.Default?.Value == true;
 
     /// <summary>
@@ -35,8 +56,14 @@ public readonly struct StyleView
     /// </summary>
     public bool IsQuickStyle => element.PrimaryStyle != null;
 
+    /// <summary>
+    /// Whether the style is hidden from the gallery until used.
+    /// </summary>
     public bool SemiHidden => element.SemiHidden != null;
 
+    /// <summary>
+    /// Whether using the style reveals it.
+    /// </summary>
     public bool UnhideWhenUsed => element.UnhideWhenUsed != null;
 
     /// <summary>
@@ -149,6 +176,9 @@ public readonly struct StyleView
         return target;
     }
 
+    /// <summary>
+    /// A readable form, for logs and debugging rather than for the file.
+    /// </summary>
     public override string ToString() =>
         Id;
 }

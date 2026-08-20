@@ -10,42 +10,63 @@ public class DocumentProperties
     internal DocumentProperties(WordprocessingDocument package) =>
         this.package = package;
 
+    /// <summary>
+    /// The document title.
+    /// </summary>
     public string? Title
     {
         get => package.PackageProperties.Title;
         set => package.PackageProperties.Title = value;
     }
 
+    /// <summary>
+    /// What the document is about.
+    /// </summary>
     public string? Subject
     {
         get => package.PackageProperties.Subject;
         set => package.PackageProperties.Subject = value;
     }
 
+    /// <summary>
+    /// The author.
+    /// </summary>
     public string? Creator
     {
         get => package.PackageProperties.Creator;
         set => package.PackageProperties.Creator = value;
     }
 
+    /// <summary>
+    /// A longer description, shown as Comments in Word.
+    /// </summary>
     public string? Description
     {
         get => package.PackageProperties.Description;
         set => package.PackageProperties.Description = value;
     }
 
+    /// <summary>
+    /// Tags, separated however the consumer expects.
+    /// </summary>
     public string? Keywords
     {
         get => package.PackageProperties.Keywords;
         set => package.PackageProperties.Keywords = value;
     }
 
+    /// <summary>
+    /// The category the document belongs to.
+    /// </summary>
     public string? Category
     {
         get => package.PackageProperties.Category;
         set => package.PackageProperties.Category = value;
     }
 
+    /// <summary>
+    /// Who saved it last.
+    /// </summary>
     public string? LastModifiedBy
     {
         get => package.PackageProperties.LastModifiedBy;
@@ -65,6 +86,9 @@ public class DocumentProperties
         set => package.PackageProperties.Created = value;
     }
 
+    /// <summary>
+    /// When it was last saved.
+    /// </summary>
     public DateTime? Modified
     {
         get => package.PackageProperties.Modified;
@@ -94,6 +118,9 @@ public class DocumentProperties
         }
     }
 
+    /// <summary>
+    /// The value of a custom property, or null when the document has none by that name.
+    /// </summary>
     public string? GetCustom(string name)
     {
         foreach (var property in Custom)

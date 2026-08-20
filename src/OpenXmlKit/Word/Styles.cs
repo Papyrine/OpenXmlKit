@@ -34,6 +34,9 @@ public class Styles :
     /// </summary>
     public Style? this[BuiltInStyle style] => Find(BuiltInStyleDefinitions.IdOf(style));
 
+    /// <summary>
+    /// The style with the given id, or null when the document has none.
+    /// </summary>
     public Style? Find(string id)
     {
         if (cache.TryGetValue(id, out var cached))
@@ -54,9 +57,15 @@ public class Styles :
         return style;
     }
 
+    /// <summary>
+    /// Whether the document defines a style with the given id.
+    /// </summary>
     public bool Contains(string id) =>
         Find(id) != null;
 
+    /// <summary>
+    /// Whether the document already carries a definition for the built-in style.
+    /// </summary>
     public bool Contains(BuiltInStyle style) =>
         Contains(BuiltInStyleDefinitions.IdOf(style));
 
@@ -76,6 +85,9 @@ public class Styles :
         return style;
     }
 
+    /// <summary>
+    /// Adds a style and configures it.
+    /// </summary>
     public Style Add(StyleKind kind, string id, string? name, Action<Style> configure)
     {
         var style = Add(kind, id, name);
@@ -185,6 +197,9 @@ public class Styles :
         defaults.ParagraphPropertiesDefault = paragraphDefault;
     }
 
+    /// <summary>
+    /// Every style the document defines.
+    /// </summary>
     public IEnumerator<Style> GetEnumerator()
     {
         foreach (var element in Root.Elements<W.Style>())

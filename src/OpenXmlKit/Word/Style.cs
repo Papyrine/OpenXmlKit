@@ -38,12 +38,18 @@ public class Style
             }
         };
 
+    /// <summary>
+    /// The id content refers to, which is not translated the way the name is.
+    /// </summary>
     public string Id
     {
         get => element.StyleId?.Value ?? "";
         set => element.StyleId = value;
     }
 
+    /// <summary>
+    /// The name Word shows in its gallery.
+    /// </summary>
     public string Name
     {
         get => element.StyleName?.Val?.Value ?? Id;
@@ -53,6 +59,9 @@ public class Style
         };
     }
 
+    /// <summary>
+    /// What the style can be applied to.
+    /// </summary>
     public StyleKind Kind =>
         element.Type is { HasValue: true } type ? Map.ToStyleKind(type.Value) : StyleKind.Paragraph;
 
@@ -122,12 +131,18 @@ public class Style
         set => element.PrimaryStyle = value ? new W.PrimaryStyle() : null;
     }
 
+    /// <summary>
+    /// Hides the style from the gallery until it is used.
+    /// </summary>
     public bool SemiHidden
     {
         get => element.SemiHidden != null;
         set => element.SemiHidden = value ? new W.SemiHidden() : null;
     }
 
+    /// <summary>
+    /// Reveals a semi-hidden style once something in the document uses it.
+    /// </summary>
     public bool UnhideWhenUsed
     {
         get => element.UnhideWhenUsed != null;
@@ -216,6 +231,9 @@ public class Style
         return result;
     }
 
+    /// <summary>
+    /// The underlying element, flushed. The escape hatch for anything not modelled here.
+    /// </summary>
     public W.Style ToOpenXml()
     {
         Flush();

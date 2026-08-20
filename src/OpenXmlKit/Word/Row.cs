@@ -9,11 +9,20 @@ public class Row
     RowFormat? format;
     readonly List<Cell> cells = [];
 
+    /// <summary>
+    /// A row with no cells and no formatting.
+    /// </summary>
     public Row() =>
         element = new();
 
+    /// <summary>
+    /// The row formatting, applied when the document is flushed.
+    /// </summary>
     public RowFormat Format => format ??= new();
 
+    /// <summary>
+    /// Adds a cell, optionally holding one paragraph of plain text, and returns it.
+    /// </summary>
     public Cell AddCell(string? text = null)
     {
         var cell = new Cell();
@@ -27,6 +36,9 @@ public class Row
         return cell;
     }
 
+    /// <summary>
+    /// Adds a cell and configures it.
+    /// </summary>
     public Row AddCell(Action<Cell> configure)
     {
         configure(AddCell());
@@ -73,6 +85,9 @@ public class Row
         return this;
     }
 
+    /// <summary>
+    /// Sets the row height and how it is interpreted.
+    /// </summary>
     public Row Height(Length height, RowHeightRule rule = RowHeightRule.AtLeast)
     {
         Format.Height = height;
@@ -89,6 +104,9 @@ public class Row
         return this;
     }
 
+    /// <summary>
+    /// The underlying element, flushed. The escape hatch for anything not modelled here.
+    /// </summary>
     public W.TableRow ToOpenXml()
     {
         Flush();

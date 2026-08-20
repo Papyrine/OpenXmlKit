@@ -27,6 +27,9 @@ public sealed class NumberingView :
     /// </summary>
     public ListDefinitionView? this[int numberingId] => Find(numberingId);
 
+    /// <summary>
+    /// The definition a numbering id resolves to, or null when the document has none.
+    /// </summary>
     public ListDefinitionView? Find(int numberingId)
     {
         if (root == null)
@@ -60,6 +63,9 @@ public sealed class NumberingView :
     public IListLevelView? LevelFor(ListMembership membership) =>
         Find(membership.NumberingId)?[membership.Level];
 
+    /// <summary>
+    /// Every list definition the document carries.
+    /// </summary>
     public IEnumerator<ListDefinitionView> GetEnumerator()
     {
         if (root == null)

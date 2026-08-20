@@ -15,6 +15,14 @@ public enum HeaderFooterKind
     /// </summary>
     Default,
 
+    /// <summary>
+    /// Used on the first page of the section, and rendered only when the section says so, which
+    /// <see cref="Section.AddHeader"/> handles.
+    /// </summary>
     First,
+
+    /// <summary>
+    /// Used on even pages, and rendered only when the document-wide odd/even switch is on.
+    /// </summary>
     Even
 }
