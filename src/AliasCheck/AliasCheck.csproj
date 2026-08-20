@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <IsPackable>false</IsPackable>
+    <!--
+      What a consumer sets. Everything below this line is what a consumer would get automatically
+      from the package; it is imported by hand here because buildTransitive props flow through a
+      PackageReference rather than a ProjectReference.
+    -->
+    <OpenXmlKitAliases>W</OpenXmlKitAliases>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="DocumentFormat.OpenXml" />
+    <PackageReference Include="ProjectDefaults" PrivateAssets="all" />
+    <ProjectReference Include="..\OpenXmlKit\OpenXmlKit.csproj" />
+  </ItemGroup>
+  <Import Project="..\OpenXmlKit\buildTransitive\OpenXmlKit.props" />
+</Project>
