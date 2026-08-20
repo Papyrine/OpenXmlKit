@@ -31,6 +31,7 @@ public class Run
             return this;
         }
 
+        // ReSharper disable once RedundantSuppressNullableWarningExpression
         var normalized = text!.Replace("\r\n", "\n").Replace('\r', '\n');
         var start = 0;
         for (var index = 0; index < normalized.Length; index++)

@@ -19,8 +19,6 @@ public sealed class DocumentView :
 {
     readonly WordprocessingDocument package;
     readonly bool ownsPackage;
-    FormattingResolver? formatting;
-    StylesView? styles;
     bool disposed;
 
     DocumentView(WordprocessingDocument package, bool ownsPackage)
@@ -95,14 +93,14 @@ public sealed class DocumentView :
     }
 
     public StylesView Styles =>
-        styles ??= new(MainPart);
+        field ??= new(MainPart);
 
     /// <summary>
     /// Resolves the formatting that actually applies to a piece of content, rather than the
     /// formatting written on it.
     /// </summary>
     public FormattingResolver Formatting =>
-        formatting ??= new(Styles, MainPart);
+        field ??= new(Styles, MainPart);
 
     /// <summary>
     /// The document's metadata.

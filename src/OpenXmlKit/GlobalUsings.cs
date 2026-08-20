@@ -6,6 +6,7 @@ global using System.Collections;
 global using System.Diagnostics.CodeAnalysis;
 global using System.Globalization;
 global using System.Runtime.CompilerServices;
+global using System.Text;
 global using DocumentFormat.OpenXml;
 global using DocumentFormat.OpenXml.Packaging;
 global using OpenXmlKit;
