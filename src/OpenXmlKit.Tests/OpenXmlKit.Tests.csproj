@@ -18,6 +18,8 @@
     <PackageReference Include="SimpleInfoName" />
     <PackageReference Include="Argon" />
     <PackageReference Include="NaughtyStrings" />
+    <!-- The SDK's own schema data, which SchemaOrderTable reads to generate the order table. -->
+    <EmbeddedResource Include="SchemaData\*.json" />
     <ProjectReference Include="..\OpenXmlKit\OpenXmlKit.csproj" />
     <Using Include="NUnit.Framework.Legacy.ClassicAssert" Static="True" />
   </ItemGroup>

@@ -299,6 +299,27 @@ public class SchemaOrderTests
     }
 
     [Test]
+    public void ShippedTableIsUpToDate()
+    {
+        var path = TablePath();
+        var expected = SchemaOrderTable.Generate();
+        var actual = File.Exists(path) ? File.ReadAllText(path) : "";
+
+        if (Normalise(actual) == Normalise(expected))
+        {
+            return;
+        }
+
+        // Written rather than merely reported, on the same terms as the alias props: bringing it up
+        // to date is re-running the suite and reading the diff. The point of generating it at all
+        // is that a table maintained by hand goes stale silently, so noticing has to be automatic.
+        File.WriteAllText(path, expected);
+        Assert.Fail(
+            $"The schema order table was out of date and has been regenerated at {path}. " +
+            "Review the diff and re-run.");
+    }
+
+    [Test]
     public void TheTableAgreesWithTheSdk()
     {
         // The table is generated from the SDK's schema data, so the guard that matters is whether
@@ -427,6 +448,26 @@ public class SchemaOrderTests
         SchemaOrder.Place(properties, new W.Bold());
 
         Assert.That(LocalNames(properties), Is.EqualTo(["pgSz", "b"]));
+    }
+
+    static string Normalise(string value) =>
+        value.ReplaceLineEndings("\n").TrimEnd();
+
+    static string TablePath()
+    {
+        var directory = new DirectoryInfo(TestContext.CurrentContext.TestDirectory);
+        while (directory != null &&
+               !Directory.Exists(Path.Combine(directory.FullName, "OpenXmlKit", "Word")))
+        {
+            directory = directory.Parent;
+        }
+
+        if (directory == null)
+        {
+            throw new DirectoryNotFoundException("Could not find the source directory from the test output directory.");
+        }
+
+        return Path.Combine(directory.FullName, "OpenXmlKit", "Word", "SchemaOrder.Table.cs");
     }
 
     static List<string> LocalNames(OpenXmlElement element) =>
