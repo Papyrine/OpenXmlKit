@@ -70,6 +70,18 @@ public class ColorTests
     }
 
     [Test]
+    public void HexIsWhatWordWrites()
+    {
+        Assert.That(Color.Parse("#C00000").ToHex(), Is.EqualTo("C00000"));
+        Assert.That(Color.Parse("#0AF").ToHex(), Is.EqualTo("00AAFF"));
+
+        // auto is a value ST_HexColor accepts, so it comes back as itself rather than as null —
+        // unlike ToArgbHex, where Excel has no way to say it.
+        Assert.That(Color.Auto.ToHex(), Is.EqualTo("auto"));
+        Assert.That(Color.Auto.ToArgbHex(), Is.Null);
+    }
+
+    [Test]
     public void AColourWithNoRgbHasNoArgb()
     {
         // Assigning null to an Rgb attribute leaves it out, which is what both of these mean.

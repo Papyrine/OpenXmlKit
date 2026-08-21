@@ -244,10 +244,21 @@ public readonly struct Color :
     public byte B => (byte) (rgb & 0xFF);
 
     /// <summary>
-    /// The <c>RRGGBB</c> form Word writes, or <c>auto</c>.
+    /// The <c>RRGGBB</c> form Word writes, or the literal <c>auto</c>.
     /// </summary>
-    internal string Value =>
+    /// <remarks>
+    /// Six digits, because that is what <c>ST_HexColor</c> accepts and Word's colours are opaque.
+    /// Excel wants eight with the alpha first — <see cref="ToArgbHex"/>.
+    /// <para>
+    /// A theme colour reports the fixed value it carries rather than the slot, which is
+    /// <see cref="Theme"/>: the file states both, and a caller writing one attribute wants this
+    /// half of it.
+    /// </para>
+    /// </remarks>
+    public string ToHex() =>
         isSet ? rgb.ToString("X6", CultureInfo.InvariantCulture) : "auto";
+
+    internal string Value => ToHex();
 
     /// <summary>
     /// The <c>AARRGGBB</c> form Excel writes, or null for a colour that states no explicit RGB.
