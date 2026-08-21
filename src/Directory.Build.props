@@ -7,7 +7,7 @@
          member at a time. A project that ships nothing suppresses it in its own file rather than
          here, because the local build passes -p:IsPackable=false and a condition on that would
          turn the check off for everyone. -->
-    <Version>0.2.3</Version>
+    <Version>0.2.4</Version>
     <LangVersion>14.0</LangVersion>
     <AssemblyVersion>1.0.0</AssemblyVersion>
     <Description>OpenXmlKit is an ergonomic wrapper over the OpenXML SDK for building and reading Word documents.</Description>
