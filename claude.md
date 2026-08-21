@@ -165,6 +165,14 @@ imported, for the same reason.
   that carried them. `XmlChars.Strip` is applied to every string the build API turns into a `w:t`,
   so a caller never has to. Three repos in the estate had their own copy of this — two of them
   character-for-character identical — which is why it is public rather than internal.
+- **`sectPr` is the one properties container with no typed properties.** `CT_SectPr` is
+  `CompositeType: None` because header and footer references repeat, so the SDK generates no typed
+  children and the house rule has nothing to offer. `PageSetup.ApplyTo` therefore states the
+  sequence itself and inserts at position. It used to append, which was invisible for as long as
+  this library owned the whole of `sectPr` and produced a document Word calls corrupt the moment it
+  did not — a `pgBorders` added through the escape hatch, or anything already in an opened
+  template, and the appended `pgSz` landed after it. `SchemaOrderTests` pins both that and the
+  header references still leading.
 - **Editing existing content, when it arrives, cannot just flush a view.** Built wrappers rebuild
   their properties element wholesale, which is what makes flushing idempotent. Doing that to a
   paragraph read from a template would discard whatever the format model does not cover (`framePr`,

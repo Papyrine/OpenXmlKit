@@ -248,6 +248,56 @@ public class SchemaOrderTests
             ]));
     }
 
+    [Test]
+    public void SectionPropertiesArePlacedRatherThanAppended()
+    {
+        // sectPr is the one properties container with no typed properties to assign through:
+        // header and footer references repeat, so the SDK generates none. Appending is therefore
+        // the only option the SDK offers, and appending is wrong as soon as sectPr holds a child
+        // this library does not model.
+        using var stream = new MemoryStream();
+        using (var document = Document.Create(stream))
+        {
+            document.Body.Paragraph("text");
+            var section = document.Body.Section;
+
+            section.ToOpenXml()
+                .Append(
+                    new W.PageBorders(
+                        new W.TopBorder
+                        {
+                            Val = W.BorderValues.Single,
+                            Size = 4
+                        }));
+
+            section.PageSetup.PageWidth = Length.FromInches(8.5);
+            section.PageSetup.PageHeight = Length.FromInches(11);
+        }
+
+        DocumentAssert.IsValid(stream.ToArray());
+
+        using var read = DocumentView.Open(stream.ToArray());
+        var properties = read.MainPart.Document!.Body!.GetFirstChild<W.SectionProperties>()!;
+
+        // pgSz precedes pgBorders in CT_SectPr, and did not before this was pinned.
+        Assert.That(LocalNames(properties), Is.EqualTo(["pgSz", "pgBorders"]));
+    }
+
+    [Test]
+    public void HeaderReferencesStillLeadTheSection()
+    {
+        using var document = Document.Create();
+        var section = document.Body.Section;
+        section.PageSetup.PageWidth = Length.FromInches(8.5);
+        section.AddHeader().AddParagraph("header");
+
+        var bytes = DocumentAssert.IsValid(document);
+
+        using var read = DocumentView.Open(bytes);
+        var properties = read.MainPart.Document!.Body!.GetFirstChild<W.SectionProperties>()!;
+        Assert.That(LocalNames(properties).First(), Is.EqualTo("headerReference"));
+    }
+
     static List<string> LocalNames(OpenXmlElement element) =>
         element.ChildElements.Select(_ => _.LocalName).ToList();
 }
