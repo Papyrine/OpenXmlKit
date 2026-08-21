@@ -88,6 +88,7 @@
     <Using Include="OpenXmlKit.Word.RowView" Alias="WRowView" />
     <Using Include="OpenXmlKit.Word.Run" Alias="WRun" />
     <Using Include="OpenXmlKit.Word.RunView" Alias="WRunView" />
+    <Using Include="OpenXmlKit.Word.SchemaOrder" Alias="WSchemaOrder" />
     <Using Include="OpenXmlKit.Word.Section" Alias="WSection" />
     <Using Include="OpenXmlKit.Word.SectionStart" Alias="WSectionStart" />
     <Using Include="OpenXmlKit.Word.SectionView" Alias="WSectionView" />
@@ -188,6 +189,7 @@
     <Using Include="OpenXmlKit.Word.RowView" Alias="WordRowView" />
     <Using Include="OpenXmlKit.Word.Run" Alias="WordRun" />
     <Using Include="OpenXmlKit.Word.RunView" Alias="WordRunView" />
+    <Using Include="OpenXmlKit.Word.SchemaOrder" Alias="WordSchemaOrder" />
     <Using Include="OpenXmlKit.Word.Section" Alias="WordSection" />
     <Using Include="OpenXmlKit.Word.SectionStart" Alias="WordSectionStart" />
     <Using Include="OpenXmlKit.Word.SectionView" Alias="WordSectionView" />

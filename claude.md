@@ -30,6 +30,23 @@ Parchment-only.)
 
 ## Architecture
 
+### Where the rule runs out
+
+Two kinds of container have no typed property to assign through, and `SchemaOrder` exists for them.
+A container the SDK models as a choice gets no typed children at all — `CT_SectPr` is one, because
+header and footer references repeat. And **the generator stops emitting typed properties partway
+through a long sequence**: `CT_Settings` has 103 children and typed properties for the first 21, so
+`w:documentProtection` has none, which is why Parchment hand-maintains a list of the 34 elements
+that precede it.
+
+`SchemaOrder.Table.cs` is generated from the SDK's own schema data — the same JSON its code
+generator reads particle order from — by `src/OpenXmlKit.Tests/SchemaOrderTable.py`, against a
+local checkout of dotnet/Open-XML-SDK. `SchemaOrderTests` pins enough of the result, written from
+the specification rather than from the generator, to notice a bad regeneration.
+
+`Place` positions the child it is given; it does not sort the children already there. A container
+that arrived out of order stays that way apart from the one element being placed.
+
 ### The rule everything rests on
 
 **Property containers are populated through the SDK's typed properties, never through `Append`.**
@@ -167,8 +184,8 @@ imported, for the same reason.
   character-for-character identical — which is why it is public rather than internal.
 - **`sectPr` is the one properties container with no typed properties.** `CT_SectPr` is
   `CompositeType: None` because header and footer references repeat, so the SDK generates no typed
-  children and the house rule has nothing to offer. `PageSetup.ApplyTo` therefore states the
-  sequence itself and inserts at position. It used to append, which was invisible for as long as
+  children and the house rule has nothing to offer. `PageSetup.ApplyTo` therefore goes through
+  `SchemaOrder.Place`, which looks the position up. It used to append, which was invisible for as long as
   this library owned the whole of `sectPr` and produced a document Word calls corrupt the moment it
   did not — a `pgBorders` added through the escape hatch, or anything already in an opened
   template, and the appended `pgSz` landed after it. `SchemaOrderTests` pins both that and the

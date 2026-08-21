@@ -298,6 +298,75 @@ public class SchemaOrderTests
         Assert.That(LocalNames(properties).First(), Is.EqualTo("headerReference"));
     }
 
+    [Test]
+    public void TheTableAgreesWithTheSequencesThisLibraryReliesOn()
+    {
+        // Spot checks written from the specification rather than from the generator, so a bad
+        // regeneration is caught by something that read the order independently.
+        Assert.That(
+            SchemaOrder.IndexOf(new W.SectionProperties(), new W.PageSize()),
+            Is.LessThan(SchemaOrder.IndexOf(new W.SectionProperties(), new W.PageBorders())));
+
+        Assert.That(
+            SchemaOrder.IndexOf(new W.TableCellProperties(), new W.GridSpan()),
+            Is.LessThan(SchemaOrder.IndexOf(new W.TableCellProperties(), new W.VerticalMerge())));
+
+        // The case the SDK's own typed properties cannot reach: documentProtection is the
+        // thirty-fifth child of CT_Settings, and the generator stops emitting them at twenty-one.
+        Assert.That(
+            SchemaOrder.IndexOf(new W.Settings(), new W.DocumentProtection()),
+            Is.GreaterThan(SchemaOrder.IndexOf(new W.Settings(), new W.Zoom())));
+        Assert.That(
+            SchemaOrder.IndexOf(new W.Settings(), new W.DocumentProtection()),
+            Is.LessThan(SchemaOrder.IndexOf(new W.Settings(), new W.Compatibility())));
+    }
+
+    [Test]
+    public void PlaceInsertsIntoALongSequenceTheSdkGivesNoTypedPropertyFor()
+    {
+        // What a caller hand-maintains a list of thirty-four types to do today.
+        // In the sequence the schema states, as a real settings part would be.
+        var settings = new W.Settings();
+        settings.AppendChild(new W.DefaultTabStop { Val = 720 });
+        settings.AppendChild(new W.Compatibility());
+        settings.AppendChild(new W.Rsids());
+
+        SchemaOrder.Place(
+            settings,
+            new W.DocumentProtection
+            {
+                Edit = W.DocumentProtectionValues.ReadOnly,
+                Enforcement = true
+            });
+
+        Assert.That(
+            LocalNames(settings),
+            Is.EqualTo(["documentProtection", "defaultTabStop", "compat", "rsids"]));
+    }
+
+    [Test]
+    public void PlaceReplacesRatherThanDuplicating()
+    {
+        var properties = new W.SectionProperties();
+        SchemaOrder.Place(properties, new W.PageSize { Width = 100U });
+        SchemaOrder.Place(properties, new W.PageSize { Width = 200U });
+
+        Assert.That(LocalNames(properties), Is.EqualTo(["pgSz"]));
+        Assert.That(properties.GetFirstChild<W.PageSize>()!.Width!.Value, Is.EqualTo(200U));
+    }
+
+    [Test]
+    public void AChildTheSequenceDoesNotMentionIsAppended()
+    {
+        // A choice imposes no order, so there is nothing to place against and nothing lost by
+        // appending — which is what the SDK would have done anyway.
+        var properties = new W.SectionProperties();
+        properties.AppendChild(new W.PageSize());
+        SchemaOrder.Place(properties, new W.Bold());
+
+        Assert.That(LocalNames(properties), Is.EqualTo(["pgSz", "b"]));
+    }
+
     static List<string> LocalNames(OpenXmlElement element) =>
         element.ChildElements.Select(_ => _.LocalName).ToList();
 }

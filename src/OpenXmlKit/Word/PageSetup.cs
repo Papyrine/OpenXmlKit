@@ -293,44 +293,11 @@ public class PageSetup :
         }
     }
 
-    // The CT_SectPr sequence. Stated here rather than assigned through a typed property, which is
-    // what every other properties container in this library uses, because sectPr has none: header
-    // and footer references repeat, so the SDK generates no typed children for it at all.
-    static readonly string[] order =
-    [
-        "headerReference", "footerReference", "footnotePr", "endnotePr", "type", "pgSz", "pgMar",
-        "paperSrc", "pgBorders", "lnNumType", "pgNumType", "cols", "formProt", "vAlign",
-        "noEndnote", "titlePg", "textDirection", "bidi", "rtlGutter", "docGrid", "printerSettings",
-        "footnoteColumns", "sectPrChange"
-    ];
-
-    /// <remarks>
-    /// Appending would be enough only while this library owns the whole of sectPr. The moment a
-    /// child it does not model is there — a pgBorders put in through the escape hatch, or anything
-    /// already in an opened template — an appended pgSz lands after it, and a sectPr out of
-    /// sequence is a document Word offers to repair.
-    /// </remarks>
+    // sectPr is one of the two containers the typed-property rule cannot cover, so the position
+    // is looked up instead. See SchemaOrder.
     static void Replace<T>(W.SectionProperties properties, T element)
-        where T : OpenXmlElement
-    {
-        properties.GetFirstChild<T>()?.Remove();
-
-        var position = Array.IndexOf(order, element.LocalName);
-        foreach (var child in properties.ChildElements)
-        {
-            // Children this does not know about are stepped over rather than displaced: an
-            // extension element has no place in the sequence to be measured against.
-            var childPosition = Array.IndexOf(order, child.LocalName);
-            if (childPosition >= 0 &&
-                childPosition > position)
-            {
-                properties.InsertBefore(element, child);
-                return;
-            }
-        }
-
-        properties.AppendChild(element);
-    }
+        where T : OpenXmlElement =>
+        SchemaOrder.Place(properties, element);
 
     internal void ReadFrom(W.SectionProperties properties)
     {
