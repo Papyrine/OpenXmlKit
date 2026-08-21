@@ -40,9 +40,19 @@ through a long sequence**: `CT_Settings` has 103 children and typed properties f
 that precede it.
 
 `SchemaOrder.Table.cs` is generated from the SDK's own schema data — the same JSON its code
-generator reads particle order from — by `src/OpenXmlKit.Tests/SchemaOrderTable.py`, against a
-local checkout of dotnet/Open-XML-SDK. `SchemaOrderTests` pins enough of the result, written from
-the specification rather than from the generator, to notice a bad regeneration.
+generator reads particle order from — and its header states the rule exactly enough to redo. The
+extraction script is deliberately **not** in the repo: it ran against a local checkout of
+dotnet/Open-XML-SDK, so it could not run anywhere else, and a file nothing executes guards nothing.
+The guard is `SchemaOrderTests.TheTableAgreesWithTheSdk`, which asks the SDK instead. Assigning
+through a typed property goes via `SetElement`, which places the child at its schema position, so
+for every container the SDK emits typed properties for the SDK will answer directly — 752 children
+across 64 containers, with the children assigned in reverse so a table that merely echoed insertion
+order would not pass.
+
+28 containers are left out because they inherit children from another element and their bases are
+not all in the schema data (`SdtElement` is not there at all), so nothing could state where an
+inherited child goes. A container with no entry is one `Place` appends to, which is what happened
+before any of this existed.
 
 `Place` positions the child it is given; it does not sort the children already there. A container
 that arrived out of order stays that way apart from the one element being placed.

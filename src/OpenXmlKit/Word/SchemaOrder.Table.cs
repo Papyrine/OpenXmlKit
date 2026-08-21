@@ -2,8 +2,16 @@
 // Generated from the OpenXML SDK's own schema data —
 // data/schemas/schemas_openxmlformats_org_wordprocessingml_2006_main.json in
 // dotnet/Open-XML-SDK — which is where the SDK's code generator reads the particle
-// order from. Regenerating means re-running the generator against a newer checkout of
-// that repository; SchemaOrderTests pins enough of the result to notice a bad one.
+// order from: every type with children whose CompositeType is a sequence, and whose
+// base class is a framework one rather than another element.
+//
+// The 28 containers that inherit children from another element are left out. Their
+// bases are not all in the schema data — SdtElement is not there at all — so nothing
+// could state where an inherited child goes. A container with no entry is one Place
+// appends to, which is what happened before this existed.
+//
+// SchemaOrderTests checks the result against the SDK itself rather than against this
+// generator, so a regeneration that disagrees with it fails.
 // </auto-generated>
 
 namespace OpenXmlKit.Word;
@@ -25,7 +33,7 @@ public static partial class SchemaOrder
 
     // The children of each container, in the sequence the schema states, keyed by the name
     // the SDK gives the container's class. Space separated to keep this a table rather
-    // than 169 array literals.
+    // than 141 array literals.
     static readonly Dictionary<string, string> sequences = new(StringComparer.Ordinal)
     {
         ["AbstractNum"] =
@@ -42,8 +50,6 @@ public static partial class SchemaOrder
             "w:customXml w:fldSimple w:hyperlink w:sdt w:proofErr w:permStart w:permEnd w:bookmarkStart w:bookmarkEnd w:commentRangeStart w:commentRangeEnd w:moveFromRangeStart w:moveFromRangeEnd w:moveToRangeStart w:moveToRangeEnd w:customXmlInsRangeStart w:customXmlInsRangeEnd w:customXmlDelRangeStart w:customXmlDelRangeEnd w:customXmlMoveFromRangeStart w:customXmlMoveFromRangeEnd w:customXmlMoveToRangeStart w:customXmlMoveToRangeEnd w14:customXmlConflictInsRangeStart w14:customXmlConflictInsRangeEnd w14:customXmlConflictDelRangeStart w14:customXmlConflictDelRangeEnd w:ins w:del w:moveFrom w:moveTo w:contentPart w14:conflictIns w14:conflictDel m:oMathPara m:oMath m:acc m:bar m:box m:borderBox m:d m:eqArr m:f m:func m:groupChr m:limLow m:limUpp m:m m:nary m:phant m:rad m:sPre m:sSub m:sSubSup m:sSup m:r w:r w:bdo w:dir w:subDoc",
         ["BidirectionalOverride"] =
             "w:customXml w:fldSimple w:hyperlink w:sdt w:proofErr w:permStart w:permEnd w:bookmarkStart w:bookmarkEnd w:commentRangeStart w:commentRangeEnd w:moveFromRangeStart w:moveFromRangeEnd w:moveToRangeStart w:moveToRangeEnd w:customXmlInsRangeStart w:customXmlInsRangeEnd w:customXmlDelRangeStart w:customXmlDelRangeEnd w:customXmlMoveFromRangeStart w:customXmlMoveFromRangeEnd w:customXmlMoveToRangeStart w:customXmlMoveToRangeEnd w14:customXmlConflictInsRangeStart w14:customXmlConflictInsRangeEnd w14:customXmlConflictDelRangeStart w14:customXmlConflictDelRangeEnd w:ins w:del w:moveFrom w:moveTo w:contentPart w14:conflictIns w14:conflictDel m:oMathPara m:oMath m:acc m:bar m:box m:borderBox m:d m:eqArr m:f m:func m:groupChr m:limLow m:limUpp m:m m:nary m:phant m:rad m:sPre m:sSub m:sSubSup m:sSup m:r w:r w:bdo w:dir w:subDoc",
-        ["Body"] =
-            "w:altChunk w:customXml w:sdt w:p w:tbl w:proofErr w:permStart w:permEnd w:bookmarkStart w:bookmarkEnd w:commentRangeStart w:commentRangeEnd w:moveFromRangeStart w:moveFromRangeEnd w:moveToRangeStart w:moveToRangeEnd w:customXmlInsRangeStart w:customXmlInsRangeEnd w:customXmlDelRangeStart w:customXmlDelRangeEnd w:customXmlMoveFromRangeStart w:customXmlMoveFromRangeEnd w:customXmlMoveToRangeStart w:customXmlMoveToRangeEnd w14:customXmlConflictInsRangeStart w14:customXmlConflictInsRangeEnd w14:customXmlConflictDelRangeStart w14:customXmlConflictDelRangeEnd w:ins w:del w:moveFrom w:moveTo w:contentPart w14:conflictIns w14:conflictDel w:sectPr",
         ["BodyType"] =
             "w:altChunk w:customXml w:sdt w:p w:tbl w:proofErr w:permStart w:permEnd w:bookmarkStart w:bookmarkEnd w:commentRangeStart w:commentRangeEnd w:moveFromRangeStart w:moveFromRangeEnd w:moveToRangeStart w:moveToRangeEnd w:customXmlInsRangeStart w:customXmlInsRangeEnd w:customXmlDelRangeStart w:customXmlDelRangeEnd w:customXmlMoveFromRangeStart w:customXmlMoveFromRangeEnd w:customXmlMoveToRangeStart w:customXmlMoveToRangeEnd w14:customXmlConflictInsRangeStart w14:customXmlConflictInsRangeEnd w14:customXmlConflictDelRangeStart w14:customXmlConflictDelRangeEnd w:ins w:del w:moveFrom w:moveTo w:contentPart w14:conflictIns w14:conflictDel w:sectPr",
         ["Captions"] =
@@ -60,40 +66,22 @@ public static partial class SchemaOrder
             "w:comment",
         ["Compatibility"] =
             "w:useSingleBorderforContiguousCells w:wpJustification w:noTabHangInd w:noLeading w:spaceForUL w:noColumnBalance w:balanceSingleByteDoubleByteWidth w:noExtraLineSpacing w:doNotLeaveBackslashAlone w:ulTrailSpace w:doNotExpandShiftReturn w:spacingInWholePoints w:lineWrapLikeWord6 w:printBodyTextBeforeHeader w:printColBlack w:wpSpaceWidth w:showBreaksInFrames w:subFontBySize w:suppressBottomSpacing w:suppressTopSpacing w:suppressSpacingAtTopOfPage w:suppressTopSpacingWP w:suppressSpBfAfterPgBrk w:swapBordersFacingPages w:convMailMergeEsc w:truncateFontHeightsLikeWP6 w:mwSmallCaps w:usePrinterMetrics w:doNotSuppressParagraphBorders w:wrapTrailSpaces w:footnoteLayoutLikeWW8 w:shapeLayoutLikeWW8 w:alignTablesRowByRow w:forgetLastTabAlignment w:adjustLineHeightInTable w:autoSpaceLikeWord95 w:noSpaceRaiseLower w:doNotUseHTMLParagraphAutoSpacing w:layoutRawTableWidth w:layoutTableRowsApart w:useWord97LineBreakRules w:doNotBreakWrappedTables w:doNotSnapToGridInCell w:selectFldWithFirstOrLastChar w:applyBreakingRules w:doNotWrapTextWithPunct w:doNotUseEastAsianBreakRules w:useWord2002TableStyleRules w:growAutofit w:useFELayout w:useNormalStyleForList w:doNotUseIndentAsNumberingTabStop w:useAltKinsokuLineBreakRules w:allowSpaceOfSameStyleInTable w:doNotSuppressIndentation w:doNotAutofitConstrainedTables w:autofitToFirstFixedWidthCell w:underlineTabInNumList w:displayHangulFixedWidth w:splitPgBreakAndParaMark w:doNotVertAlignCellWithSp w:doNotBreakConstrainedForcedTable w:doNotVertAlignInTxbx w:useAnsiKerningPairs w:cachedColBalance w:compatSetting",
-        ["CustomXmlBlock"] =
-            "w:customXml w:sdt w:p w:tbl w:proofErr w:permStart w:permEnd w:bookmarkStart w:bookmarkEnd w:commentRangeStart w:commentRangeEnd w:moveFromRangeStart w:moveFromRangeEnd w:moveToRangeStart w:moveToRangeEnd w:customXmlInsRangeStart w:customXmlInsRangeEnd w:customXmlDelRangeStart w:customXmlDelRangeEnd w:customXmlMoveFromRangeStart w:customXmlMoveFromRangeEnd w:customXmlMoveToRangeStart w:customXmlMoveToRangeEnd w14:customXmlConflictInsRangeStart w14:customXmlConflictInsRangeEnd w14:customXmlConflictDelRangeStart w14:customXmlConflictDelRangeEnd w:ins w:del w:moveFrom w:moveTo w:contentPart w14:conflictIns w14:conflictDel",
-        ["CustomXmlCell"] =
-            "w:tc w:customXml w:sdt w:proofErr w:permStart w:permEnd w:bookmarkStart w:bookmarkEnd w:commentRangeStart w:commentRangeEnd w:moveFromRangeStart w:moveFromRangeEnd w:moveToRangeStart w:moveToRangeEnd w:customXmlInsRangeStart w:customXmlInsRangeEnd w:customXmlDelRangeStart w:customXmlDelRangeEnd w:customXmlMoveFromRangeStart w:customXmlMoveFromRangeEnd w:customXmlMoveToRangeStart w:customXmlMoveToRangeEnd w14:customXmlConflictInsRangeStart w14:customXmlConflictInsRangeEnd w14:customXmlConflictDelRangeStart w14:customXmlConflictDelRangeEnd w:ins w:del w:moveFrom w:moveTo w:contentPart w14:conflictIns w14:conflictDel",
         ["CustomXmlProperties"] =
             "w:placeholder w:attr",
-        ["CustomXmlRow"] =
-            "w:tr w:customXml w:sdt w:proofErr w:permStart w:permEnd w:bookmarkStart w:bookmarkEnd w:commentRangeStart w:commentRangeEnd w:moveFromRangeStart w:moveFromRangeEnd w:moveToRangeStart w:moveToRangeEnd w:customXmlInsRangeStart w:customXmlInsRangeEnd w:customXmlDelRangeStart w:customXmlDelRangeEnd w:customXmlMoveFromRangeStart w:customXmlMoveFromRangeEnd w:customXmlMoveToRangeStart w:customXmlMoveToRangeEnd w14:customXmlConflictInsRangeStart w14:customXmlConflictInsRangeEnd w14:customXmlConflictDelRangeStart w14:customXmlConflictDelRangeEnd w:ins w:del w:moveFrom w:moveTo w:contentPart w14:conflictIns w14:conflictDel",
-        ["CustomXmlRuby"] =
-            "w:customXml w:fldSimple w:hyperlink w:r w:sdt w:proofErr w:permStart w:permEnd w:bookmarkStart w:bookmarkEnd w:commentRangeStart w:commentRangeEnd w:moveFromRangeStart w:moveFromRangeEnd w:moveToRangeStart w:moveToRangeEnd w:customXmlInsRangeStart w:customXmlInsRangeEnd w:customXmlDelRangeStart w:customXmlDelRangeEnd w:customXmlMoveFromRangeStart w:customXmlMoveFromRangeEnd w:customXmlMoveToRangeStart w:customXmlMoveToRangeEnd w14:customXmlConflictInsRangeStart w14:customXmlConflictInsRangeEnd w14:customXmlConflictDelRangeStart w14:customXmlConflictDelRangeEnd w:ins w:del w:moveFrom w:moveTo w:contentPart w14:conflictIns w14:conflictDel m:oMathPara m:oMath m:acc m:bar m:box m:borderBox m:d m:eqArr m:f m:func m:groupChr m:limLow m:limUpp m:m m:nary m:phant m:rad m:sPre m:sSub m:sSubSup m:sSup m:r",
-        ["CustomXmlRun"] =
-            "w:customXml w:fldSimple w:hyperlink w:sdt w:proofErr w:permStart w:permEnd w:bookmarkStart w:bookmarkEnd w:commentRangeStart w:commentRangeEnd w:moveFromRangeStart w:moveFromRangeEnd w:moveToRangeStart w:moveToRangeEnd w:customXmlInsRangeStart w:customXmlInsRangeEnd w:customXmlDelRangeStart w:customXmlDelRangeEnd w:customXmlMoveFromRangeStart w:customXmlMoveFromRangeEnd w:customXmlMoveToRangeStart w:customXmlMoveToRangeEnd w14:customXmlConflictInsRangeStart w14:customXmlConflictInsRangeEnd w14:customXmlConflictDelRangeStart w14:customXmlConflictDelRangeEnd w:ins w:del w:moveFrom w:moveTo w:contentPart w14:conflictIns w14:conflictDel m:oMathPara m:oMath m:acc m:bar m:box m:borderBox m:d m:eqArr m:f m:func m:groupChr m:limLow m:limUpp m:m m:nary m:phant m:rad m:sPre m:sSub m:sSubSup m:sSup m:r w:r w:bdo w:dir w:subDoc",
         ["DataSourceObject"] =
             "w:udl w:table w:src w:colDelim w:type w:fHdr w:fieldMapData w:recipientData",
         ["DeletedMathControl"] =
             "w:rPr",
-        ["DeletedRun"] =
-            "w:sdt w:proofErr w:permStart w:permEnd w:bookmarkStart w:bookmarkEnd w:commentRangeStart w:commentRangeEnd w:moveFromRangeStart w:moveFromRangeEnd w:moveToRangeStart w:moveToRangeEnd w:customXmlInsRangeStart w:customXmlInsRangeEnd w:customXmlDelRangeStart w:customXmlDelRangeEnd w:customXmlMoveFromRangeStart w:customXmlMoveFromRangeEnd w:customXmlMoveToRangeStart w:customXmlMoveToRangeEnd w14:customXmlConflictInsRangeStart w14:customXmlConflictInsRangeEnd w14:customXmlConflictDelRangeStart w14:customXmlConflictDelRangeEnd w:ins w:del w:moveFrom w:moveTo w:contentPart w14:conflictIns w14:conflictDel m:oMathPara m:oMath m:acc m:bar m:box m:borderBox m:d m:eqArr m:f m:func m:groupChr m:limLow m:limUpp m:m m:nary m:phant m:rad m:sPre m:sSub m:sSubSup m:sSup m:r w:r w:bdo w:dir",
         ["Div"] =
             "w:blockQuote w:bodyDiv w:marLeft w:marRight w:marTop w:marBottom w:divBdr w:divsChild",
         ["DivBorder"] =
             "w:top w:left w:bottom w:right",
-        ["Divs"] =
-            "w:div",
-        ["DivsChild"] =
-            "w:div",
         ["DivsType"] =
             "w:div",
         ["DocDefaults"] =
             "w:rPrDefault w:pPrDefault",
         ["DocPart"] =
             "w:docPartPr w:docPartBody",
-        ["DocPartBody"] =
-            "w:altChunk w:customXml w:sdt w:p w:tbl w:proofErr w:permStart w:permEnd w:bookmarkStart w:bookmarkEnd w:commentRangeStart w:commentRangeEnd w:moveFromRangeStart w:moveFromRangeEnd w:moveToRangeStart w:moveToRangeEnd w:customXmlInsRangeStart w:customXmlInsRangeEnd w:customXmlDelRangeStart w:customXmlDelRangeEnd w:customXmlMoveFromRangeStart w:customXmlMoveFromRangeEnd w:customXmlMoveToRangeStart w:customXmlMoveToRangeEnd w14:customXmlConflictInsRangeStart w14:customXmlConflictInsRangeEnd w14:customXmlConflictDelRangeStart w14:customXmlConflictDelRangeEnd w:ins w:del w:moveFrom w:moveTo w:contentPart w14:conflictIns w14:conflictDel w:sectPr",
         ["DocPartProperties"] =
             "w:name w:style w:category w:types w:behaviors w:description w:guid",
         ["DocPartTypes"] =
@@ -108,8 +96,6 @@ public static partial class SchemaOrder
             "w:result w:default w:listEntry",
         ["EmbeddedObject"] =
             "v:group v:image v:line v:oval v:polyline v:rect v:roundrect v:shape v:shapetype v:arc v:curve o:OLEObject w:drawing w:control w:objectEmbed w:objectLink",
-        ["Endnote"] =
-            "w:altChunk w:customXml w:sdt w:p w:tbl w:proofErr w:permStart w:permEnd w:bookmarkStart w:bookmarkEnd w:commentRangeStart w:commentRangeEnd w:moveFromRangeStart w:moveFromRangeEnd w:moveToRangeStart w:moveToRangeEnd w:customXmlInsRangeStart w:customXmlInsRangeEnd w:customXmlDelRangeStart w:customXmlDelRangeEnd w:customXmlMoveFromRangeStart w:customXmlMoveFromRangeEnd w:customXmlMoveToRangeStart w:customXmlMoveToRangeEnd w14:customXmlConflictInsRangeStart w14:customXmlConflictInsRangeEnd w14:customXmlConflictDelRangeStart w14:customXmlConflictDelRangeEnd w:ins w:del w:moveFrom w:moveTo w:contentPart w14:conflictIns w14:conflictDel",
         ["EndnoteDocumentWideProperties"] =
             "w:pos w:numFmt w:numStart w:numRestart w:endnote",
         ["EndnoteProperties"] =
@@ -121,8 +107,6 @@ public static partial class SchemaOrder
         ["Fonts"] =
             "w:font",
         ["Footer"] =
-            "w:altChunk w:customXml w:sdt w:p w:tbl w:proofErr w:permStart w:permEnd w:bookmarkStart w:bookmarkEnd w:commentRangeStart w:commentRangeEnd w:moveFromRangeStart w:moveFromRangeEnd w:moveToRangeStart w:moveToRangeEnd w:customXmlInsRangeStart w:customXmlInsRangeEnd w:customXmlDelRangeStart w:customXmlDelRangeEnd w:customXmlMoveFromRangeStart w:customXmlMoveFromRangeEnd w:customXmlMoveToRangeStart w:customXmlMoveToRangeEnd w14:customXmlConflictInsRangeStart w14:customXmlConflictInsRangeEnd w14:customXmlConflictDelRangeStart w14:customXmlConflictDelRangeEnd w:ins w:del w:moveFrom w:moveTo w:contentPart w14:conflictIns w14:conflictDel",
-        ["Footnote"] =
             "w:altChunk w:customXml w:sdt w:p w:tbl w:proofErr w:permStart w:permEnd w:bookmarkStart w:bookmarkEnd w:commentRangeStart w:commentRangeEnd w:moveFromRangeStart w:moveFromRangeEnd w:moveToRangeStart w:moveToRangeEnd w:customXmlInsRangeStart w:customXmlInsRangeEnd w:customXmlDelRangeStart w:customXmlDelRangeEnd w:customXmlMoveFromRangeStart w:customXmlMoveFromRangeEnd w:customXmlMoveToRangeStart w:customXmlMoveToRangeEnd w14:customXmlConflictInsRangeStart w14:customXmlConflictInsRangeEnd w14:customXmlConflictDelRangeStart w14:customXmlConflictDelRangeEnd w:ins w:del w:moveFrom w:moveTo w:contentPart w14:conflictIns w14:conflictDel",
         ["FootnoteDocumentWideProperties"] =
             "w:pos w:numFmt w:numStart w:numRestart w:footnote",
@@ -146,16 +130,12 @@ public static partial class SchemaOrder
             "w:altChunk w:customXml w:sdt w:p w:tbl w:proofErr w:permStart w:permEnd w:bookmarkStart w:bookmarkEnd w:commentRangeStart w:commentRangeEnd w:moveFromRangeStart w:moveFromRangeEnd w:moveToRangeStart w:moveToRangeEnd w:customXmlInsRangeStart w:customXmlInsRangeEnd w:customXmlDelRangeStart w:customXmlDelRangeEnd w:customXmlMoveFromRangeStart w:customXmlMoveFromRangeEnd w:customXmlMoveToRangeStart w:customXmlMoveToRangeEnd w14:customXmlConflictInsRangeStart w14:customXmlConflictInsRangeEnd w14:customXmlConflictDelRangeStart w14:customXmlConflictDelRangeEnd w:ins w:del w:moveFrom w:moveTo w:contentPart w14:conflictIns w14:conflictDel",
         ["HeaderFooterType"] =
             "w:altChunk w:customXml w:sdt w:p w:tbl w:proofErr w:permStart w:permEnd w:bookmarkStart w:bookmarkEnd w:commentRangeStart w:commentRangeEnd w:moveFromRangeStart w:moveFromRangeEnd w:moveToRangeStart w:moveToRangeEnd w:customXmlInsRangeStart w:customXmlInsRangeEnd w:customXmlDelRangeStart w:customXmlDelRangeEnd w:customXmlMoveFromRangeStart w:customXmlMoveFromRangeEnd w:customXmlMoveToRangeStart w:customXmlMoveToRangeEnd w14:customXmlConflictInsRangeStart w14:customXmlConflictInsRangeEnd w14:customXmlConflictDelRangeStart w14:customXmlConflictDelRangeEnd w:ins w:del w:moveFrom w:moveTo w:contentPart w14:conflictIns w14:conflictDel",
-        ["HeaderShapeDefaults"] =
-            "o:shapedefaults o:shapelayout",
         ["Hyperlink"] =
             "w:customXml w:fldSimple w:hyperlink w:sdt w:proofErr w:permStart w:permEnd w:bookmarkStart w:bookmarkEnd w:commentRangeStart w:commentRangeEnd w:moveFromRangeStart w:moveFromRangeEnd w:moveToRangeStart w:moveToRangeEnd w:customXmlInsRangeStart w:customXmlInsRangeEnd w:customXmlDelRangeStart w:customXmlDelRangeEnd w:customXmlMoveFromRangeStart w:customXmlMoveFromRangeEnd w:customXmlMoveToRangeStart w:customXmlMoveToRangeEnd w14:customXmlConflictInsRangeStart w14:customXmlConflictInsRangeEnd w14:customXmlConflictDelRangeStart w14:customXmlConflictDelRangeEnd w:ins w:del w:moveFrom w:moveTo w:contentPart w14:conflictIns w14:conflictDel m:oMathPara m:oMath m:acc m:bar m:box m:borderBox m:d m:eqArr m:f m:func m:groupChr m:limLow m:limUpp m:m m:nary m:phant m:rad m:sPre m:sSub m:sSubSup m:sSup m:r w:r w:bdo w:dir w:subDoc",
         ["HyperlinkRuby"] =
             "w:customXml w:fldSimple w:hyperlink w:r w:sdt w:proofErr w:permStart w:permEnd w:bookmarkStart w:bookmarkEnd w:commentRangeStart w:commentRangeEnd w:moveFromRangeStart w:moveFromRangeEnd w:moveToRangeStart w:moveToRangeEnd w:customXmlInsRangeStart w:customXmlInsRangeEnd w:customXmlDelRangeStart w:customXmlDelRangeEnd w:customXmlMoveFromRangeStart w:customXmlMoveFromRangeEnd w:customXmlMoveToRangeStart w:customXmlMoveToRangeEnd w14:customXmlConflictInsRangeStart w14:customXmlConflictInsRangeEnd w14:customXmlConflictDelRangeStart w14:customXmlConflictDelRangeEnd w:ins w:del w:moveFrom w:moveTo w:contentPart w14:conflictIns w14:conflictDel m:oMathPara m:oMath m:acc m:bar m:box m:borderBox m:d m:eqArr m:f m:func m:groupChr m:limLow m:limUpp m:m m:nary m:phant m:rad m:sPre m:sSub m:sSubSup m:sSup m:r",
         ["InsertedMathControl"] =
             "w:rPr w:del",
-        ["InsertedRun"] =
-            "w:sdt w:proofErr w:permStart w:permEnd w:bookmarkStart w:bookmarkEnd w:commentRangeStart w:commentRangeEnd w:moveFromRangeStart w:moveFromRangeEnd w:moveToRangeStart w:moveToRangeEnd w:customXmlInsRangeStart w:customXmlInsRangeEnd w:customXmlDelRangeStart w:customXmlDelRangeEnd w:customXmlMoveFromRangeStart w:customXmlMoveFromRangeEnd w:customXmlMoveToRangeStart w:customXmlMoveToRangeEnd w14:customXmlConflictInsRangeStart w14:customXmlConflictInsRangeEnd w14:customXmlConflictDelRangeStart w14:customXmlConflictDelRangeEnd w:ins w:del w:moveFrom w:moveTo w:contentPart w14:conflictIns w14:conflictDel m:oMathPara m:oMath m:acc m:bar m:box m:borderBox m:d m:eqArr m:f m:func m:groupChr m:limLow m:limUpp m:m m:nary m:phant m:rad m:sPre m:sSub m:sSubSup m:sSup m:r w:r w:bdo w:dir",
         ["LatentStyles"] =
             "w:lsdException",
         ["Level"] =
@@ -166,14 +146,6 @@ public static partial class SchemaOrder
             "w:mainDocumentType w:linkToQuery w:dataType w:connectString w:query w:dataSource w:headerSource w:doNotSuppressBlankLines w:destination w:addressFieldName w:mailSubject w:mailAsAttachment w:viewMergedData w:activeRecord w:checkErrors w:odso",
         ["MathControlMoveType"] =
             "w:rPr w:ins w:del",
-        ["MoveFromMathControl"] =
-            "w:rPr w:ins w:del",
-        ["MoveFromRun"] =
-            "w:sdt w:proofErr w:permStart w:permEnd w:bookmarkStart w:bookmarkEnd w:commentRangeStart w:commentRangeEnd w:moveFromRangeStart w:moveFromRangeEnd w:moveToRangeStart w:moveToRangeEnd w:customXmlInsRangeStart w:customXmlInsRangeEnd w:customXmlDelRangeStart w:customXmlDelRangeEnd w:customXmlMoveFromRangeStart w:customXmlMoveFromRangeEnd w:customXmlMoveToRangeStart w:customXmlMoveToRangeEnd w14:customXmlConflictInsRangeStart w14:customXmlConflictInsRangeEnd w14:customXmlConflictDelRangeStart w14:customXmlConflictDelRangeEnd w:ins w:del w:moveFrom w:moveTo w:contentPart w14:conflictIns w14:conflictDel m:oMathPara m:oMath m:acc m:bar m:box m:borderBox m:d m:eqArr m:f m:func m:groupChr m:limLow m:limUpp m:m m:nary m:phant m:rad m:sPre m:sSub m:sSubSup m:sSup m:r w:r w:bdo w:dir",
-        ["MoveToMathControl"] =
-            "w:rPr w:ins w:del",
-        ["MoveToRun"] =
-            "w:sdt w:proofErr w:permStart w:permEnd w:bookmarkStart w:bookmarkEnd w:commentRangeStart w:commentRangeEnd w:moveFromRangeStart w:moveFromRangeEnd w:moveToRangeStart w:moveToRangeEnd w:customXmlInsRangeStart w:customXmlInsRangeEnd w:customXmlDelRangeStart w:customXmlDelRangeEnd w:customXmlMoveFromRangeStart w:customXmlMoveFromRangeEnd w:customXmlMoveToRangeStart w:customXmlMoveToRangeEnd w14:customXmlConflictInsRangeStart w14:customXmlConflictInsRangeEnd w14:customXmlConflictDelRangeStart w14:customXmlConflictDelRangeEnd w:ins w:del w:moveFrom w:moveTo w:contentPart w14:conflictIns w14:conflictDel m:oMathPara m:oMath m:acc m:bar m:box m:borderBox m:d m:eqArr m:f m:func m:groupChr m:limLow m:limUpp m:m m:nary m:phant m:rad m:sPre m:sSub m:sSubSup m:sSup m:r w:r w:bdo w:dir",
         ["Numbering"] =
             "w:numPicBullet w:abstractNum w:num w:numIdMacAtCleanup",
         ["NumberingInstance"] =
@@ -232,10 +204,6 @@ public static partial class SchemaOrder
             "w:rsidRoot w:rsid",
         ["Ruby"] =
             "w:rubyPr w:rt w:rubyBase",
-        ["RubyBase"] =
-            "w:customXml w:fldSimple w:hyperlink w:r w:sdt w:proofErr w:permStart w:permEnd w:bookmarkStart w:bookmarkEnd w:commentRangeStart w:commentRangeEnd w:moveFromRangeStart w:moveFromRangeEnd w:moveToRangeStart w:moveToRangeEnd w:customXmlInsRangeStart w:customXmlInsRangeEnd w:customXmlDelRangeStart w:customXmlDelRangeEnd w:customXmlMoveFromRangeStart w:customXmlMoveFromRangeEnd w:customXmlMoveToRangeStart w:customXmlMoveToRangeEnd w14:customXmlConflictInsRangeStart w14:customXmlConflictInsRangeEnd w14:customXmlConflictDelRangeStart w14:customXmlConflictDelRangeEnd w:ins w:del w:moveFrom w:moveTo w:contentPart w14:conflictIns w14:conflictDel m:oMathPara m:oMath m:acc m:bar m:box m:borderBox m:d m:eqArr m:f m:func m:groupChr m:limLow m:limUpp m:m m:nary m:phant m:rad m:sPre m:sSub m:sSubSup m:sSup m:r",
-        ["RubyContent"] =
-            "w:customXml w:fldSimple w:hyperlink w:r w:sdt w:proofErr w:permStart w:permEnd w:bookmarkStart w:bookmarkEnd w:commentRangeStart w:commentRangeEnd w:moveFromRangeStart w:moveFromRangeEnd w:moveToRangeStart w:moveToRangeEnd w:customXmlInsRangeStart w:customXmlInsRangeEnd w:customXmlDelRangeStart w:customXmlDelRangeEnd w:customXmlMoveFromRangeStart w:customXmlMoveFromRangeEnd w:customXmlMoveToRangeStart w:customXmlMoveToRangeEnd w14:customXmlConflictInsRangeStart w14:customXmlConflictInsRangeEnd w14:customXmlConflictDelRangeStart w14:customXmlConflictDelRangeEnd w:ins w:del w:moveFrom w:moveTo w:contentPart w14:conflictIns w14:conflictDel m:oMathPara m:oMath m:acc m:bar m:box m:borderBox m:d m:eqArr m:f m:func m:groupChr m:limLow m:limUpp m:m m:nary m:phant m:rad m:sPre m:sSub m:sSubSup m:sSup m:r",
         ["RubyContentType"] =
             "w:customXml w:fldSimple w:hyperlink w:r w:sdt w:proofErr w:permStart w:permEnd w:bookmarkStart w:bookmarkEnd w:commentRangeStart w:commentRangeEnd w:moveFromRangeStart w:moveFromRangeEnd w:moveToRangeStart w:moveToRangeEnd w:customXmlInsRangeStart w:customXmlInsRangeEnd w:customXmlDelRangeStart w:customXmlDelRangeEnd w:customXmlMoveFromRangeStart w:customXmlMoveFromRangeEnd w:customXmlMoveToRangeStart w:customXmlMoveToRangeEnd w14:customXmlConflictInsRangeStart w14:customXmlConflictInsRangeEnd w14:customXmlConflictDelRangeStart w14:customXmlConflictDelRangeEnd w:ins w:del w:moveFrom w:moveTo w:contentPart w14:conflictIns w14:conflictDel m:oMathPara m:oMath m:acc m:bar m:box m:borderBox m:d m:eqArr m:f m:func m:groupChr m:limLow m:limUpp m:m m:nary m:phant m:rad m:sPre m:sSub m:sSubSup m:sSup m:r",
         ["RubyProperties"] =
@@ -252,10 +220,6 @@ public static partial class SchemaOrder
             "w:rPr",
         ["RunTrackChangeType"] =
             "w:sdt w:proofErr w:permStart w:permEnd w:bookmarkStart w:bookmarkEnd w:commentRangeStart w:commentRangeEnd w:moveFromRangeStart w:moveFromRangeEnd w:moveToRangeStart w:moveToRangeEnd w:customXmlInsRangeStart w:customXmlInsRangeEnd w:customXmlDelRangeStart w:customXmlDelRangeEnd w:customXmlMoveFromRangeStart w:customXmlMoveFromRangeEnd w:customXmlMoveToRangeStart w:customXmlMoveToRangeEnd w14:customXmlConflictInsRangeStart w14:customXmlConflictInsRangeEnd w14:customXmlConflictDelRangeStart w14:customXmlConflictDelRangeEnd w:ins w:del w:moveFrom w:moveTo w:contentPart w14:conflictIns w14:conflictDel m:oMathPara m:oMath m:acc m:bar m:box m:borderBox m:d m:eqArr m:f m:func m:groupChr m:limLow m:limUpp m:m m:nary m:phant m:rad m:sPre m:sSub m:sSubSup m:sSup m:r w:r w:bdo w:dir",
-        ["SdtBlock"] =
-            "w:sdtContent w:bookmarkStart w:bookmarkEnd w:commentRangeStart w:commentRangeEnd w:moveFromRangeStart w:moveFromRangeEnd w:moveToRangeStart w:moveToRangeEnd w:customXmlInsRangeStart w:customXmlInsRangeEnd w:customXmlDelRangeStart w:customXmlDelRangeEnd w:customXmlMoveFromRangeStart w:customXmlMoveFromRangeEnd w:customXmlMoveToRangeStart w:customXmlMoveToRangeEnd w14:customXmlConflictInsRangeStart w14:customXmlConflictInsRangeEnd w14:customXmlConflictDelRangeStart w14:customXmlConflictDelRangeEnd",
-        ["SdtCell"] =
-            "w:sdtContent w:bookmarkStart w:bookmarkEnd w:commentRangeStart w:commentRangeEnd w:moveFromRangeStart w:moveFromRangeEnd w:moveToRangeStart w:moveToRangeEnd w:customXmlInsRangeStart w:customXmlInsRangeEnd w:customXmlDelRangeStart w:customXmlDelRangeEnd w:customXmlMoveFromRangeStart w:customXmlMoveFromRangeEnd w:customXmlMoveToRangeStart w:customXmlMoveToRangeEnd w14:customXmlConflictInsRangeStart w14:customXmlConflictInsRangeEnd w14:customXmlConflictDelRangeStart w14:customXmlConflictDelRangeEnd",
         ["SdtContentBlock"] =
             "w:customXml w:sdt w:p w:tbl w:proofErr w:permStart w:permEnd w:bookmarkStart w:bookmarkEnd w:commentRangeStart w:commentRangeEnd w:moveFromRangeStart w:moveFromRangeEnd w:moveToRangeStart w:moveToRangeEnd w:customXmlInsRangeStart w:customXmlInsRangeEnd w:customXmlDelRangeStart w:customXmlDelRangeEnd w:customXmlMoveFromRangeStart w:customXmlMoveFromRangeEnd w:customXmlMoveToRangeStart w:customXmlMoveToRangeEnd w14:customXmlConflictInsRangeStart w14:customXmlConflictInsRangeEnd w14:customXmlConflictDelRangeStart w14:customXmlConflictDelRangeEnd w:ins w:del w:moveFrom w:moveTo w:contentPart w14:conflictIns w14:conflictDel",
         ["SdtContentCell"] =
@@ -264,10 +228,6 @@ public static partial class SchemaOrder
             "w:listItem",
         ["SdtContentDate"] =
             "w:dateFormat w:lid w:storeMappedDataAs w:calendar",
-        ["SdtContentDocPartList"] =
-            "w:docPartGallery w:docPartCategory w:docPartUnique",
-        ["SdtContentDocPartObject"] =
-            "w:docPartGallery w:docPartCategory w:docPartUnique",
         ["SdtContentDropDownList"] =
             "w:listItem",
         ["SdtContentRow"] =
@@ -284,20 +244,12 @@ public static partial class SchemaOrder
             "w:docPart",
         ["SdtProperties"] =
             "w:rPr w:alias w:lock w:placeholder w:showingPlcHdr w:dataBinding w15:dataBinding w:temporary w:id w:tag w15:color w15:appearance w15:webExtensionLinked w15:webExtensionCreated w:equation w:comboBox w:date w:docPartObj w:docPartList w:dropDownList w:picture w:richText w:text w:citation w:group w:bibliography w14:entityPicker w14:checkbox w15:repeatingSection w15:repeatingSectionItem",
-        ["SdtRow"] =
-            "w:sdtContent w:bookmarkStart w:bookmarkEnd w:commentRangeStart w:commentRangeEnd w:moveFromRangeStart w:moveFromRangeEnd w:moveToRangeStart w:moveToRangeEnd w:customXmlInsRangeStart w:customXmlInsRangeEnd w:customXmlDelRangeStart w:customXmlDelRangeEnd w:customXmlMoveFromRangeStart w:customXmlMoveFromRangeEnd w:customXmlMoveToRangeStart w:customXmlMoveToRangeEnd w14:customXmlConflictInsRangeStart w14:customXmlConflictInsRangeEnd w14:customXmlConflictDelRangeStart w14:customXmlConflictDelRangeEnd",
-        ["SdtRun"] =
-            "w:sdtContent w:bookmarkStart w:bookmarkEnd w:commentRangeStart w:commentRangeEnd w:moveFromRangeStart w:moveFromRangeEnd w:moveToRangeStart w:moveToRangeEnd w:customXmlInsRangeStart w:customXmlInsRangeEnd w:customXmlDelRangeStart w:customXmlDelRangeEnd w:customXmlMoveFromRangeStart w:customXmlMoveFromRangeEnd w:customXmlMoveToRangeStart w:customXmlMoveToRangeEnd w14:customXmlConflictInsRangeStart w14:customXmlConflictInsRangeEnd w14:customXmlConflictDelRangeStart w14:customXmlConflictDelRangeEnd",
-        ["SdtRunRuby"] =
-            "w:sdtContent w:bookmarkStart w:bookmarkEnd w:commentRangeStart w:commentRangeEnd w:moveFromRangeStart w:moveFromRangeEnd w:moveToRangeStart w:moveToRangeEnd w:customXmlInsRangeStart w:customXmlInsRangeEnd w:customXmlDelRangeStart w:customXmlDelRangeEnd w:customXmlMoveFromRangeStart w:customXmlMoveFromRangeEnd w:customXmlMoveToRangeStart w:customXmlMoveToRangeEnd w14:customXmlConflictInsRangeStart w14:customXmlConflictInsRangeEnd w14:customXmlConflictDelRangeStart w14:customXmlConflictDelRangeEnd",
         ["SectionProperties"] =
             "w:headerReference w:footerReference w:footnotePr w:endnotePr w:type w:pgSz w:pgMar w:paperSrc w:pgBorders w:lnNumType w:pgNumType w:cols w:formProt w:vAlign w:noEndnote w:titlePg w:textDirection w:bidi w:rtlGutter w:docGrid w:printerSettings w15:footnoteColumns w:sectPrChange",
         ["SectionPropertiesChange"] =
             "w:sectPr",
         ["Settings"] =
             "w:writeProtection w:view w:zoom w:removePersonalInformation w:removeDateAndTime w:doNotDisplayPageBoundaries w:displayBackgroundShape w:printPostScriptOverText w:printFractionalCharacterWidth w:printFormsData w:embedTrueTypeFonts w:embedSystemFonts w:saveSubsetFonts w:saveFormsData w:mirrorMargins w:alignBordersAndEdges w:bordersDoNotSurroundHeader w:bordersDoNotSurroundFooter w:gutterAtTop w:hideSpellingErrors w:hideGrammaticalErrors w:activeWritingStyle w:proofState w:formsDesign w:attachedTemplate w:linkStyles w:stylePaneFormatFilter w:stylePaneSortMethod w:documentType w:mailMerge w:revisionView w:trackRevisions w:doNotTrackMoves w:doNotTrackFormatting w:documentProtection w:autoFormatOverride w:styleLockTheme w:styleLockQFSet w:defaultTabStop w:autoHyphenation w:consecutiveHyphenLimit w:hyphenationZone w:doNotHyphenateCaps w:showEnvelope w:summaryLength w:clickAndTypeStyle w:defaultTableStyle w:evenAndOddHeaders w:bookFoldRevPrinting w:bookFoldPrinting w:bookFoldPrintingSheets w:drawingGridHorizontalSpacing w:drawingGridVerticalSpacing w:displayHorizontalDrawingGridEvery w:displayVerticalDrawingGridEvery w:doNotUseMarginsForDrawingGridOrigin w:drawingGridHorizontalOrigin w:drawingGridVerticalOrigin w:doNotShadeFormData w:noPunctuationKerning w:characterSpacingControl w:printTwoOnOne w:strictFirstAndLastChars w:noLineBreaksAfter w:noLineBreaksBefore w:savePreviewPicture w:doNotValidateAgainstSchema w:saveInvalidXml w:ignoreMixedContent w:alwaysShowPlaceholderText w:doNotDemarcateInvalidXml w:saveXmlDataOnly w:useXSLTWhenSaving w:saveThroughXslt w:showXMLTags w:alwaysMergeEmptyNamespace w:updateFields w:hdrShapeDefaults w:footnotePr w:endnotePr w:compat w:docVars w:rsids m:mathPr w:uiCompat97To2003 w:attachedSchema w:themeFontLang w:clrSchemeMapping w:doNotIncludeSubdocsInStats w:doNotAutoCompressPictures w:forceUpgrade w:captions w:readModeInkLockDown sl:schemaLibrary w:shapeDefaults w:decimalSymbol w:listSeparator w14:docId w14:discardImageEditingData w14:defaultImageDpi w14:conflictMode w15:chartTrackingRefBased w15:docId",
-        ["ShapeDefaults"] =
-            "o:shapedefaults o:shapelayout",
         ["ShapeDefaultsType"] =
             "o:shapedefaults o:shapelayout",
         ["SimpleField"] =

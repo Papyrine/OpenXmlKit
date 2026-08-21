@@ -299,6 +299,68 @@ public class SchemaOrderTests
     }
 
     [Test]
+    public void TheTableAgreesWithTheSdk()
+    {
+        // The table is generated from the SDK's schema data, so the guard that matters is whether
+        // it still agrees with the SDK itself. Assigning through a typed property goes via
+        // SetElement, which places the child at its schema position — so the SDK will answer the
+        // question directly for every container it emits typed properties for, and this asks it.
+        var containers = 0;
+        var children = 0;
+
+        foreach (var type in typeof(W.Paragraph).Assembly.GetTypes())
+        {
+            if (!type.IsPublic ||
+                type.IsAbstract ||
+                type.Namespace != typeof(W.Paragraph).Namespace ||
+                !typeof(OpenXmlCompositeElement).IsAssignableFrom(type) ||
+                type.GetConstructor(Type.EmptyTypes) == null)
+            {
+                continue;
+            }
+
+            var typed = type.GetProperties()
+                .Where(_ => _.CanWrite && _.GetIndexParameters().Length == 0)
+                .Where(_ => typeof(OpenXmlElement).IsAssignableFrom(_.PropertyType))
+                .Where(_ => !_.PropertyType.IsAbstract && _.PropertyType.GetConstructor(Type.EmptyTypes) != null)
+                .ToList();
+            if (typed.Count < 2)
+            {
+                continue;
+            }
+
+            var container = (OpenXmlCompositeElement) Activator.CreateInstance(type)!;
+
+            // Assigned in reverse, so a table that merely echoed insertion order would not pass.
+            foreach (var property in Enumerable.Reverse(typed))
+            {
+                property.SetValue(container, Activator.CreateInstance(property.PropertyType));
+            }
+
+            var positions = container.ChildElements
+                .Select(_ => SchemaOrder.IndexOf(container, _))
+                .ToList();
+            if (positions.All(_ => _ < 0))
+            {
+                // A container the table has no entry for — one the SDK models as a choice, where
+                // there is no order to state.
+                continue;
+            }
+
+            Assert.That(positions, Has.None.EqualTo(-1), type.Name);
+            Assert.That(positions, Is.Ordered.Ascending, type.Name);
+            containers++;
+            children += positions.Count;
+        }
+
+        TestContext.Out.WriteLine($"COVERAGE {children} children across {containers} containers");
+
+        // The containers with no typed properties at all are the ones the table exists for, and
+        // the SDK cannot be asked about those — they are covered by the written-out checks below.
+        Assert.That(containers, Is.GreaterThan(50));
+    }
+
+    [Test]
     public void TheTableAgreesWithTheSequencesThisLibraryReliesOn()
     {
         // Spot checks written from the specification rather than from the generator, so a bad
