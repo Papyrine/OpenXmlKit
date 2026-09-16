@@ -16,5 +16,7 @@
     <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
     <SuppressNETCoreSdkPreviewMessage>true</SuppressNETCoreSdkPreviewMessage>
     <Papyrine_SponsorshipLicenseIgnored>true</Papyrine_SponsorshipLicenseIgnored>
+    <Verify_SponsorshipExemption>OpenSource</Verify_SponsorshipExemption>
+    <Verify_SponsorshipExemptionUntil>2027-08</Verify_SponsorshipExemptionUntil>
   </PropertyGroup>
 </Project>
